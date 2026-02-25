@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 6 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Next.js scaffold, all packages, Drizzle + Neon client, domain schema
+- [x] 01-01-PLAN.md — Next.js scaffold, all packages, Drizzle + Neon client, domain schema
 - [ ] 01-02-PLAN.md — Better Auth config, schema generation, API route, database migrations
 - [ ] 01-03-PLAN.md — Middleware + route group layouts with session/role guards
 - [ ] 01-04-PLAN.md — Auth UI pages (login, register, forgot-password, reset-password)
@@ -109,7 +109,7 @@ Note: Phase 4 depends on Phase 1 (not Phase 3) — it can start in parallel with
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/6 | In progress | - |
+| 1. Foundation | 1/6 | In progress | - |
 | 2. Tenant Onboarding | 0/TBD | Not started | - |
 | 3. Payments | 0/TBD | Not started | - |
 | 4. Maintenance, Documents, and Profiles | 0/TBD | Not started | - |

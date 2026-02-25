@@ -1,0 +1,129 @@
+---
+phase: 01-foundation
+plan: 01
+subsystem: database
+tags: [next.js, drizzle, neon, tailwind-v4, shadcn-ui, better-auth, react-19]
+
+# Dependency graph
+requires: []
+provides:
+  - "Next.js 15.5 application scaffold with all Phase 1 packages"
+  - "Drizzle ORM client configured for Neon PostgreSQL HTTP driver"
+  - "Domain schema: properties, units, tenantUnits tables"
+  - "Tailwind v4 + shadcn/ui with tw-animate-css"
+  - "Environment variable template (.env.example)"
+affects: [01-02, 01-03, 01-04, 01-05, 01-06]
+
+# Tech tracking
+tech-stack:
+  added: [next.js 15.5, react 19, typescript 5.x, tailwind-css 4.x, shadcn-ui, better-auth 1.4.x, drizzle-orm 0.45.x, "@neondatabase/serverless", zod, react-hook-form, "@hookform/resolvers", resend, "@react-email/components", sonner, lucide-react, drizzle-kit, tsx, tw-animate-css]
+  patterns: [tailwind-v4-css-only, shadcn-new-york-style, neon-http-driver, drizzle-schema-directory]
+
+key-files:
+  created: [package.json, tsconfig.json, next.config.ts, postcss.config.mjs, components.json, ".env.example", ".gitignore", "src/app/layout.tsx", "src/app/page.tsx", "src/app/globals.css", "src/lib/utils.ts", "drizzle.config.ts", "src/db/index.ts", "src/db/schema/domain.ts", "src/db/schema/index.ts"]
+  modified: []
+
+key-decisions:
+  - "Manual project setup instead of create-next-app to match existing repo structure"
+  - "tenantUnits.userId uses text() to match Better Auth user.id type (not uuid)"
+  - "Auth schema barrel export commented out in schema/index.ts for Plan 02 to uncomment"
+
+patterns-established:
+  - "Tailwind v4 CSS-only config: no tailwind.config.ts, use @import 'tailwindcss' in globals.css"
+  - "Drizzle schema directory pattern: drizzle.config.ts points to ./src/db/schema (all files auto-discovered)"
+  - "Neon HTTP driver pattern: neon() + drizzle() with schema object for relational queries"
+  - "Environment variable pattern: .env.local for secrets, .env.example for documentation"
+
+requirements-completed: [AUTH-01, AUTH-02, AUTH-03, AUTH-05]
+
+# Metrics
+duration: 4min
+completed: 2026-02-25
+---
+
+# Phase 1 Plan 01: App Scaffold and Domain Schema Summary
+
+**Next.js 15.5 scaffold with Drizzle ORM + Neon HTTP client and domain schema (properties, units, tenantUnits) using text-type user IDs for Better Auth compatibility**
+
+## Performance
+
+- **Duration:** 4 min
+- **Started:** 2026-02-25T20:42:10Z
+- **Completed:** 2026-02-25T20:46:21Z
+- **Tasks:** 2
+- **Files modified:** 16
+
+## Accomplishments
+- Scaffolded Next.js 15.5 app with React 19, TypeScript strict mode, and path aliases
+- Installed all Phase 1 packages: better-auth, drizzle-orm, @neondatabase/serverless, zod, react-hook-form, resend, sonner, lucide-react, and more
+- Configured shadcn/ui with Tailwind v4 (CSS-only, tw-animate-css, new-york style)
+- Created Drizzle ORM client with Neon serverless HTTP driver and full schema object
+- Defined domain schema with properties, units, and tenantUnits tables; userId as text() for Better Auth compatibility
+
+## Task Commits
+
+Each task was committed atomically:
+
+1. **Task 1: Scaffold Next.js app and install all Phase 1 packages** - `69dfc8a` (feat)
+2. **Task 2: Configure Drizzle + Neon client and define domain schema** - `759d0f7` (feat)
+
+## Files Created/Modified
+- `package.json` - Project dependencies and npm scripts (dev, build, start, db:generate, db:migrate, db:push, db:studio)
+- `tsconfig.json` - TypeScript strict config with @/* path alias
+- `next.config.ts` - Next.js configuration (empty, ready for extension)
+- `postcss.config.mjs` - PostCSS config with @tailwindcss/postcss plugin for Tailwind v4
+- `components.json` - shadcn/ui configuration
+- `.env.example` - Environment variable template (DATABASE_URL, BETTER_AUTH_SECRET, etc.)
+- `.env.local` - Local environment with placeholder values (not committed)
+- `.gitignore` - Standard Next.js gitignore including .env.local
+- `src/app/layout.tsx` - Root layout with metadata
+- `src/app/page.tsx` - Home page redirecting to /auth/login
+- `src/app/globals.css` - Tailwind v4 imports with shadcn theme variables (light + dark)
+- `src/lib/utils.ts` - shadcn utility (cn function)
+- `drizzle.config.ts` - Drizzle-kit config pointing to schema directory with Neon credentials
+- `src/db/index.ts` - Drizzle client using Neon HTTP driver, exports db and DB type
+- `src/db/schema/domain.ts` - Domain tables: properties, units, tenantUnits (userId as text)
+- `src/db/schema/index.ts` - Barrel export for domain schema (auth export commented for Plan 02)
+
+## Decisions Made
+- **Manual setup over create-next-app**: The repo already existed with README.md and .planning directory; create-next-app would have conflicted. Manual setup gave full control over file structure.
+- **text() for userId in tenantUnits**: Better Auth generates user.id as text, not PostgreSQL uuid. Using text() prevents foreign key type mismatches.
+- **Commented auth export in schema/index.ts**: The auth schema will be generated by @better-auth/cli in Plan 02. Leaving a commented placeholder makes the integration point obvious.
+
+## Deviations from Plan
+
+### Auto-fixed Issues
+
+**1. [Rule 3 - Blocking] Installed Tailwind CSS and PostCSS before shadcn init**
+- **Found during:** Task 1 (shadcn/ui initialization)
+- **Issue:** shadcn/ui init failed with "No Tailwind CSS configuration found" because Tailwind v4 and PostCSS were not installed yet. The plan's Step 4 (shadcn init) ran before Tailwind was available.
+- **Fix:** Installed tailwindcss, @tailwindcss/postcss, and postcss packages and created postcss.config.mjs before running shadcn init
+- **Files modified:** package.json, postcss.config.mjs
+- **Verification:** shadcn init completed successfully, detected Tailwind v4
+- **Committed in:** 69dfc8a (Task 1 commit)
+
+---
+
+**Total deviations:** 1 auto-fixed (1 blocking)
+**Impact on plan:** Necessary dependency ordering fix. No scope creep.
+
+## Issues Encountered
+- Node.js engine warnings for @noble/ciphers and @noble/hashes (require >= 20.19.0, current 20.12.0). These are warnings only and do not affect functionality. Consider upgrading Node.js before production deployment.
+
+## User Setup Required
+None - no external service configuration required at this stage. Users will need to fill in .env.local values (DATABASE_URL, BETTER_AUTH_SECRET, etc.) before Plan 02 runs database migrations.
+
+## Next Phase Readiness
+- App scaffold is complete and builds cleanly
+- All Phase 1 packages installed and importable
+- Domain schema ready; auth schema will be generated and added in Plan 02
+- Drizzle client configured but untested against a real database (requires DATABASE_URL)
+- Ready for Plan 02: Better Auth configuration, schema generation, API route, and database migrations
+
+## Self-Check: PASSED
+
+All 15 created files verified present. Both task commits (69dfc8a, 759d0f7) confirmed in git history.
+
+---
+*Phase: 01-foundation*
+*Completed: 2026-02-25*
