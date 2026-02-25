@@ -1,4 +1,2 @@
-// Better Auth generated tables -- added in Plan 02 after CLI generation
-// export * from "./auth"
-
-export * from "./domain"
+export * from "./auth"    // Better Auth generated tables (user, session, account, verification)
+export * from "./domain"  // Property, Unit, TenantUnit
