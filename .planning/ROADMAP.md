@@ -31,7 +31,15 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. A user who forgot their password can reset it via an emailed link and regain access
   4. Multiple admin users can each log in to the admin portal and see the same data with full access
   5. Accessing any tenant or admin route while unauthenticated redirects to the login page
-**Plans**: TBD
+**Plans**: 6 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Next.js scaffold, all packages, Drizzle + Neon client, domain schema
+- [ ] 01-02-PLAN.md — Better Auth config, schema generation, API route, database migrations
+- [ ] 01-03-PLAN.md — Middleware + route group layouts with session/role guards
+- [ ] 01-04-PLAN.md — Auth UI pages (login, register, forgot-password, reset-password)
+- [ ] 01-05-PLAN.md — Admin users page, UserTable, admin seed script, property seed script
+- [ ] 01-06-PLAN.md — Human verification checkpoint: full auth flow end to end
 
 ### Phase 2: Tenant Onboarding
 **Goal**: A tenant who has never used the portal can scan a QR code from a physical letter, create an account, and be linked to their unit — no manual admin steps required
@@ -101,7 +109,7 @@ Note: Phase 4 depends on Phase 1 (not Phase 3) — it can start in parallel with
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/6 | In progress | - |
 | 2. Tenant Onboarding | 0/TBD | Not started | - |
 | 3. Payments | 0/TBD | Not started | - |
 | 4. Maintenance, Documents, and Profiles | 0/TBD | Not started | - |
