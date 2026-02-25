@@ -87,34 +87,34 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | — | Pending |
-| AUTH-02 | — | Pending |
-| AUTH-03 | — | Pending |
-| AUTH-04 | — | Pending |
-| AUTH-05 | — | Pending |
-| PAY-01 | — | Pending |
-| PAY-02 | — | Pending |
-| PAY-03 | — | Pending |
-| PAY-04 | — | Pending |
-| PAY-05 | — | Pending |
-| PAY-06 | — | Pending |
-| MAINT-01 | — | Pending |
-| MAINT-02 | — | Pending |
-| MAINT-03 | — | Pending |
-| DOC-01 | — | Pending |
-| DOC-02 | — | Pending |
-| NOTIF-01 | — | Pending |
-| NOTIF-02 | — | Pending |
-| NOTIF-03 | — | Pending |
-| NOTIF-04 | — | Pending |
-| NOTIF-05 | — | Pending |
-| TMGMT-01 | — | Pending |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Pending |
+| AUTH-04 | Phase 2 | Pending |
+| AUTH-05 | Phase 1 | Pending |
+| PAY-01 | Phase 3 | Pending |
+| PAY-02 | Phase 3 | Pending |
+| PAY-03 | Phase 3 | Pending |
+| PAY-04 | Phase 3 | Pending |
+| PAY-05 | Phase 3 | Pending |
+| PAY-06 | Phase 6 | Pending |
+| MAINT-01 | Phase 4 | Pending |
+| MAINT-02 | Phase 4 | Pending |
+| MAINT-03 | Phase 4 | Pending |
+| DOC-01 | Phase 4 | Pending |
+| DOC-02 | Phase 4 | Pending |
+| NOTIF-01 | Phase 5 | Pending |
+| NOTIF-02 | Phase 3 | Pending |
+| NOTIF-03 | Phase 5 | Pending |
+| NOTIF-04 | Phase 5 | Pending |
+| NOTIF-05 | Phase 5 | Pending |
+| TMGMT-01 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 22 total
-- Mapped to phases: 0
-- Unmapped: 22 ⚠️
+- Mapped to phases: 22
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-25*
-*Last updated: 2026-02-25 after initial definition*
+*Last updated: 2026-02-25 after roadmap creation*
