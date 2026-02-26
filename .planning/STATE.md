@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 current_plan: 5
 status: executing
-stopped_at: Completed 06-02-PLAN.md
-last_updated: "2026-02-26T19:53:12.406Z"
+stopped_at: Completed 06-03-PLAN.md
+last_updated: "2026-02-26T19:53:26.244Z"
 last_activity: 2026-02-26
 progress:
   total_phases: 6
@@ -76,6 +76,7 @@ Progress: [█████████░] 30/33 plans (Phases 1-5 + 06-01..03 c
 | Phase 05 P04 | 3min | 2 tasks | 2 files |
 | Phase 05 P05 | 8min | 2 tasks | 7 files |
 | Phase 06 P02 | 3min | 2 tasks | 11 files |
+| Phase 06 P03 | 3min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -129,6 +130,8 @@ Recent decisions affecting current work:
 - [Phase 06]: Reuse existing Stripe Customer ID from cancelled enrollments to avoid duplicate customers
 - [Phase 06]: PaymentMethod kept on Stripe after cancellation for one-click re-enrollment
 - [Phase 06]: Admin autopay notifications use in-app channel only (not email/SMS)
+- [Phase 06]: Autopay retry uses dueDay+2 check in daily cron rather than separate retry scheduler
+- [Phase 06]: Two-strike policy: first failure notifies tenant, second marks enrollment payment_failed and alerts admin
 
 ### Pending Todos
 
@@ -140,6 +143,6 @@ None yet.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-26T19:53:12.405Z
-**Stopped At:** Completed 06-02-PLAN.md
-**Resume File:** None
+**Last Session:** 2026-02-26T19:52:00Z
+**Stopped At:** Completed 06-03-PLAN.md
+**Resume File:** .planning/phases/06-autopay-and-polish/06-04-PLAN.md
