@@ -94,7 +94,14 @@ Plans:
   2. Tenant who has opted in to SMS receives the same reminders by text with a working STOP opt-out
   3. Tenant and admin can open a notification inbox in the app and see a chronological list of recent notifications
   4. Admin can compose and send a bulk message to all tenants (or specific units) via email and SMS from the admin portal
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Notifications table, Twilio client, sendNotification dispatch helper, DB migration
+- [ ] 05-02-PLAN.md — SMS opt-in toggle on tenant profile with TCPA disclosure, Twilio STOP/START webhook
+- [ ] 05-03-PLAN.md — Notification inbox pages (tenant + admin), bell icon with unread count, layout updates
+- [ ] 05-04-PLAN.md — Rent reminder cron API route with idempotency, styled email templates
+- [ ] 05-05-PLAN.md — Admin broadcast messaging page and API, E2E test suite with seed data
 
 ### Phase 6: Autopay and Polish
 **Goal**: Tenants can enroll in automatic recurring rent payments — removing the need to remember to pay each month
@@ -119,5 +126,5 @@ Note: Phase 4 depends on Phase 1 (not Phase 3) — it can start in parallel with
 | 2. Tenant Onboarding | 4/4 | Complete | 2026-02-25 |
 | 3. Payments | 6/6 | Complete | 2026-02-26 |
 | 4. Maintenance, Documents, and Profiles | 6/6 | Complete | 2026-02-26 |
-| 5. Notifications and Messaging | 0/TBD | Not started | - |
+| 5. Notifications and Messaging | 0/5 | Planning complete | - |
 | 6. Autopay and Polish | 0/TBD | Not started | - |
