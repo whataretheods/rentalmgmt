@@ -78,3 +78,89 @@ export const payments = pgTable("payments", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
+
+// ==================== Phase 4: Maintenance, Documents, Profiles ====================
+
+// Maintenance requests with 4-stage status progression
+export const maintenanceRequests = pgTable("maintenance_requests", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantUserId: text("tenant_user_id").notNull(),   // Better Auth user.id (text, NOT uuid)
+  unitId: uuid("unit_id")
+    .references(() => units.id, { onDelete: "cascade" })
+    .notNull(),
+  category: text("category", {
+    enum: ["plumbing", "electrical", "hvac", "appliance", "pest_control", "structural", "general"],
+  }).notNull(),
+  description: text("description").notNull(),
+  status: text("status", {
+    enum: ["submitted", "acknowledged", "in_progress", "resolved"],
+  }).default("submitted").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  resolvedAt: timestamp("resolved_at"),
+})
+
+// Photos attached to maintenance requests (up to 5 per request)
+export const maintenancePhotos = pgTable("maintenance_photos", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  requestId: uuid("request_id")
+    .references(() => maintenanceRequests.id, { onDelete: "cascade" })
+    .notNull(),
+  filePath: text("file_path").notNull(),       // relative path from uploads root
+  fileName: text("file_name").notNull(),       // original filename
+  fileSize: integer("file_size").notNull(),    // bytes
+  mimeType: text("mime_type").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+// Threaded comments on maintenance requests (tenant + admin)
+export const maintenanceComments = pgTable("maintenance_comments", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  requestId: uuid("request_id")
+    .references(() => maintenanceRequests.id, { onDelete: "cascade" })
+    .notNull(),
+  userId: text("user_id").notNull(),           // can be tenant or admin
+  content: text("content").notNull(),
+  isStatusChange: boolean("is_status_change").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+// Tenant documents (uploaded files)
+export const documents = pgTable("documents", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantUserId: text("tenant_user_id").notNull(),
+  documentType: text("document_type", {
+    enum: ["government_id", "proof_of_income_insurance", "general"],
+  }).notNull(),
+  filePath: text("file_path").notNull(),       // relative path from uploads root
+  fileName: text("file_name").notNull(),
+  fileSize: integer("file_size").notNull(),    // bytes
+  mimeType: text("mime_type").notNull(),
+  requestId: uuid("request_id"),               // links to admin request if this was requested
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+// Admin document requests
+export const documentRequests = pgTable("document_requests", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantUserId: text("tenant_user_id").notNull(),
+  documentType: text("document_type", {
+    enum: ["government_id", "proof_of_income_insurance", "general"],
+  }).notNull(),
+  message: text("message"),                    // optional admin note
+  status: text("status", {
+    enum: ["pending", "submitted"],
+  }).default("pending").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  fulfilledAt: timestamp("fulfilled_at"),
+})
+
+// Emergency contacts for tenants
+export const emergencyContacts = pgTable("emergency_contacts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").notNull().unique(),  // one emergency contact per tenant
+  contactName: text("contact_name").notNull(),
+  contactPhone: text("contact_phone").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
