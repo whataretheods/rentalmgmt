@@ -39,3 +39,19 @@ export const tenantUnits = pgTable("tenant_units", {
   isActive: boolean("is_active").default(true).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
+
+// Invite tokens — single-use, time-limited QR code invitations linking tenants to units
+export const inviteTokens = pgTable("invite_tokens", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  unitId: uuid("unit_id")
+    .references(() => units.id, { onDelete: "cascade" })
+    .notNull(),
+  tokenHash: text("token_hash").notNull().unique(),  // SHA-256 hash of raw token
+  status: text("status", { enum: ["pending", "used", "expired"] })
+    .default("pending")
+    .notNull(),
+  usedByUserId: text("used_by_user_id"),  // populated when consumed (text matches Better Auth user.id type)
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  usedAt: timestamp("used_at"),
+})
