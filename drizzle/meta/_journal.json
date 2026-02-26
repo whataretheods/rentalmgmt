@@ -22,6 +22,13 @@
       "when": 1772123672494,
       "tag": "0002_warm_vampiro",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1772126750081,
+      "tag": "0003_quick_tusk",
+      "breakpoints": true
     }
   ]
 }
