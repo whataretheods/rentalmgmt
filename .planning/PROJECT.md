@@ -16,18 +16,18 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 
 - ✓ Multi-user admin access (full permissions for all team members) — Phase 1
 - ✓ Tenant onboarding via QR code (scan → create account → linked to unit) — Phase 2
+- ✓ Rent payment through Stripe with multiple payment methods — Phase 3
+- ✓ Per-unit rent amounts and due dates (fully variable) — Phase 3
+- ✓ Payment tracking dashboard (who's paid, who hasn't) — Phase 3
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Rent payment through Stripe with multiple payment methods
-- [ ] Per-unit rent amounts and due dates (fully variable)
 - [ ] Tenant contact info management (submit and update)
 - [ ] Document uploads (ID/proof docs and general ad-hoc requests)
 - [ ] Structured maintenance requests (issue type, description, photos)
 - [ ] Admin portal with full tenant/payment/request management
-- [ ] Payment tracking dashboard (who's paid, who hasn't)
 - [ ] Notifications via email, SMS, and in-app
 - [ ] Professional, polished tenant-facing experience
 
@@ -62,7 +62,10 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 | No leases/e-signatures | Month-to-month tenancy, keep it simple | — Pending |
 | Flat admin access (no roles) | Small team, everyone needs full access | — Pending |
 | QR code onboarding | Tenants are unreachable, physical letters with QR code is the outreach plan | — Pending |
-| Stripe for payments | Industry standard, supports multiple payment methods | — Pending |
+| Stripe for payments | Industry standard, supports multiple payment methods | ✓ Phase 3 |
+| Stripe Checkout (redirect) | Simplest PCI compliance, handles ACH + card | ✓ Phase 3 |
+| Webhook-first confirmation | Never trust redirects as payment proof | ✓ Phase 3 |
+| Manual payment recording | Admin can log cash/check/Venmo payments | ✓ Phase 3 |
 
 ---
-*Last updated: 2026-02-26 after Phase 2*
+*Last updated: 2026-02-26 after Phase 3*
