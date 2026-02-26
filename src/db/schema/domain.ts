@@ -181,3 +181,30 @@ export const notifications = pgTable("notifications", {
   readAt: timestamp("read_at"),                // null = unread
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
+
+// ==================== Phase 6: Autopay and Polish ====================
+
+// Autopay enrollment — one per tenant, saves Stripe payment method for recurring charges
+export const autopayEnrollments = pgTable("autopay_enrollments", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantUserId: text("tenant_user_id").notNull().unique(), // one enrollment per tenant
+  unitId: uuid("unit_id")
+    .references(() => units.id, { onDelete: "cascade" })
+    .notNull(),
+  stripeCustomerId: text("stripe_customer_id").notNull(),
+  stripePaymentMethodId: text("stripe_payment_method_id").notNull(),
+  paymentMethodType: text("payment_method_type", {
+    enum: ["card", "us_bank_account"],
+  }).notNull(),
+  paymentMethodLast4: text("payment_method_last4").notNull(),
+  paymentMethodBrand: text("payment_method_brand"), // "visa", "mastercard", null for ACH
+  status: text("status", {
+    enum: ["active", "paused", "payment_failed", "cancelled"],
+  }).default("active").notNull(),
+  enrolledAt: timestamp("enrolled_at").defaultNow().notNull(),
+  cancelledAt: timestamp("cancelled_at"),
+  lastChargeAt: timestamp("last_charge_at"),
+  nextChargeDate: text("next_charge_date"),  // "2026-03-01" ISO date string for display
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})

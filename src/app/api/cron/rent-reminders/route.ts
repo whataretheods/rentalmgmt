@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { db } from "@/db"
-import { tenantUnits, units, payments, notifications } from "@/db/schema/domain"
+import { tenantUnits, units, payments, notifications, autopayEnrollments } from "@/db/schema/domain"
 import { user } from "@/db/schema/auth"
 import { eq, and, sql } from "drizzle-orm"
 import { sendNotification } from "@/lib/notifications"
@@ -75,6 +75,23 @@ export async function POST(req: Request) {
     try {
       // Skip units without rent configuration
       if (!link.rentDueDay || !link.rentAmountCents) {
+        skipped++
+        continue
+      }
+
+      // Skip tenants with active autopay — they get pre-charge notifications instead
+      const [autopayActive] = await db
+        .select({ id: autopayEnrollments.id })
+        .from(autopayEnrollments)
+        .where(
+          and(
+            eq(autopayEnrollments.tenantUserId, link.userId),
+            eq(autopayEnrollments.status, "active"),
+          )
+        )
+        .limit(1)
+
+      if (autopayActive) {
         skipped++
         continue
       }
