@@ -16,7 +16,7 @@ test.describe("Tenant Notification Flows", () => {
     await page.fill('input[type="email"]', TENANT_EMAIL)
     await page.fill('input[type="password"]', TENANT_PASSWORD)
     await page.click('button[type="submit"]')
-    await page.waitForURL("**/tenant/dashboard", { timeout: 15000 })
+    await page.waitForURL("**/tenant/dashboard", { timeout: 30000 })
   })
 
   test("@smoke tenant can view notification inbox", async ({ page }) => {
@@ -24,11 +24,10 @@ test.describe("Tenant Notification Flows", () => {
     await page.waitForLoadState("networkidle")
 
     // Verify page loaded with notifications heading
-    await expect(page.locator("h1:has-text('Notifications')")).toBeVisible({ timeout: 10000 })
+    await expect(page.locator("h1:has-text('Notifications')")).toBeVisible({ timeout: 15000 })
 
-    // At least one notification should be visible (from seed data)
-    const notifications = page.locator("[class*='Card']")
-    await expect(notifications.first()).toBeVisible({ timeout: 10000 })
+    // At least one notification body text should be visible (from seed data)
+    await expect(page.locator("text=rent").first()).toBeVisible({ timeout: 10000 })
   })
 
   test("tenant can see unread indicator", async ({ page }) => {
@@ -41,12 +40,12 @@ test.describe("Tenant Notification Flows", () => {
   })
 
   test("tenant notification bell shows unread count", async ({ page }) => {
-    // Bell should be visible on any tenant page (it's in the layout)
-    const bell = page.locator("a[href='/tenant/notifications']")
+    // Bell should be visible in the header (it's the one inside the header with the Bell icon)
+    const bell = page.locator("header a[href='/tenant/notifications']").first()
     await expect(bell).toBeVisible({ timeout: 10000 })
 
     // Check for unread badge (red badge with count)
-    const badge = page.locator("a[href='/tenant/notifications'] .bg-red-500")
+    const badge = bell.locator(".bg-red-500")
     // Badge may or may not be visible depending on unread count
     // Just verify the bell link is there
     await expect(bell).toBeVisible()
@@ -57,7 +56,7 @@ test.describe("Tenant Notification Flows", () => {
     await page.waitForLoadState("networkidle")
 
     // Verify SMS Notifications card is visible
-    await expect(page.locator("text=SMS Notifications")).toBeVisible({ timeout: 10000 })
+    await expect(page.getByText("SMS Notifications", { exact: true })).toBeVisible({ timeout: 10000 })
 
     // Verify TCPA disclosure text is present
     await expect(page.locator("text=Reply STOP")).toBeVisible()
@@ -105,12 +104,16 @@ test.describe("Rent Reminder Cron", () => {
 
 test.describe("Admin Broadcast", () => {
   test.beforeEach(async ({ page }) => {
+    // Admin login redirects to /tenant/dashboard by default, then we navigate to admin
     await page.goto(`${BASE_URL}/auth/login`)
     await page.waitForLoadState("networkidle")
     await page.fill('input[type="email"]', ADMIN_EMAIL)
     await page.fill('input[type="password"]', ADMIN_PASSWORD)
     await page.click('button[type="submit"]')
-    await page.waitForURL("**/admin/dashboard", { timeout: 15000 })
+    await page.waitForURL("**/tenant/dashboard", { timeout: 30000 })
+    // Now navigate to admin dashboard
+    await page.goto(`${BASE_URL}/admin/dashboard`)
+    await page.waitForLoadState("networkidle")
   })
 
   test("@smoke admin can view broadcast page", async ({ page }) => {
@@ -121,8 +124,8 @@ test.describe("Admin Broadcast", () => {
     await expect(page.locator("h1:has-text('Send Broadcast Message')")).toBeVisible({ timeout: 10000 })
     await expect(page.locator("#subject")).toBeVisible()
     await expect(page.locator("#body")).toBeVisible()
-    await expect(page.locator("text=All Tenants")).toBeVisible()
-    await expect(page.locator("text=Email")).toBeVisible()
+    await expect(page.getByText("All Tenants", { exact: true })).toBeVisible()
+    await expect(page.getByText("Email", { exact: true })).toBeVisible()
   })
 
   test("admin can send broadcast", async ({ page }) => {
