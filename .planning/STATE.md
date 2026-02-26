@@ -21,17 +21,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 4 — Maintenance, Documents, and Profiles
+**Current focus:** Phase 5 — Notifications and Messaging
 
 ## Current Position
 
-**Phase:** 4 of 6 (Maintenance, Documents, Profiles)
+**Phase:** 5 of 6 (Notifications and Messaging)
 **Current Plan:** Not started
-**Total Plans in Phase:** 6
-**Status:** Milestone complete
+**Total Plans in Phase:** TBD
+**Status:** Ready to plan
 **Last Activity:** 2026-02-26
 
-Progress: [████████░░] 17/22 plans
+Progress: [████████░░] 22/22 plans (Phases 1-4 complete)
 
 ## Performance Metrics
 
@@ -127,12 +127,11 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 3: Decision needed — Stripe Checkout Session (redirect) vs. Payment Element (embedded). Resolve during Phase 3 planning.
 - Phase 5: Twilio inbound webhook for STOP handling needs validation before Phase 5 planning.
 - Phase 6: Stripe SetupIntent vs. Stripe Subscriptions for autopay — decide during Phase 6 planning.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-26T18:04:38.619Z
-**Stopped At:** Completed 04-06-PLAN.md -- Phase 4 fully verified with 14 E2E tests
+**Last Session:** 2026-02-26
+**Stopped At:** Phase 4 complete, ready to plan Phase 5 (Notifications and Messaging)
 **Resume File:** None

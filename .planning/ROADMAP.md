@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Foundation** - Auth, data model, and admin bootstrap — every other phase depends on this
 - [ ] **Phase 2: Tenant Onboarding** - QR invite flow linking tenants to their units before any other tenant feature can be tested
 - [ ] **Phase 3: Payments** - Stripe rent collection and admin payment dashboard — the core product value
-- [ ] **Phase 4: Maintenance, Documents, and Profiles** - Tenant self-service workflows after the payment core is validated
+- [x] **Phase 4: Maintenance, Documents, and Profiles** - Tenant self-service workflows after the payment core is validated (2026-02-26)
 - [ ] **Phase 5: Notifications and Messaging** - Full multi-channel notification infrastructure with TCPA-compliant SMS
 - [ ] **Phase 6: Autopay and Polish** - Recurring payments and UX refinements after core flows are production-validated
 
@@ -115,9 +115,9 @@ Note: Phase 4 depends on Phase 1 (not Phase 3) — it can start in parallel with
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 6/6 | Complete | - |
-| 2. Tenant Onboarding | 2/4 | In Progress | - |
-| 3. Payments | 0/TBD | Not started | - |
-| 4. Maintenance, Documents, and Profiles | 5/6 | In Progress|  |
+| 1. Foundation | 6/6 | Complete | 2026-02-25 |
+| 2. Tenant Onboarding | 4/4 | Complete | 2026-02-25 |
+| 3. Payments | 6/6 | Complete | 2026-02-26 |
+| 4. Maintenance, Documents, and Profiles | 6/6 | Complete | 2026-02-26 |
 | 5. Notifications and Messaging | 0/TBD | Not started | - |
 | 6. Autopay and Polish | 0/TBD | Not started | - |

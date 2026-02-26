@@ -19,15 +19,15 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 - ✓ Rent payment through Stripe with multiple payment methods — Phase 3
 - ✓ Per-unit rent amounts and due dates (fully variable) — Phase 3
 - ✓ Payment tracking dashboard (who's paid, who hasn't) — Phase 3
+- ✓ Structured maintenance requests (issue type, description, photos, admin kanban) — Phase 4
+- ✓ Document uploads (ID/proof docs and admin request workflow) — Phase 4
+- ✓ Tenant contact info management (name, phone, email, emergency contact) — Phase 4
+- ✓ Admin portal with full tenant/payment/request management — Phase 4
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Tenant contact info management (submit and update)
-- [ ] Document uploads (ID/proof docs and general ad-hoc requests)
-- [ ] Structured maintenance requests (issue type, description, photos)
-- [ ] Admin portal with full tenant/payment/request management
 - [ ] Notifications via email, SMS, and in-app
 - [ ] Professional, polished tenant-facing experience
 
@@ -66,6 +66,9 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 | Stripe Checkout (redirect) | Simplest PCI compliance, handles ACH + card | ✓ Phase 3 |
 | Webhook-first confirmation | Never trust redirects as payment proof | ✓ Phase 3 |
 | Manual payment recording | Admin can log cash/check/Venmo payments | ✓ Phase 3 |
+| Local file storage | uploads/ directory with API-based auth-gated serving, UUID filenames | ✓ Phase 4 |
+| @hello-pangea/dnd for kanban | Drag-and-drop maintenance status management for admin | ✓ Phase 4 |
+| Better Auth changeEmail | Email changes via auth client, not profile API — separation of concerns | ✓ Phase 4 |
 
 ---
-*Last updated: 2026-02-26 after Phase 3*
+*Last updated: 2026-02-26 after Phase 4*
