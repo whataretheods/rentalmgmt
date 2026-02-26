@@ -13,7 +13,9 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "seed:admin": "tsx -r tsconfig-paths/register scripts/seed-admin.ts",
-    "seed:property": "tsx -r tsconfig-paths/register scripts/seed-property.ts"
+    "seed:property": "tsx -r tsconfig-paths/register scripts/seed-property.ts",
+    "seed:payment-test": "tsx -r tsconfig-paths/register scripts/seed-payment-test.ts",
+    "test:e2e": "npx playwright test"
   },
   "keywords": [],
   "author": "",
@@ -46,6 +48,7 @@
   },
   "devDependencies": {
     "@better-auth/cli": "^1.4.19",
+    "@playwright/test": "^1.58.2",
     "@types/node": "^25.3.0",
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19.2.14",
