@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { db } from "@/db"
 import { payments, units, user } from "@/db/schema"
-import { eq } from "drizzle-orm"
+import { eq, and } from "drizzle-orm"
 import { resend } from "@/lib/resend"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
@@ -116,6 +116,61 @@ export async function POST(req: Request) {
           .update(payments)
           .set({ status: "failed", updatedAt: new Date() })
           .where(eq(payments.stripeSessionId, session.id))
+        break
+      }
+
+      case "payment_intent.succeeded": {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent
+        const { tenantUserId, unitId, billingPeriod, autopay } = paymentIntent.metadata || {}
+
+        // Only handle autopay payments (one-time payments use checkout.session events)
+        if (autopay !== "true") break
+        if (!tenantUserId || !unitId || !billingPeriod) break
+
+        // Update payment record from "pending" to "succeeded" if it exists
+        // (The cron may have already recorded it as succeeded for instant card payments,
+        //  but ACH payments arrive async)
+        await db
+          .update(payments)
+          .set({
+            status: "succeeded",
+            paidAt: new Date(),
+            stripePaymentIntentId: paymentIntent.id,
+            updatedAt: new Date(),
+          })
+          .where(
+            and(
+              eq(payments.tenantUserId, tenantUserId),
+              eq(payments.unitId, unitId),
+              eq(payments.billingPeriod, billingPeriod),
+              eq(payments.status, "pending")
+            )
+          )
+
+        // Send payment confirmation
+        await sendPaymentConfirmation(tenantUserId, unitId, paymentIntent.amount, billingPeriod)
+        break
+      }
+
+      case "payment_intent.payment_failed": {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent
+        const { tenantUserId, unitId, billingPeriod, autopay } = paymentIntent.metadata || {}
+
+        if (autopay !== "true") break
+        if (!tenantUserId || !unitId || !billingPeriod) break
+
+        // Update payment record to "failed"
+        await db
+          .update(payments)
+          .set({ status: "failed", updatedAt: new Date() })
+          .where(
+            and(
+              eq(payments.tenantUserId, tenantUserId),
+              eq(payments.unitId, unitId),
+              eq(payments.billingPeriod, billingPeriod),
+              eq(payments.status, "pending")
+            )
+          )
         break
       }
 
