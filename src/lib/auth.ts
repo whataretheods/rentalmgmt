@@ -37,7 +37,25 @@ export const auth = betterAuth({
     nextCookies(),             // REQUIRED: without this, Server Actions cannot set auth cookies
   ],
   user: {
+    changeEmail: {
+      enabled: true,
+      sendChangeEmailVerification: async ({ user, newEmail, url }) => {
+        // Do NOT await -- prevent timing attacks, matching sendResetPassword pattern
+        void resend.emails.send({
+          from: "RentalMgmt <noreply@rentalmgmt.com>",
+          to: newEmail,
+          subject: "Verify your new email address",
+          html: `<p>Hi ${user.name || "there"},</p><p>Please verify your new email address by clicking the link below:</p><p><a href="${url}">${url}</a></p><p>This link expires in 1 hour. If you didn't request this change, you can ignore this email.</p>`,
+        })
+      },
+    },
     additionalFields: {
+      phone: {
+        type: "string",
+        required: false,
+        defaultValue: null,
+        input: true,           // allow users to set/update their phone
+      },
       smsOptIn: {
         type: "boolean",
         required: false,
