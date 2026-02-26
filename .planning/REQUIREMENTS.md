@@ -19,7 +19,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **PAY-01**: Tenant can pay rent via Stripe (ACH and card)
 - [x] **PAY-02**: Tenant can view payment history and download receipts
-- [ ] **PAY-03**: Tenant can see current balance, due date, and last payment
+- [x] **PAY-03**: Tenant can see current balance, due date, and last payment
 - [x] **PAY-04**: Admin can configure different rent amounts and due dates per unit
 - [x] **PAY-05**: Admin can view payment dashboard showing who's paid and outstanding balances per unit
 - [ ] **PAY-06**: Tenant can enroll in autopay for automatic recurring rent payments
@@ -94,7 +94,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-05 | Phase 1 | Complete |
 | PAY-01 | Phase 3 | Complete |
 | PAY-02 | Phase 3 | Complete |
-| PAY-03 | Phase 3 | Pending |
+| PAY-03 | Phase 3 | Complete |
 | PAY-04 | Phase 3 | Complete |
 | PAY-05 | Phase 3 | Complete |
 | PAY-06 | Phase 6 | Pending |
