@@ -6,23 +6,35 @@ import { drizzle } from "drizzle-orm/neon-http"
 import * as schema from "../src/db/schema"
 import { eq, and } from "drizzle-orm"
 
-const TEST_TENANT_EMAIL = "testtenant@test.com"
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "odesantos2@gmail.com"
 
 async function main() {
   const sql = neon(process.env.DATABASE_URL!)
   const db = drizzle({ client: sql, schema })
 
-  // --- Find test tenant ---
+  // --- Find active tenant-unit link (same approach as seed-payment-test) ---
+  const [link] = await db
+    .select()
+    .from(schema.tenantUnits)
+    .where(eq(schema.tenantUnits.isActive, true))
+    .limit(1)
+
+  if (!link) {
+    console.log("No active tenant-unit links found. Run invite flow first.")
+    process.exit(1)
+  }
+
+  console.log("Found active unit link:", link.unitId, "userId:", link.userId)
+
+  // --- Find the tenant user ---
   const [tenant] = await db
     .select()
     .from(schema.user)
-    .where(eq(schema.user.email, TEST_TENANT_EMAIL))
+    .where(eq(schema.user.id, link.userId))
     .limit(1)
 
   if (!tenant) {
-    console.log(`No test tenant found with email ${TEST_TENANT_EMAIL}.`)
-    console.log("Run the invite flow first to create a test tenant.")
+    console.log("Tenant user not found for userId:", link.userId)
     process.exit(1)
   }
 
@@ -42,25 +54,6 @@ async function main() {
   }
 
   console.log("Found admin:", admin.email, "(id:", admin.id, ")")
-
-  // --- Find tenant's active unit ---
-  const [link] = await db
-    .select()
-    .from(schema.tenantUnits)
-    .where(
-      and(
-        eq(schema.tenantUnits.userId, tenant.id),
-        eq(schema.tenantUnits.isActive, true)
-      )
-    )
-    .limit(1)
-
-  if (!link) {
-    console.log("No active tenant-unit link found. Run invite flow first.")
-    process.exit(1)
-  }
-
-  console.log("Found active unit link:", link.unitId)
 
   // --- Seed a maintenance request (submitted) for the test tenant ---
   const existingRequests = await db
@@ -103,7 +96,12 @@ async function main() {
   const existingDocRequests = await db
     .select()
     .from(schema.documentRequests)
-    .where(eq(schema.documentRequests.tenantUserId, tenant.id))
+    .where(
+      and(
+        eq(schema.documentRequests.tenantUserId, tenant.id),
+        eq(schema.documentRequests.status, "pending")
+      )
+    )
     .limit(1)
 
   if (existingDocRequests.length === 0) {
@@ -121,9 +119,14 @@ async function main() {
     console.log("Created document request:", docRequest.id)
   } else {
     console.log(
-      "Document request already exists for tenant, skipping creation"
+      "Pending document request already exists for tenant, skipping creation"
     )
   }
+
+  // Output the tenant email for E2E tests to use
+  console.log("\n--- Test Credentials ---")
+  console.log("TEST_TENANT_EMAIL=" + tenant.email)
+  console.log("ADMIN_EMAIL=" + admin.email)
 
   console.log("\nPhase 4 test data seeded successfully.")
 }

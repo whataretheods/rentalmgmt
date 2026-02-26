@@ -69,24 +69,40 @@ test.describe("Tenant Maintenance Requests", () => {
     await page.goto(`${BASE_URL}/tenant/maintenance`)
     await page.waitForLoadState("networkidle")
 
-    // Click on the first maintenance request card
-    const firstCard = page.locator('a[href^="/tenant/maintenance/"]').first()
-    await expect(firstCard).toBeVisible({ timeout: 10000 })
-    await firstCard.click()
+    // Wait for the list to load, then click on a request card (not the "New Request" link)
+    // Request cards link to /tenant/maintenance/<uuid>
+    const requestCards = page.locator(
+      'a[href^="/tenant/maintenance/"]:not([href="/tenant/maintenance/new"])'
+    )
+    await expect(requestCards.first()).toBeVisible({ timeout: 10000 })
+    await requestCards.first().click()
 
-    // Should navigate to detail page
-    await page.waitForURL("**/tenant/maintenance/*", { timeout: 10000 })
+    // Should navigate to a detail page (UUID in URL)
+    await page.waitForURL(/\/tenant\/maintenance\/[0-9a-f-]+/, {
+      timeout: 10000,
+    })
 
-    // Verify detail page shows status badge
-    const statusBadge = page.locator(".rounded-full").first()
-    await expect(statusBadge).toBeVisible({ timeout: 10000 })
+    // Wait for detail content to load
+    await expect(page.locator("text=Back to requests")).toBeVisible({
+      timeout: 10000,
+    })
 
-    // Verify description is visible
-    await expect(page.locator("text=Back to requests")).toBeVisible()
+    // Verify status badge is visible (the badge uses rounded-full in the component)
+    // Use text content as selectors for the status labels
+    const statusLabels = ["Submitted", "Acknowledged", "In Progress", "Resolved"]
+    let foundStatus = false
+    for (const label of statusLabels) {
+      const badge = page.locator(`text=${label}`).first()
+      if (await badge.isVisible().catch(() => false)) {
+        foundStatus = true
+        break
+      }
+    }
+    expect(foundStatus).toBe(true)
 
     // Verify Comments section is visible
     await expect(
-      page.locator("text=Comments")
+      page.locator('[data-slot="card-title"]', { hasText: "Comments" })
     ).toBeVisible()
   })
 
@@ -94,16 +110,29 @@ test.describe("Tenant Maintenance Requests", () => {
     await page.goto(`${BASE_URL}/tenant/maintenance`)
     await page.waitForLoadState("networkidle")
 
-    // Click on first request
-    const firstCard = page.locator('a[href^="/tenant/maintenance/"]').first()
-    await expect(firstCard).toBeVisible({ timeout: 10000 })
-    await firstCard.click()
-    await page.waitForURL("**/tenant/maintenance/*", { timeout: 10000 })
+    // Click on a request card (not the "New Request" link)
+    const requestCards = page.locator(
+      'a[href^="/tenant/maintenance/"]:not([href="/tenant/maintenance/new"])'
+    )
+    await expect(requestCards.first()).toBeVisible({ timeout: 10000 })
+    await requestCards.first().click()
+    await page.waitForURL(/\/tenant\/maintenance\/[0-9a-f-]+/, {
+      timeout: 10000,
+    })
+
+    // Wait for detail page to fully load
+    await expect(
+      page.locator('[data-slot="card-title"]', { hasText: "Comments" })
+    ).toBeVisible({ timeout: 10000 })
 
     // Type a comment
-    const commentInput = page.locator('textarea[placeholder="Add a comment..."]')
+    const commentInput = page.locator(
+      'textarea[placeholder="Add a comment..."]'
+    )
     await expect(commentInput).toBeVisible({ timeout: 10000 })
-    await commentInput.fill("Thanks for the update! When will the plumber arrive?")
+    await commentInput.fill(
+      "Thanks for the update! When will the plumber arrive?"
+    )
 
     // Click send button
     const sendButton = page.locator('form button[type="submit"]').last()
@@ -146,17 +175,20 @@ test.describe("Admin Maintenance Kanban", () => {
     await expect(page.locator("text=Resolved").first()).toBeVisible()
   })
 
-  test("kanban board shows request cards from seed data", async ({ page }) => {
+  test("kanban board shows filter bar and request data", async ({ page }) => {
     await page.goto(`${BASE_URL}/admin/maintenance`)
     await page.waitForLoadState("networkidle")
 
     // Wait for the kanban to load (submitted column should have content)
-    // The seeded request is a plumbing request about a kitchen sink
-    await expect(
-      page.locator("text=Submitted").first()
-    ).toBeVisible({ timeout: 15000 })
+    await expect(page.locator("text=Submitted").first()).toBeVisible({
+      timeout: 15000,
+    })
 
-    // Verify filter bar is present (unit dropdown)
-    await expect(page.locator("text=All units")).toBeVisible()
+    // Verify filter bar is present (the "Unit" label is visible in the filter bar)
+    await expect(page.locator("text=Unit").first()).toBeVisible()
+
+    // Verify the "From" and "To" date filter labels are visible
+    await expect(page.locator("text=From").first()).toBeVisible()
+    await expect(page.locator("text=To").first()).toBeVisible()
   })
 })

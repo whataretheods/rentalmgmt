@@ -13,6 +13,7 @@ test.describe("Tenant Profile Editing", () => {
     await page.fill('input[type="password"]', TENANT_PASSWORD)
     await page.click('button[type="submit"]')
     await page.waitForURL("**/tenant/dashboard", { timeout: 15000 })
+    await page.waitForLoadState("networkidle")
   })
 
   test("@smoke profile page loads with form sections", async ({ page }) => {
@@ -29,9 +30,13 @@ test.describe("Tenant Profile Editing", () => {
       page.locator("text=Personal Information")
     ).toBeVisible({ timeout: 10000 })
 
-    await expect(page.locator("text=Email Address")).toBeVisible()
+    await expect(
+      page.locator('[data-slot="card-title"]', { hasText: "Email Address" })
+    ).toBeVisible()
 
-    await expect(page.locator("text=Emergency Contact")).toBeVisible()
+    await expect(
+      page.locator('[data-slot="card-title"]', { hasText: "Emergency Contact" })
+    ).toBeVisible()
   })
 
   test("form pre-populates with current user data", async ({ page }) => {
