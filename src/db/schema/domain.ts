@@ -55,3 +55,26 @@ export const inviteTokens = pgTable("invite_tokens", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   usedAt: timestamp("used_at"),
 })
+
+// Payments — tracks all rent payments (Stripe and manual/offline)
+export const payments = pgTable("payments", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantUserId: text("tenant_user_id").notNull(),     // Better Auth user.id (text, NOT uuid)
+  unitId: uuid("unit_id")
+    .references(() => units.id, { onDelete: "cascade" })
+    .notNull(),
+  amountCents: integer("amount_cents").notNull(),      // amount in cents (e.g., 150000 = $1,500.00)
+  stripeSessionId: text("stripe_session_id").unique(), // null for manual payments, unique to prevent duplicates
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  paymentMethod: text("payment_method", {
+    enum: ["card", "ach", "cash", "check", "venmo", "other"],
+  }).notNull(),
+  status: text("status", {
+    enum: ["pending", "succeeded", "failed"],
+  }).notNull(),
+  billingPeriod: text("billing_period").notNull(),     // "2026-03" YYYY-MM format
+  note: text("note"),                                   // for manual payment descriptions
+  paidAt: timestamp("paid_at"),                         // when payment was confirmed
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
