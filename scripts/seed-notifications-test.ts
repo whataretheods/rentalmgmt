@@ -6,22 +6,30 @@ import { drizzle } from "drizzle-orm/neon-http"
 import * as schema from "../src/db/schema"
 import { eq, and } from "drizzle-orm"
 
-const TENANT_EMAIL = process.env.TEST_TENANT_EMAIL || "testtenant@test.com"
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "odesantos2@gmail.com"
-
 async function main() {
   const sql = neon(process.env.DATABASE_URL!)
   const db = drizzle({ client: sql, schema })
 
-  // --- Find tenant user ---
+  // --- Find tenant via active tenant-unit link (same approach as seed-payment-test) ---
+  const [link] = await db
+    .select()
+    .from(schema.tenantUnits)
+    .where(eq(schema.tenantUnits.isActive, true))
+    .limit(1)
+
+  if (!link) {
+    console.log("No active tenant-unit links found. Run invite flow first.")
+    process.exit(1)
+  }
+
   const [tenant] = await db
     .select()
     .from(schema.user)
-    .where(eq(schema.user.email, TENANT_EMAIL))
+    .where(eq(schema.user.id, link.userId))
     .limit(1)
 
   if (!tenant) {
-    console.log(`Tenant ${TENANT_EMAIL} not found. Run invite flow first.`)
+    console.log("Tenant user not found for active unit link.")
     process.exit(1)
   }
 
