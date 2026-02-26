@@ -14,20 +14,19 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 
 <!-- Shipped and confirmed valuable. -->
 
-(None yet — ship to validate)
+- ✓ Multi-user admin access (full permissions for all team members) — Phase 1
+- ✓ Tenant onboarding via QR code (scan → create account → linked to unit) — Phase 2
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Tenant onboarding via QR code (scan → create account → setup profile)
 - [ ] Rent payment through Stripe with multiple payment methods
 - [ ] Per-unit rent amounts and due dates (fully variable)
 - [ ] Tenant contact info management (submit and update)
 - [ ] Document uploads (ID/proof docs and general ad-hoc requests)
 - [ ] Structured maintenance requests (issue type, description, photos)
 - [ ] Admin portal with full tenant/payment/request management
-- [ ] Multi-user admin access (full permissions for all team members)
 - [ ] Payment tracking dashboard (who's paid, who hasn't)
 - [ ] Notifications via email, SMS, and in-app
 - [ ] Professional, polished tenant-facing experience
@@ -66,4 +65,4 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 | Stripe for payments | Industry standard, supports multiple payment methods | — Pending |
 
 ---
-*Last updated: 2026-02-25 after initialization*
+*Last updated: 2026-02-26 after Phase 2*
