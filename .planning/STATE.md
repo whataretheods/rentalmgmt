@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_plan: 3
+current_plan: 5
 status: executing
-stopped_at: Completed 04-03-PLAN.md
-last_updated: "2026-02-26T17:34:12.413Z"
+stopped_at: Completed 04-04-PLAN.md
+last_updated: "2026-02-26T17:35:52.899Z"
 last_activity: 2026-02-26
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 22
-  completed_plans: 18
+  completed_plans: 20
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 **Phase:** 4 of 6 (Maintenance, Documents, Profiles)
-**Current Plan:** 3
+**Current Plan:** 5
 **Total Plans in Phase:** 6
 **Status:** Ready to execute
 **Last Activity:** 2026-02-26
@@ -66,6 +66,8 @@ Progress: [████████░░] 17/22 plans
 | Phase 03 P06 | 2min | 2 tasks | 5 files |
 | Phase 04 P01 | 2min | 2 tasks | 7 files |
 | Phase 04 P03 | 3min | 2 tasks | 9 files |
+| Phase 04 P02 | 5min | 2 tasks | 10 files |
+| Phase 04 P04 | 5min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -107,6 +109,11 @@ Recent decisions affecting current work:
 - [Phase 04]: UUID-based filenames prevent collisions and path information leakage
 - [Phase 04]: Used Better Auth admin listUsers endpoint for tenant dropdown in DocumentRequestForm
 - [Phase 04]: Document download serves file inline with Content-Disposition header for browser preview
+- [Phase 04]: Drizzle enum type casting: validate string then cast to type alias before insert/update
+- [Phase 04]: Photo upload failures are non-blocking -- request created even if individual photo save fails
+- [Phase 04]: Email change handled via Better Auth client changeEmail, not profile API -- separation of concerns
+- [Phase 04]: Phone field added as Better Auth additionalField with input:true for user-updatable field
+- [Phase 04]: sendChangeEmailVerification placed under user.changeEmail config (not emailAndPassword) matching Better Auth 1.4.x API
 
 ### Pending Todos
 
@@ -120,6 +127,6 @@ None yet.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-26T17:34:12.412Z
-**Stopped At:** Completed 04-03-PLAN.md
+**Last Session:** 2026-02-26T17:35:52.898Z
+**Stopped At:** Completed 04-04-PLAN.md
 **Resume File:** None
