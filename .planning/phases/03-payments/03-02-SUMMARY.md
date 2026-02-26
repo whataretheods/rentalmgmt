@@ -72,7 +72,7 @@ Each task was committed atomically:
 1. **Task 1: Create rent config API endpoint** - `354db4b` (feat)
 2. **Task 2: Create admin units page with inline rent configuration** - `6e52b99` (feat)
 
-**Plan metadata:** [pending] (docs: complete plan)
+**Plan metadata:** `a3eb696` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/app/api/units/[unitId]/rent-config/route.ts` - PATCH endpoint: validates admin session, Zod schema for rentAmountCents/rentDueDay, updates units table
