@@ -1,4 +1,6 @@
 import Link from "next/link"
+import { CreditCard } from "lucide-react"
+import { EmptyState } from "@/components/ui/empty-state"
 
 interface Payment {
   id: string
@@ -17,14 +19,22 @@ interface PaymentHistoryTableProps {
 export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
   if (payments.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-500">
-        No payments yet. Pay your first rent to see it here.
-      </div>
+      <EmptyState
+        icon={CreditCard}
+        title="No payments yet"
+        description="Pay your first rent to see your payment history here."
+        action={
+          <Link href="/tenant/dashboard" className="text-sm text-blue-600 hover:underline">
+            Go to Dashboard to pay rent
+          </Link>
+        }
+      />
     )
   }
 
   return (
-    <table className="w-full border-collapse">
+    <div className="overflow-x-auto">
+    <table className="w-full border-collapse min-w-[600px]">
       <thead>
         <tr className="border-b text-left text-sm font-medium text-gray-500">
           <th className="pb-3 pr-4">Date</th>
@@ -58,6 +68,7 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
         ))}
       </tbody>
     </table>
+    </div>
   )
 }
 
