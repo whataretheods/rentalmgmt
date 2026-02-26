@@ -2,9 +2,13 @@ import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { admin } from "better-auth/plugins"
 import { nextCookies } from "better-auth/next-js"
+import { createAuthMiddleware } from "better-auth/api"
+import { eq, and, gt } from "drizzle-orm"
 import { db } from "@/db"
 import * as schema from "@/db/schema"
+import { inviteTokens, tenantUnits } from "@/db/schema"
 import { resend } from "@/lib/resend"
+import { hashToken } from "@/lib/tokens"
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -47,6 +51,68 @@ export const auth = betterAuth({
         input: false,
       },
     },
+  },
+  hooks: {
+    after: createAuthMiddleware(async (ctx) => {
+      // Only process signup requests
+      if (!ctx.path.startsWith("/sign-up")) return
+
+      const newSession = ctx.context.newSession
+      if (!newSession) return
+
+      // Read invite token from request body (passed as extra field by invite registration form)
+      let body: Record<string, unknown> = {}
+      try {
+        body = ctx.body as Record<string, unknown> ?? {}
+      } catch {
+        // Body may not be parseable — skip invite processing
+        return
+      }
+
+      const inviteToken = body.inviteToken as string | undefined
+      if (!inviteToken) return  // Normal registration (no invite) — skip
+
+      const tokenHash = hashToken(inviteToken)
+      const now = new Date()
+
+      // Atomic consumption: UPDATE WHERE status='pending' AND not expired
+      // If 0 rows returned, token was already used, expired, or invalid
+      const [consumed] = await db
+        .update(inviteTokens)
+        .set({
+          status: "used",
+          usedByUserId: newSession.user.id,
+          usedAt: now,
+        })
+        .where(
+          and(
+            eq(inviteTokens.tokenHash, tokenHash),
+            eq(inviteTokens.status, "pending"),
+            gt(inviteTokens.expiresAt, now),
+          )
+        )
+        .returning()
+
+      if (!consumed) {
+        // Token invalid/expired/already used — user is created but not linked
+        // They'll see an "unlinked" state on their dashboard
+        console.warn("Invite token consumption failed for user:", newSession.user.id)
+        return
+      }
+
+      // Link user to unit
+      await db.insert(tenantUnits).values({
+        userId: newSession.user.id,
+        unitId: consumed.unitId,
+        startDate: now,
+        isActive: true,
+      })
+
+      console.log("Tenant linked to unit:", {
+        userId: newSession.user.id,
+        unitId: consumed.unitId,
+      })
+    }),
   },
 })
 
