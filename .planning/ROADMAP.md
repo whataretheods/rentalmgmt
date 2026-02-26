@@ -51,7 +51,13 @@ Plans:
   3. After completing account creation, tenant is linked to the correct unit automatically
   4. The invite link becomes invalid after one use — a second scan shows an error, not a registration form
   5. An invite link that has expired (past 30 days) shows a clear expiry message
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — inviteTokens schema, token/QR utilities, Better Auth after-signup hook, DB migration
+- [ ] 02-02-PLAN.md — Admin invite management API routes and UI page
+- [ ] 02-03-PLAN.md — Tenant invite landing page and invite-aware registration form
+- [ ] 02-04-PLAN.md — End-to-end Playwright verification and human verification checkpoint
 
 ### Phase 3: Payments
 **Goal**: Tenants can pay rent online via Stripe and the admin can see at a glance who has paid and who hasn't — the complete core value proposition
@@ -110,7 +116,7 @@ Note: Phase 4 depends on Phase 1 (not Phase 3) — it can start in parallel with
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 1/6 | In progress | - |
-| 2. Tenant Onboarding | 0/TBD | Not started | - |
+| 2. Tenant Onboarding | 0/4 | Not started | - |
 | 3. Payments | 0/TBD | Not started | - |
 | 4. Maintenance, Documents, and Profiles | 0/TBD | Not started | - |
 | 5. Notifications and Messaging | 0/TBD | Not started | - |
