@@ -15,6 +15,13 @@
       "when": 1772075793197,
       "tag": "0001_wet_marvex",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772123672494,
+      "tag": "0002_warm_vampiro",
+      "breakpoints": true
     }
   ]
 }
