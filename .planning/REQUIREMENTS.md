@@ -26,14 +26,14 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Maintenance
 
-- [ ] **MAINT-01**: Tenant can submit maintenance request with issue type, description, and photos
-- [ ] **MAINT-02**: Tenant can track maintenance request status (submitted, acknowledged, in progress, resolved)
-- [ ] **MAINT-03**: Admin can manage maintenance queue with filters by status, unit, and date
+- [x] **MAINT-01**: Tenant can submit maintenance request with issue type, description, and photos
+- [x] **MAINT-02**: Tenant can track maintenance request status (submitted, acknowledged, in progress, resolved)
+- [x] **MAINT-03**: Admin can manage maintenance queue with filters by status, unit, and date
 
 ### Documents
 
-- [ ] **DOC-01**: Tenant can upload documents (ID, proof docs, ad-hoc files) with type and size validation
-- [ ] **DOC-02**: Admin can request specific documents from tenants and view submissions
+- [x] **DOC-01**: Tenant can upload documents (ID, proof docs, ad-hoc files) with type and size validation
+- [x] **DOC-02**: Admin can request specific documents from tenants and view submissions
 
 ### Notifications
 
@@ -45,7 +45,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Tenant Management
 
-- [ ] **TMGMT-01**: Tenant can manage own contact info (name, phone, email, emergency contact)
+- [x] **TMGMT-01**: Tenant can manage own contact info (name, phone, email, emergency contact)
 
 ## v2 Requirements
 
@@ -98,17 +98,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PAY-04 | Phase 3 | Complete |
 | PAY-05 | Phase 3 | Complete |
 | PAY-06 | Phase 6 | Pending |
-| MAINT-01 | Phase 4 | Pending |
-| MAINT-02 | Phase 4 | Pending |
-| MAINT-03 | Phase 4 | Pending |
-| DOC-01 | Phase 4 | Pending |
-| DOC-02 | Phase 4 | Pending |
+| MAINT-01 | Phase 4 | Complete |
+| MAINT-02 | Phase 4 | Complete |
+| MAINT-03 | Phase 4 | Complete |
+| DOC-01 | Phase 4 | Complete |
+| DOC-02 | Phase 4 | Complete |
 | NOTIF-01 | Phase 5 | Pending |
 | NOTIF-02 | Phase 3 | Complete |
 | NOTIF-03 | Phase 5 | Pending |
 | NOTIF-04 | Phase 5 | Pending |
 | NOTIF-05 | Phase 5 | Pending |
-| TMGMT-01 | Phase 4 | Pending |
+| TMGMT-01 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 22 total
