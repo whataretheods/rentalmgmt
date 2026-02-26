@@ -16,6 +16,7 @@
     "seed:property": "tsx -r tsconfig-paths/register scripts/seed-property.ts",
     "seed:payment-test": "tsx -r tsconfig-paths/register scripts/seed-payment-test.ts",
     "seed:phase4-test": "tsx -r tsconfig-paths/register scripts/seed-phase4-test.ts",
+    "seed:phase5-test": "tsx -r tsconfig-paths/register scripts/seed-notifications-test.ts",
     "test:e2e": "npx playwright test"
   },
   "keywords": [],
