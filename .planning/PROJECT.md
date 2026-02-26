@@ -23,12 +23,12 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 - ✓ Document uploads (ID/proof docs and admin request workflow) — Phase 4
 - ✓ Tenant contact info management (name, phone, email, emergency contact) — Phase 4
 - ✓ Admin portal with full tenant/payment/request management — Phase 4
+- ✓ Notifications via email, SMS, and in-app (reminders, inbox, admin broadcast) — Phase 5
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Notifications via email, SMS, and in-app
 - [ ] Professional, polished tenant-facing experience
 
 ### Out of Scope
@@ -69,6 +69,9 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 | Local file storage | uploads/ directory with API-based auth-gated serving, UUID filenames | ✓ Phase 4 |
 | @hello-pangea/dnd for kanban | Drag-and-drop maintenance status management for admin | ✓ Phase 4 |
 | Better Auth changeEmail | Email changes via auth client, not profile API — separation of concerns | ✓ Phase 4 |
+| Twilio for SMS | TCPA-compliant with platform-level STOP handling, A2P 10DLC registration | ✓ Phase 5 |
+| System crontab for reminders | Daily curl to CRON_SECRET-protected API route — simpler than BullMQ/Redis | ✓ Phase 5 |
+| Multi-channel sendNotification | Single dispatch helper routes to in-app, email, and SMS based on user prefs | ✓ Phase 5 |
 
 ---
-*Last updated: 2026-02-26 after Phase 4*
+*Last updated: 2026-02-26 after Phase 5*
