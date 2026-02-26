@@ -1,0 +1,55 @@
+import { db } from "@/db"
+import { units, properties, inviteTokens } from "@/db/schema"
+import { eq, desc } from "drizzle-orm"
+import { InviteManager } from "@/components/admin/InviteManager"
+
+export default async function AdminInvitesPage() {
+  // Fetch all units with their property name
+  const allUnits = await db
+    .select({
+      id: units.id,
+      unitNumber: units.unitNumber,
+      propertyName: properties.name,
+      propertyId: units.propertyId,
+    })
+    .from(units)
+    .innerJoin(properties, eq(units.propertyId, properties.id))
+    .orderBy(units.unitNumber)
+
+  // Fetch latest invite for each unit (pending only)
+  const pendingInvites = await db
+    .select({
+      unitId: inviteTokens.unitId,
+      status: inviteTokens.status,
+      expiresAt: inviteTokens.expiresAt,
+      createdAt: inviteTokens.createdAt,
+    })
+    .from(inviteTokens)
+    .where(eq(inviteTokens.status, "pending"))
+    .orderBy(desc(inviteTokens.createdAt))
+
+  // Build unit data with invite status
+  const unitsWithStatus = allUnits.map((unit) => {
+    const invite = pendingInvites.find((inv) => inv.unitId === unit.id)
+    return {
+      id: unit.id,
+      unitNumber: unit.unitNumber,
+      propertyName: unit.propertyName,
+      hasPendingInvite: !!invite,
+      inviteExpiresAt: invite?.expiresAt?.toISOString() ?? null,
+    }
+  })
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Invite Tenants</h1>
+        <p className="mt-1 text-sm text-gray-600">
+          Generate QR code invites for each unit. Tenants scan the code to
+          create their account and get linked automatically.
+        </p>
+      </div>
+      <InviteManager units={unitsWithStatus} />
+    </div>
+  )
+}
