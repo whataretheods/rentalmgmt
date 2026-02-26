@@ -38,7 +38,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Notifications
 
 - [ ] **NOTIF-01**: System sends automated payment reminders (3-5 days before, day-of, overdue)
-- [ ] **NOTIF-02**: System sends email notifications for payment confirmations, reminders, and request updates
+- [x] **NOTIF-02**: System sends email notifications for payment confirmations, reminders, and request updates
 - [ ] **NOTIF-03**: System sends SMS notifications for urgent items with TCPA-compliant opt-in and STOP handling
 - [ ] **NOTIF-04**: Tenant and admin can view in-app notifications via notification inbox
 - [ ] **NOTIF-05**: Admin can send bulk messages to all tenants via email and SMS
@@ -104,7 +104,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DOC-01 | Phase 4 | Pending |
 | DOC-02 | Phase 4 | Pending |
 | NOTIF-01 | Phase 5 | Pending |
-| NOTIF-02 | Phase 3 | Pending |
+| NOTIF-02 | Phase 3 | Complete |
 | NOTIF-03 | Phase 5 | Pending |
 | NOTIF-04 | Phase 5 | Pending |
 | NOTIF-05 | Phase 5 | Pending |
