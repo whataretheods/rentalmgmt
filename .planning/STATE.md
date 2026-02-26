@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_plan: 3
-status: executing
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-02-26T03:23:02.713Z"
+status: in-progress
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-02-26T03:25:13.807Z"
 last_activity: 2026-02-26
 progress:
   total_phases: 2
@@ -28,10 +28,10 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 **Phase:** 2 of 6 (Tenant Onboarding)
 **Current Plan:** 3
 **Total Plans in Phase:** 4
-**Status:** Ready to execute
+**Status:** In progress
 **Last Activity:** 2026-02-26
 
-Progress: [██████░░░░] 7/10 plans
+Progress: [████████░░] 8/10 plans
 
 ## Performance Metrics
 
@@ -57,7 +57,7 @@ Progress: [██████░░░░] 7/10 plans
 | Phase 01 P04 | 5min | 2 tasks | 14 files |
 | Phase 01 P05 | 3min | 2 tasks | 6 files |
 | Phase 02 P01 | 3min | 2 tasks | 7 files |
-| Phase 02 P03 | 2min | 2 tasks | 2 files |
+| Phase 02 P02 | 2min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -83,8 +83,7 @@ Recent decisions affecting current work:
 - [Phase 02]: Token passed via request body field (inviteToken) rather than cookie for simplicity
 - [Phase 02]: Atomic UPDATE WHERE status=pending AND expiresAt>now for race-condition-safe token consumption
 - [Phase 02]: Unlinked user on failed consumption gets warning log, not error -- account still created
-- [Phase 02]: Raw invite token passed as prop to InviteRegisterForm, then included in signUp.email body for after-hook consumption
-- [Phase 02]: Type assertion used for inviteToken extra field since Better Auth TS types do not include custom body fields
+- [Phase 02]: QR code download via dedicated API route for clean PNG download with Content-Disposition attachment header
 
 ### Pending Todos
 
@@ -98,6 +97,6 @@ None yet.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-26T03:23:02.712Z
-**Stopped At:** Completed 02-03-PLAN.md
+**Last Session:** 2026-02-26T03:25:13.806Z
+**Stopped At:** Completed 02-02-PLAN.md
 **Resume File:** None

@@ -115,8 +115,8 @@ Note: Phase 4 depends on Phase 1 (not Phase 3) — it can start in parallel with
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/6 | In progress | - |
-| 2. Tenant Onboarding | 0/4 | Not started | - |
+| 1. Foundation | 6/6 | Complete | - |
+| 2. Tenant Onboarding | 2/4 | In Progress | - |
 | 3. Payments | 0/TBD | Not started | - |
 | 4. Maintenance, Documents, and Profiles | 0/TBD | Not started | - |
 | 5. Notifications and Messaging | 0/TBD | Not started | - |
