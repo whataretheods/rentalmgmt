@@ -12,7 +12,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **AUTH-01**: User can create tenant account with email and password
 - [x] **AUTH-02**: User session persists across browser refresh
 - [x] **AUTH-03**: User can reset password via email link
-- [ ] **AUTH-04**: Tenant can onboard by scanning QR code from physical letter, creating account, and being linked to their unit
+- [x] **AUTH-04**: Tenant can onboard by scanning QR code from physical letter, creating account, and being linked to their unit
 - [x] **AUTH-05**: Multiple admin users can access the admin portal with full permissions
 
 ### Payments
@@ -90,7 +90,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
-| AUTH-04 | Phase 2 | Pending |
+| AUTH-04 | Phase 2 | Complete |
 | AUTH-05 | Phase 1 | Complete |
 | PAY-01 | Phase 3 | Pending |
 | PAY-02 | Phase 3 | Pending |

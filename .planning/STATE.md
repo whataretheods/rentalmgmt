@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_plan: Not started
-status: completed
-stopped_at: Completed 01-05-PLAN.md
-last_updated: "2026-02-26T02:42:53.775Z"
+current_plan: 2
+status: in-progress
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-02-26T03:17:31Z"
 last_activity: 2026-02-26
 progress:
-  total_phases: 1
+  total_phases: 2
   completed_phases: 1
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 10
+  completed_plans: 7
 ---
 
 # Project State
@@ -21,17 +21,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 2 — Tenant Onboarding
 
 ## Current Position
 
-**Phase:** 1 of 6 (Foundation)
-**Current Plan:** Not started
-**Total Plans in Phase:** 6
-**Status:** Milestone complete
+**Phase:** 2 of 6 (Tenant Onboarding)
+**Current Plan:** 2 of 4
+**Total Plans in Phase:** 4
+**Status:** In progress
 **Last Activity:** 2026-02-26
 
-Progress: [█░░░░░░░░░] 1/6 plans
+Progress: [██████░░░░] 7/10 plans
 
 ## Performance Metrics
 
@@ -56,6 +56,7 @@ Progress: [█░░░░░░░░░] 1/6 plans
 | Phase 01 P03 | 3min | 2 tasks | 5 files |
 | Phase 01 P04 | 5min | 2 tasks | 14 files |
 | Phase 01 P05 | 3min | 2 tasks | 6 files |
+| Phase 02 P01 | 3min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Sonner Toaster added to root layout for global toast notifications across all auth forms
 - [Phase 01]: Admin users page placed at (admin)/admin/users/ following Plan 03 route group convention
 - [Phase 01]: Seed scripts use tsx with tsconfig-paths/register for @/ path alias resolution
+- [Phase 02]: Token passed via request body field (inviteToken) rather than cookie for simplicity
+- [Phase 02]: Atomic UPDATE WHERE status=pending AND expiresAt>now for race-condition-safe token consumption
+- [Phase 02]: Unlinked user on failed consumption gets warning log, not error -- account still created
 
 ### Pending Todos
 
@@ -91,6 +95,6 @@ None yet.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-25T21:12:31.107Z
-**Stopped At:** Completed 01-05-PLAN.md
+**Last Session:** 2026-02-26T03:17:31Z
+**Stopped At:** Completed 02-01-PLAN.md
 **Resume File:** None
