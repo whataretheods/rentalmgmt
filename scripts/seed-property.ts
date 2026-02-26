@@ -8,7 +8,8 @@
  * Requires in .env.local:
  *   DATABASE_URL=...
  */
-import "dotenv/config"
+import { config } from "dotenv"
+config({ path: ".env.local" })
 import { db } from "@/db"
 import { properties, units } from "@/db/schema"
 
