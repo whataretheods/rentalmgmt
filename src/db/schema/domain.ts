@@ -164,3 +164,20 @@ export const emergencyContacts = pgTable("emergency_contacts", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
+
+// ==================== Phase 5: Notifications and Messaging ====================
+
+export const notifications = pgTable("notifications", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id").notNull(),           // Better Auth user.id (text)
+  type: text("type", {
+    enum: ["rent_reminder", "payment_confirmation", "broadcast", "maintenance_update", "system"],
+  }).notNull(),
+  title: text("title").notNull(),
+  body: text("body").notNull(),
+  channel: text("channel", {
+    enum: ["in_app", "email", "sms"],
+  }).default("in_app").notNull(),
+  readAt: timestamp("read_at"),                // null = unread
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
