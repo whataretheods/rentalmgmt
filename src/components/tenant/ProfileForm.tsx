@@ -7,12 +7,13 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { authClient } from "@/lib/auth-client"
 import { toast } from "sonner"
-import { User, Phone, Mail, Shield } from "lucide-react"
+import { User, Phone, Mail, Shield, MessageSquare } from "lucide-react"
 
 interface ProfileData {
   name: string
   email: string
   phone: string | null
+  smsOptIn: boolean
   emergencyContact: {
     contactName: string
     contactPhone: string
@@ -33,6 +34,10 @@ export function ProfileForm() {
   const [showEmailChange, setShowEmailChange] = useState(false)
   const [savingEmail, setSavingEmail] = useState(false)
 
+  // SMS opt-in state
+  const [smsOptIn, setSmsOptIn] = useState(false)
+  const [savingSms, setSavingSms] = useState(false)
+
   // Emergency contact form state
   const [ecName, setEcName] = useState("")
   const [ecPhone, setEcPhone] = useState("")
@@ -50,6 +55,7 @@ export function ProfileForm() {
       setProfile(data)
       setName(data.name)
       setPhone(data.phone ?? "")
+      setSmsOptIn(data.smsOptIn ?? false)
       setEcName(data.emergencyContact?.contactName ?? "")
       setEcPhone(data.emergencyContact?.contactPhone ?? "")
     } catch {
@@ -83,6 +89,29 @@ export function ProfileForm() {
       toast.error(err instanceof Error ? err.message : "Failed to update personal information")
     } finally {
       setSavingPersonal(false)
+    }
+  }
+
+  async function handleToggleSms(newValue: boolean) {
+    setSavingSms(true)
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ smsOptIn: newValue }),
+      })
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.error || "Failed to update SMS preference")
+      }
+      const data: ProfileData = await res.json()
+      setProfile(data)
+      setSmsOptIn(data.smsOptIn)
+      toast.success(newValue ? "SMS notifications enabled" : "SMS notifications disabled")
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to update SMS preference")
+    } finally {
+      setSavingSms(false)
     }
   }
 
@@ -204,6 +233,44 @@ export function ProfileForm() {
               {savingPersonal ? "Saving..." : "Save Personal Info"}
             </Button>
           </form>
+        </CardContent>
+      </Card>
+
+      {/* SMS Notifications */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MessageSquare className="size-5" />
+            SMS Notifications
+          </CardTitle>
+          <CardDescription>
+            Receive rent reminders and property announcements via text message
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="smsOptIn"
+              checked={smsOptIn}
+              disabled={!phone.trim() || savingSms}
+              onChange={(e) => handleToggleSms(e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+            <Label htmlFor="smsOptIn" className={!phone.trim() ? "text-gray-400" : ""}>
+              {savingSms ? "Updating..." : "Enable SMS notifications"}
+            </Label>
+          </div>
+          {!phone.trim() && (
+            <p className="text-sm text-amber-600">
+              You must have a phone number on file to enable SMS notifications.
+            </p>
+          )}
+          <p className="text-xs text-gray-500 leading-relaxed">
+            By enabling SMS notifications, you agree to receive text messages from RentalMgmt
+            about rent reminders and property announcements. Message and data rates may apply.
+            Reply STOP to any message to opt out at any time.
+          </p>
         </CardContent>
       </Card>
 
