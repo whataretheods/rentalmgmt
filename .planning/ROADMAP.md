@@ -46,7 +46,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. A non-admin user attempting to access any /admin route is rejected at the edge (middleware) before the page component loads
   4. Deleting or archiving a property or unit does not destroy any associated payment, charge, or maintenance history
   5. Every admin page displays a persistent collapsible sidebar navigation that maintains state across page transitions
-**Plans**: TBD
+**Plans**: 4 plans, 3 waves
+  - Wave 1: Plan 01 (INFRA-04: DB driver swap) + Plan 04 (INFRA-02 + AUX-01: edge auth + sidebar) — parallel
+  - Wave 2: Plan 02 (INFRA-05 + INFRA-01 schema: cascade safety + storage columns)
+  - Wave 3: Plan 03 (INFRA-01: S3 storage implementation)
 
 ### Phase 8: Financial Ledger Foundation
 **Goal**: Tenant finances are tracked through a proper ledger where charges (what is owed) are separated from payments (what was paid), with running balances visible to both tenants and admins
@@ -119,7 +122,7 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 4. Maintenance, Documents, and Profiles | v1.0 | 6/6 | Complete | 2026-02-26 |
 | 5. Notifications and Messaging | v1.0 | 5/5 | Complete | 2026-02-26 |
 | 6. Autopay and Polish | v1.0 | 6/6 | Complete | 2026-02-26 |
-| 7. Infrastructure Prerequisites | v2.0 | 0/TBD | Not started | - |
+| 7. Infrastructure Prerequisites | v2.0 | 0/4 | Planned | - |
 | 8. Financial Ledger Foundation | v2.0 | 0/TBD | Not started | - |
 | 9. Automated Operations | v2.0 | 0/TBD | Not started | - |
 | 10. Portfolio Management & Tenant Lifecycle | v2.0 | 0/TBD | Not started | - |
