@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { db } from "@/db"
-import { units, properties, tenantUnits, payments, user } from "@/db/schema"
+import { units, properties, tenantUnits, payments, charges, user } from "@/db/schema"
 import { eq, and, sql, inArray } from "drizzle-orm"
 
 export async function GET(req: Request) {
@@ -55,6 +55,31 @@ export async function GET(req: Request) {
     .where(eq(payments.billingPeriod, period))
     .groupBy(payments.unitId)
 
+  // 3b. Get charge totals per tenant-unit pair (for balance computation)
+  const chargeTotals = await db
+    .select({
+      tenantUserId: charges.tenantUserId,
+      unitId: charges.unitId,
+      totalChargesCents: sql<number>`COALESCE(SUM(${charges.amountCents}), 0)`.as("total_charges_cents"),
+    })
+    .from(charges)
+    .groupBy(charges.tenantUserId, charges.unitId)
+
+  const chargeMap = new Map(chargeTotals.map(c => [`${c.tenantUserId}:${c.unitId}`, Number(c.totalChargesCents)]))
+
+  // 3c. Get all-time succeeded payment totals per tenant-unit pair (for balance)
+  const paymentTotals = await db
+    .select({
+      tenantUserId: payments.tenantUserId,
+      unitId: payments.unitId,
+      totalPaidCents: sql<number>`COALESCE(SUM(${payments.amountCents}), 0)`.as("total_paid_cents"),
+    })
+    .from(payments)
+    .where(eq(payments.status, "succeeded"))
+    .groupBy(payments.tenantUserId, payments.unitId)
+
+  const totalPaidMap = new Map(paymentTotals.map(p => [`${p.tenantUserId}:${p.unitId}`, Number(p.totalPaidCents)]))
+
   // 4. Get user names/emails for active tenants using Drizzle schema (type-safe)
   const tenantUserIds = activeTenants.map((t) => t.userId)
   let userMap: Record<string, { name: string | null; email: string }> = {}
@@ -89,6 +114,12 @@ export async function GET(req: Request) {
       status = hasPending ? "pending" : "partial"
     }
 
+    // Compute running balance: charges - succeeded payments (all-time)
+    const balanceKey = tenantUserId ? `${tenantUserId}:${unit.unitId}` : null
+    const totalCharges = balanceKey ? (chargeMap.get(balanceKey) ?? 0) : 0
+    const totalPaid = balanceKey ? (totalPaidMap.get(balanceKey) ?? 0) : 0
+    const balanceCents = totalCharges - totalPaid
+
     return {
       unitId: unit.unitId,
       unitNumber: unit.unitNumber,
@@ -98,6 +129,7 @@ export async function GET(req: Request) {
       rentAmountCents: unit.rentAmountCents,
       amountPaidCents: amountPaid,
       status,
+      balanceCents,
       lastPaymentDate: paymentData?.lastPaymentDate
         ? new Date(paymentData.lastPaymentDate).toLocaleDateString()
         : null,

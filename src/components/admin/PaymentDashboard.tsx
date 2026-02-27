@@ -13,6 +13,7 @@ interface UnitPaymentStatus {
   rentAmountCents: number | null
   amountPaidCents: number
   status: "paid" | "unpaid" | "partial" | "pending"
+  balanceCents: number
   lastPaymentDate: string | null
 }
 
@@ -85,6 +86,7 @@ export function PaymentDashboard({
               <th className="pb-3 pr-4">Amount Due</th>
               <th className="pb-3 pr-4">Amount Paid</th>
               <th className="pb-3 pr-4">Status</th>
+              <th className="pb-3 pr-4">Balance</th>
               <th className="pb-3 pr-4">Last Payment</th>
               <th className="pb-3">Actions</th>
             </tr>
@@ -115,6 +117,15 @@ export function PaymentDashboard({
                     {unit.status.charAt(0).toUpperCase() + unit.status.slice(1)}
                   </span>
                 </td>
+                <td className="py-3 pr-4 text-sm font-medium">
+                  {unit.balanceCents > 0 ? (
+                    <span className="text-red-700">${(unit.balanceCents / 100).toFixed(2)} owed</span>
+                  ) : unit.balanceCents < 0 ? (
+                    <span className="text-blue-700">${(Math.abs(unit.balanceCents) / 100).toFixed(2)} credit</span>
+                  ) : (
+                    <span className="text-green-700">Current</span>
+                  )}
+                </td>
                 <td className="py-3 pr-4 text-sm text-gray-500">
                   {unit.lastPaymentDate || "\u2014"}
                 </td>
@@ -131,7 +142,7 @@ export function PaymentDashboard({
             ))}
             {data.length === 0 && (
               <tr>
-                <td colSpan={7} className="py-8 text-center text-gray-500">
+                <td colSpan={8} className="py-8 text-center text-gray-500">
                   No units found.
                 </td>
               </tr>
