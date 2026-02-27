@@ -1,8 +1,9 @@
 # Roadmap: RentalMgmt
 
-## Overview
+## Milestones
 
-Six phases, each unlocking the next. The build order is dependency-driven: auth and data model first, then the QR onboarding flow that gets tenants into the system, then the core payment and dashboard capability that delivers the product's entire reason for existence. Maintenance, documents, and contact management follow once the tenant account foundation is proven. Full multi-channel notification infrastructure ships next as a discrete phase requiring TCPA compliance work that should not be rushed. Autopay closes the loop on the payment experience once the core payment flow has been validated in production.
+- **v1.0 MVP** - Phases 1-6 (shipped 2026-02-26)
+- **v2.0 Production-Ready** - Phases 7-12 (in progress)
 
 ## Phases
 
@@ -12,119 +13,115 @@ Six phases, each unlocking the next. The build order is dependency-driven: auth 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Auth, data model, and admin bootstrap — every other phase depends on this
-- [ ] **Phase 2: Tenant Onboarding** - QR invite flow linking tenants to their units before any other tenant feature can be tested
-- [ ] **Phase 3: Payments** - Stripe rent collection and admin payment dashboard — the core product value
-- [x] **Phase 4: Maintenance, Documents, and Profiles** - Tenant self-service workflows after the payment core is validated (2026-02-26)
-- [x] **Phase 5: Notifications and Messaging** - Full multi-channel notification infrastructure with TCPA-compliant SMS (2026-02-26)
-- [ ] **Phase 6: Autopay and Polish** - Recurring payments and UX refinements after core flows are production-validated
+<details>
+<summary>v1.0 MVP (Phases 1-6) - SHIPPED 2026-02-26</summary>
+
+- [x] **Phase 1: Foundation** - Auth, data model, and admin bootstrap (2026-02-25)
+- [x] **Phase 2: Tenant Onboarding** - QR invite flow linking tenants to their units (2026-02-25)
+- [x] **Phase 3: Payments** - Stripe rent collection and admin payment dashboard (2026-02-26)
+- [x] **Phase 4: Maintenance, Documents, and Profiles** - Tenant self-service workflows (2026-02-26)
+- [x] **Phase 5: Notifications and Messaging** - Multi-channel notifications with TCPA-compliant SMS (2026-02-26)
+- [x] **Phase 6: Autopay and Polish** - Recurring payments and UX refinements (2026-02-26)
+
+</details>
+
+### v2.0 Production-Ready
+
+- [ ] **Phase 7: Infrastructure Prerequisites** - Database transaction support, S3 cloud storage, edge auth, cascade safety, admin sidebar layout
+- [ ] **Phase 8: Financial Ledger Foundation** - Charges table, running balances, charge management, historical reconciliation, webhook hardening
+- [ ] **Phase 9: Automated Operations** - Late fee automation, configurable fee rules, timezone-aware scheduling, late fee notifications
+- [ ] **Phase 10: Portfolio Management & Tenant Lifecycle** - Property/unit CRUD, move-out workflow, past-tenant access, self-service invite entry
+- [ ] **Phase 11: Admin UX & KPI Dashboard** - KPI metric cards, polished empty states, mobile-responsive admin layout
+- [ ] **Phase 12: Vendor & Work Order Management** - Vendor directory, maintenance assignment, magic link sharing, cost tracking
 
 ## Phase Details
 
-### Phase 1: Foundation
-**Goal**: A working application with secure auth, a complete data model, and a barebones admin interface — the prerequisite for every other feature
-**Depends on**: Nothing (first phase)
-**Requirements**: AUTH-01, AUTH-02, AUTH-03, AUTH-05
+### Phase 7: Infrastructure Prerequisites
+**Goal**: The application has a transaction-safe database layer, cloud file storage, edge-level role authorization, safe deletion constraints, and a persistent admin sidebar — removing all technical blockers before feature work begins
+**Depends on**: Phase 6 (v1.0 complete)
+**Requirements**: INFRA-01, INFRA-02, INFRA-04, INFRA-05, AUX-01
 **Success Criteria** (what must be TRUE):
-  1. A tenant can create an account with email and password and land on their portal
-  2. A logged-in user's session persists across browser refresh and tab close/reopen
-  3. A user who forgot their password can reset it via an emailed link and regain access
-  4. Multiple admin users can each log in to the admin portal and see the same data with full access
-  5. Accessing any tenant or admin route while unauthenticated redirects to the login page
-**Plans**: 6 plans
-
-Plans:
-- [x] 01-01-PLAN.md — Next.js scaffold, all packages, Drizzle + Neon client, domain schema
-- [ ] 01-02-PLAN.md — Better Auth config, schema generation, API route, database migrations
-- [ ] 01-03-PLAN.md — Middleware + route group layouts with session/role guards
-- [ ] 01-04-PLAN.md — Auth UI pages (login, register, forgot-password, reset-password)
-- [ ] 01-05-PLAN.md — Admin users page, UserTable, admin seed script, property seed script
-- [ ] 01-06-PLAN.md — Human verification checkpoint: full auth flow end to end
-
-### Phase 2: Tenant Onboarding
-**Goal**: A tenant who has never used the portal can scan a QR code from a physical letter, create an account, and be linked to their unit — no manual admin steps required
-**Depends on**: Phase 1
-**Requirements**: AUTH-04
-**Success Criteria** (what must be TRUE):
-  1. Admin can generate a unique per-unit invite token and download or print a QR code
-  2. Tenant scans QR code, is taken directly to account creation pre-associated with their unit
-  3. After completing account creation, tenant is linked to the correct unit automatically
-  4. The invite link becomes invalid after one use — a second scan shows an error, not a registration form
-  5. An invite link that has expired (past 30 days) shows a clear expiry message
-**Plans**: 4 plans
-
-Plans:
-- [ ] 02-01-PLAN.md — inviteTokens schema, token/QR utilities, Better Auth after-signup hook, DB migration
-- [ ] 02-02-PLAN.md — Admin invite management API routes and UI page
-- [ ] 02-03-PLAN.md — Tenant invite landing page and invite-aware registration form
-- [ ] 02-04-PLAN.md — End-to-end Playwright verification and human verification checkpoint
-
-### Phase 3: Payments
-**Goal**: Tenants can pay rent online via Stripe and the admin can see at a glance who has paid and who hasn't — the complete core value proposition
-**Depends on**: Phase 2
-**Requirements**: PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, NOTIF-02
-**Success Criteria** (what must be TRUE):
-  1. Tenant can pay rent via Stripe using ACH or card and receive a payment confirmation
-  2. Tenant can view their full payment history and download a receipt for any past payment
-  3. Tenant's portal shows their current balance, next due date, and most recent payment
-  4. Admin can set a different rent amount and due date for each unit individually
-  5. Admin's payment dashboard shows per-unit paid/unpaid status for the current period at a glance
-  6. Tenant receives an email confirmation immediately after a successful payment
+  1. Database operations can execute multi-table transactions atomically (e.g., inserting a charge and updating a related record either both succeed or both roll back)
+  2. Newly uploaded maintenance photos and documents are stored in S3-compatible cloud storage and served via presigned URLs — existing local files continue to work via dual-read
+  3. A non-admin user attempting to access any /admin route is rejected at the edge (middleware) before the page component loads
+  4. Deleting or archiving a property or unit does not destroy any associated payment, charge, or maintenance history
+  5. Every admin page displays a persistent collapsible sidebar navigation that maintains state across page transitions
 **Plans**: TBD
 
-### Phase 4: Maintenance, Documents, and Profiles
-**Goal**: Tenants can manage their contact info, submit and track maintenance requests, and upload documents — completing the full tenant self-service experience
-**Depends on**: Phase 1
-**Requirements**: MAINT-01, MAINT-02, MAINT-03, DOC-01, DOC-02, TMGMT-01
+### Phase 8: Financial Ledger Foundation
+**Goal**: Tenant finances are tracked through a proper ledger where charges (what is owed) are separated from payments (what was paid), with running balances visible to both tenants and admins
+**Depends on**: Phase 7
+**Requirements**: LEDG-01, LEDG-02, LEDG-03, LEDG-04, LEDG-05
 **Success Criteria** (what must be TRUE):
-  1. Tenant can submit a maintenance request with issue type, description, and photos attached
-  2. Tenant can check the current status of their open maintenance requests (submitted, acknowledged, in progress, resolved)
-  3. Admin can view all maintenance requests in a queue and filter by status, unit, or date
-  4. Tenant can upload a document (ID, proof doc, ad-hoc file) with type and size validation that rejects unsupported formats
-  5. Admin can request a specific document from a tenant and see when the tenant has submitted it
-  6. Tenant can update their own name, phone, email, and emergency contact at any time
+  1. Every financial obligation (monthly rent, one-time charge, credit, adjustment) exists as a distinct charge record in the ledger, separate from payment records
+  2. Tenant dashboard displays a computed running balance ("You owe $X") reflecting all charges minus all payments, and admin views show the same per-tenant balance
+  3. Admin can manually post a charge, credit, or adjustment to any tenant's ledger with a description, and it immediately updates their running balance
+  4. All historical payment records from v1.0 have been reconciled with corresponding charge records via a validated backfill migration
+  5. Stripe webhook processes ACH settlements and payment confirmations using strict payment intent ID matching, and duplicate webhook events do not create duplicate ledger entries
 **Plans**: TBD
 
-### Phase 5: Notifications and Messaging
-**Goal**: The system proactively notifies tenants and admins via email, SMS, and in-app channels — with automated rent reminders and admin broadcast capability
-**Depends on**: Phase 3
-**Requirements**: NOTIF-01, NOTIF-03, NOTIF-04, NOTIF-05
+### Phase 9: Automated Operations
+**Goal**: The system automatically assesses late fees when rent goes unpaid past a configurable grace period, all time-sensitive operations use property-local timezone, and tenants are notified when fees are posted
+**Depends on**: Phase 8
+**Requirements**: LATE-01, LATE-02, LATE-03, INFRA-03
 **Success Criteria** (what must be TRUE):
-  1. Tenant receives automated rent reminder emails 3-5 days before due date, on the due date, and when overdue
-  2. Tenant who has opted in to SMS receives the same reminders by text with a working STOP opt-out
-  3. Tenant and admin can open a notification inbox in the app and see a chronological list of recent notifications
-  4. Admin can compose and send a bulk message to all tenants (or specific units) via email and SMS from the admin portal
-**Plans**: 5 plans
+  1. When a tenant's rent is unpaid after the configured grace period, the system automatically posts a late fee charge to their ledger without admin intervention
+  2. Admin can configure late fee rules per property — grace period days, flat or percentage fee type, and fee amount — and can disable automatic late fees entirely (default: off)
+  3. Tenant receives a notification (email, SMS, and/or in-app per their preferences) when a late fee is posted to their account
+  4. Rent reminders, late fee calculations, and autopay scheduling all use the property's configured timezone — a tenant with rent due on the 1st is not charged late on December 31st at 7pm because the server runs in UTC
+**Plans**: TBD
 
-Plans:
-- [ ] 05-01-PLAN.md — Notifications table, Twilio client, sendNotification dispatch helper, DB migration
-- [ ] 05-02-PLAN.md — SMS opt-in toggle on tenant profile with TCPA disclosure, Twilio STOP/START webhook
-- [ ] 05-03-PLAN.md — Notification inbox pages (tenant + admin), bell icon with unread count, layout updates
-- [ ] 05-04-PLAN.md — Rent reminder cron API route with idempotency, styled email templates
-- [ ] 05-05-PLAN.md — Admin broadcast messaging page and API, E2E test suite with seed data
-
-### Phase 6: Autopay and Polish
-**Goal**: Tenants can enroll in automatic recurring rent payments — removing the need to remember to pay each month
-**Depends on**: Phase 3
-**Requirements**: PAY-06
+### Phase 10: Portfolio Management & Tenant Lifecycle
+**Goal**: Admin can manage the full property portfolio and tenant lifecycle from the dashboard — creating properties and units, moving tenants out with proper financial reconciliation, and tenants can self-associate via invite tokens
+**Depends on**: Phase 8
+**Requirements**: PORT-01, PORT-02, PORT-03, PORT-04, TUX-01
 **Success Criteria** (what must be TRUE):
-  1. Tenant can enroll a saved payment method in autopay and see their enrollment status on their dashboard
-  2. Tenant can cancel their autopay enrollment at any time and immediately stop future automatic charges
-  3. Tenant receives a notification before each autopay charge fires so they are not surprised
+  1. Admin can create, edit, and archive properties from the admin dashboard without developer intervention
+  2. Admin can create, edit, and archive units within a property, including setting rent amount and due day
+  3. Admin can initiate a tenant move-out that atomically sets an end date, cancels active autopay, posts any final charges, and archives the tenancy — no partial state is possible
+  4. A moved-out tenant can still log in and view their payment history and maintenance request history in read-only mode
+  5. A tenant with no active unit sees an empty-state dashboard where they can enter an invite token to self-associate with a unit
+**Plans**: TBD
+
+### Phase 11: Admin UX & KPI Dashboard
+**Goal**: The admin dashboard surfaces key portfolio metrics at a glance and all admin interfaces are polished with proper empty states and mobile responsiveness
+**Depends on**: Phase 8, Phase 10
+**Requirements**: AUX-02, AUX-03, AUX-04
+**Success Criteria** (what must be TRUE):
+  1. Admin dashboard displays KPI metric cards showing collection rate, total outstanding balance, occupancy rate, open maintenance requests, and count of overdue tenants — with data derived from the live ledger
+  2. Every admin table and list view shows a polished empty state with contextual guidance when no data exists (e.g., "No tenants yet — generate an invite to get started")
+  3. Admin layout is fully usable on mobile devices — sidebar collapses to a hamburger menu and all interactive elements have touch-friendly tap targets
+**Plans**: TBD
+
+### Phase 12: Vendor & Work Order Management
+**Goal**: Admin can manage vendors, assign them to maintenance requests, share limited-view details via magic links, and track work order costs per unit
+**Depends on**: Phase 7, Phase 8
+**Requirements**: OPS-01, OPS-02, OPS-03, OPS-04
+**Success Criteria** (what must be TRUE):
+  1. Admin can manage a vendor directory — adding, editing, and removing vendors with name, trade/specialty, phone, and email
+  2. Admin can assign a vendor from the directory to any open maintenance request
+  3. When a vendor is assigned, they receive an email/SMS notification with a magic link that shows the maintenance request details and photos without exposing any tenant personal information
+  4. Admin can record labor and materials costs on a work order, and the system rolls up total maintenance expenses per unit
 **Plans**: TBD
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
+Phases execute in numeric order: 7 -> 8 -> 9 -> 10 -> 11 -> 12
 
-Note: Phase 4 depends on Phase 1 (not Phase 3) — it can start in parallel with Phase 3, but conventionally follows Phase 3 to avoid splitting focus.
+Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel with Phase 9, but sequentially follows it to avoid splitting focus. Phase 11 depends on both Phase 8 and Phase 10 for ledger data and portfolio data respectively. Phase 12 depends on Phase 7 (S3 for receipt uploads) and Phase 8 (ledger for cost tracking).
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Foundation | 6/6 | Complete | 2026-02-25 |
-| 2. Tenant Onboarding | 4/4 | Complete | 2026-02-25 |
-| 3. Payments | 6/6 | Complete | 2026-02-26 |
-| 4. Maintenance, Documents, and Profiles | 6/6 | Complete | 2026-02-26 |
-| 5. Notifications and Messaging | 5/5 | Complete | 2026-02-26 |
-| 6. Autopay and Polish | 0/TBD | Not started | - |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Foundation | v1.0 | 6/6 | Complete | 2026-02-25 |
+| 2. Tenant Onboarding | v1.0 | 4/4 | Complete | 2026-02-25 |
+| 3. Payments | v1.0 | 6/6 | Complete | 2026-02-26 |
+| 4. Maintenance, Documents, and Profiles | v1.0 | 6/6 | Complete | 2026-02-26 |
+| 5. Notifications and Messaging | v1.0 | 5/5 | Complete | 2026-02-26 |
+| 6. Autopay and Polish | v1.0 | 6/6 | Complete | 2026-02-26 |
+| 7. Infrastructure Prerequisites | v2.0 | 0/TBD | Not started | - |
+| 8. Financial Ledger Foundation | v2.0 | 0/TBD | Not started | - |
+| 9. Automated Operations | v2.0 | 0/TBD | Not started | - |
+| 10. Portfolio Management & Tenant Lifecycle | v2.0 | 0/TBD | Not started | - |
+| 11. Admin UX & KPI Dashboard | v2.0 | 0/TBD | Not started | - |
+| 12. Vendor & Work Order Management | v2.0 | 0/TBD | Not started | - |

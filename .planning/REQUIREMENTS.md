@@ -173,43 +173,43 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NOTIF-05 | Phase 5 | Complete |
 | TMGMT-01 | Phase 4 | Complete |
 
-### v2.0 (Pending)
+### v2.0
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LEDG-01 | — | Pending |
-| LEDG-02 | — | Pending |
-| LEDG-03 | — | Pending |
-| LEDG-04 | — | Pending |
-| LEDG-05 | — | Pending |
-| LATE-01 | — | Pending |
-| LATE-02 | — | Pending |
-| LATE-03 | — | Pending |
-| INFRA-01 | — | Pending |
-| INFRA-02 | — | Pending |
-| INFRA-03 | — | Pending |
-| INFRA-04 | — | Pending |
-| INFRA-05 | — | Pending |
-| PORT-01 | — | Pending |
-| PORT-02 | — | Pending |
-| PORT-03 | — | Pending |
-| PORT-04 | — | Pending |
-| AUX-01 | — | Pending |
-| AUX-02 | — | Pending |
-| AUX-03 | — | Pending |
-| AUX-04 | — | Pending |
-| OPS-01 | — | Pending |
-| OPS-02 | — | Pending |
-| OPS-03 | — | Pending |
-| OPS-04 | — | Pending |
-| TUX-01 | — | Pending |
+| INFRA-01 | Phase 7 | Pending |
+| INFRA-02 | Phase 7 | Pending |
+| INFRA-04 | Phase 7 | Pending |
+| INFRA-05 | Phase 7 | Pending |
+| AUX-01 | Phase 7 | Pending |
+| LEDG-01 | Phase 8 | Pending |
+| LEDG-02 | Phase 8 | Pending |
+| LEDG-03 | Phase 8 | Pending |
+| LEDG-04 | Phase 8 | Pending |
+| LEDG-05 | Phase 8 | Pending |
+| LATE-01 | Phase 9 | Pending |
+| LATE-02 | Phase 9 | Pending |
+| LATE-03 | Phase 9 | Pending |
+| INFRA-03 | Phase 9 | Pending |
+| PORT-01 | Phase 10 | Pending |
+| PORT-02 | Phase 10 | Pending |
+| PORT-03 | Phase 10 | Pending |
+| PORT-04 | Phase 10 | Pending |
+| TUX-01 | Phase 10 | Pending |
+| AUX-02 | Phase 11 | Pending |
+| AUX-03 | Phase 11 | Pending |
+| AUX-04 | Phase 11 | Pending |
+| OPS-01 | Phase 12 | Pending |
+| OPS-02 | Phase 12 | Pending |
+| OPS-03 | Phase 12 | Pending |
+| OPS-04 | Phase 12 | Pending |
 
 **Coverage:**
 - v1 requirements: 22 total (all complete)
 - v2.0 requirements: 26 total
-- Mapped to phases: 0 (pending roadmap creation)
-- Unmapped: 26
+- Mapped to phases: 26/26
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-25*
-*Last updated: 2026-02-26 after v2.0 milestone requirements definition*
+*Last updated: 2026-02-26 after v2.0 roadmap creation*
