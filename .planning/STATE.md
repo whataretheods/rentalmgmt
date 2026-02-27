@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Production-Ready
-current_plan: "08-02"
+current_plan: "08-05"
 status: executing
-stopped_at: Completed 08-04-PLAN.md
+stopped_at: Completed 08-03-PLAN.md
 last_updated: "2026-02-27"
 last_activity: 2026-02-27
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 6
-  completed_plans: 6
+  completed_plans: 8
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-02-26)
 ## Current Position
 
 **Phase:** 8 of 12 (Financial Ledger Foundation) — executing
-**Plan:** 08-02 (next to execute; 08-04 also complete)
-**Status:** 08-01 + 08-04 complete — charges schema + webhook hardening
-**Last Activity:** 2026-02-27 — Phase 8 Plan 04 executed
+**Plan:** 08-03 (next)
+**Status:** 08-01 + 08-02 + 08-04 complete — charges schema + admin charge UI + webhook hardening
+**Last Activity:** 2026-02-27 — Phase 8 Plan 02 executed
 
-Progress: [||||||||||||||......] 65% (v1.0 complete, v2.0 Phase 7 + 08-01 + 08-04 done)
+Progress: [|||||||||||||||.....] 68% (v1.0 complete, v2.0 Phase 7 + 08-01/02/04 done)
 
 ## Performance Metrics
 
@@ -40,9 +40,9 @@ Progress: [||||||||||||||......] 65% (v1.0 complete, v2.0 Phase 7 + 08-01 + 08-0
 - Total execution time: ~1.9 hours
 
 **Velocity (v2.0):**
-- Total plans completed: 6
-- Average duration: 3.8 min
-- Total execution time: ~23 min
+- Total plans completed: 7
+- Average duration: 3.9 min
+- Total execution time: ~27 min
 
 **By Phase (v1.0):**
 
@@ -60,10 +60,10 @@ Progress: [||||||||||||||......] 65% (v1.0 complete, v2.0 Phase 7 + 08-01 + 08-0
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 7. Infrastructure | 4 | 18min | 4.5min |
-| 8. Financial Ledger | 2 | 5min | 2.5min |
+| 8. Financial Ledger | 3 | 9min | 3.0min |
 
 **Recent Trend:**
-- Last 4 plans: 4min, 5min, 3min, 2min
+- Last 4 plans: 5min, 3min, 2min, 4min
 - Trend: Stable
 
 ## Accumulated Context
@@ -83,6 +83,8 @@ Recent decisions affecting v2.0:
 - [Phase 8]: charges.amountCents uses positive for debits, negative for credits/adjustments
 - [Phase 8]: stripe_events uses text PK (Stripe event ID format) not uuid
 - [Phase 8]: Raw SQL via db.execute for balance computation (aggregate queries)
+- [Phase 8]: Created /api/admin/tenant-units endpoint for charge form (payments-overview lacked tenantUserId)
+- [Phase 8]: Credits/adjustments sign conversion in API — UI sends positive, API negates for credit types
 - [Phase 8]: db.transaction() for webhook dedup + processing atomicity (Phase 7 WS driver available)
 - [Phase 8]: Strict stripePaymentIntentId matching replaces broad tenant/unit/period queries in webhook
 
@@ -98,5 +100,5 @@ None yet.
 ## Session Continuity
 
 **Last Session:** 2026-02-27
-**Stopped At:** Completed 08-04-PLAN.md — webhook hardening with event dedup + strict PI matching
+**Stopped At:** Completed 08-02-PLAN.md — admin charge management API + UI
 **Resume File:** None
