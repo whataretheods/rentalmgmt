@@ -138,6 +138,8 @@ export async function POST(req: Request) {
           fileName: uploaded.fileName,
           fileSize: uploaded.fileSize,
           mimeType: uploaded.mimeType,
+          storageBackend: uploaded.storageBackend,
+          s3Key: uploaded.s3Key,
         })
         .returning()
       savedPhotos.push(photo)

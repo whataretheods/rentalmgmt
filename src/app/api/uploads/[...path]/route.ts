@@ -2,7 +2,12 @@ import { promises as fs } from "fs"
 import path from "path"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
+import { NextResponse } from "next/server"
 import { UPLOADS_DIR } from "@/lib/uploads"
+import { db } from "@/db"
+import { maintenancePhotos } from "@/db/schema"
+import { eq } from "drizzle-orm"
+import { getPresignedDownloadUrl } from "@/lib/storage"
 
 const MIME_TYPES: Record<string, string> = {
   ".jpg": "image/jpeg",
@@ -26,6 +31,21 @@ export async function GET(
   }
 
   const { path: pathSegments } = await params
+  const relPath = pathSegments.join("/")
+
+  // Check if this file is stored in S3 by looking up the photo record by filePath
+  const [photo] = await db
+    .select()
+    .from(maintenancePhotos)
+    .where(eq(maintenancePhotos.filePath, relPath))
+
+  if (photo && photo.storageBackend === "s3" && photo.s3Key) {
+    // Redirect to S3 presigned URL — file bytes never pass through the app server
+    const presignedUrl = await getPresignedDownloadUrl(photo.s3Key)
+    return NextResponse.redirect(presignedUrl, 302)
+  }
+
+  // Local file serving (existing behavior)
   const filePath = path.join(UPLOADS_DIR, ...pathSegments)
 
   // Path traversal protection -- verify resolved path stays within uploads directory

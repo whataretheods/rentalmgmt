@@ -2,10 +2,12 @@ import { promises as fs } from "fs"
 import path from "path"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
+import { NextResponse } from "next/server"
 import { db } from "@/db"
 import { documents } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { UPLOADS_DIR } from "@/lib/uploads"
+import { getPresignedDownloadUrl } from "@/lib/storage"
 
 const MIME_TYPES: Record<string, string> = {
   ".jpg": "image/jpeg",
@@ -43,6 +45,13 @@ export async function GET(
     return new Response("Forbidden", { status: 403 })
   }
 
+  // S3 dual-read: redirect to presigned URL if stored in S3
+  if (doc.storageBackend === "s3" && doc.s3Key) {
+    const presignedUrl = await getPresignedDownloadUrl(doc.s3Key)
+    return NextResponse.redirect(presignedUrl, 302)
+  }
+
+  // Local file serving (existing behavior)
   const filePath = path.join(UPLOADS_DIR, doc.filePath)
   const resolvedPath = path.resolve(filePath)
 

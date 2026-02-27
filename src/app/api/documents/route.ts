@@ -82,6 +82,8 @@ export async function POST(req: Request) {
       fileName: uploadResult.fileName,
       fileSize: uploadResult.fileSize,
       mimeType: uploadResult.mimeType,
+      storageBackend: uploadResult.storageBackend,
+      s3Key: uploadResult.s3Key,
       requestId: requestId || null,
     })
     .returning()
