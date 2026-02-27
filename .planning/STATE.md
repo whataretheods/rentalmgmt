@@ -1,37 +1,34 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
+milestone: v2.0
+milestone_name: Production-Ready
 current_plan: Not started
-status: completed
-stopped_at: Completed 06-06-PLAN.md — Phase 6 complete (all 6 plans)
-last_updated: "2026-02-27T02:50:21.049Z"
-last_activity: 2026-02-27
+status: defining_requirements
+stopped_at: Milestone v2.0 started — defining requirements
+last_updated: "2026-02-26"
+last_activity: 2026-02-26
 progress:
-  total_phases: 6
-  completed_phases: 6
-  total_plans: 33
-  completed_plans: 33
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-25)
+See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 6 — Autopay and Polish
+**Current focus:** Defining v2.0 requirements
 
 ## Current Position
 
-**Phase:** 6 of 6 (Autopay and Polish)
-**Current Plan:** Not started
-**Total Plans in Phase:** 6
-**Status:** Milestone complete
-**Last Activity:** 2026-02-27
-
-Progress: [█████████░] 30/33 plans (Phases 1-5 + 06-01..03 complete)
+**Phase:** Not started (defining requirements)
+**Plan:** —
+**Status:** Defining requirements
+**Last Activity:** 2026-02-26 — Milestone v2.0 started
 
 ## Performance Metrics
 
