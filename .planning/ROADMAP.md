@@ -123,7 +123,7 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 5. Notifications and Messaging | v1.0 | 5/5 | Complete | 2026-02-26 |
 | 6. Autopay and Polish | v1.0 | 6/6 | Complete | 2026-02-26 |
 | 7. Infrastructure Prerequisites | v2.0 | 4/4 | Complete | 2026-02-26 |
-| 8. Financial Ledger Foundation | v2.0 | 0/TBD | Not started | - |
+| 8. Financial Ledger Foundation | 2/5 | In Progress|  | - |
 | 9. Automated Operations | v2.0 | 0/TBD | Not started | - |
 | 10. Portfolio Management & Tenant Lifecycle | v2.0 | 0/TBD | Not started | - |
 | 11. Admin UX & KPI Dashboard | v2.0 | 0/TBD | Not started | - |
