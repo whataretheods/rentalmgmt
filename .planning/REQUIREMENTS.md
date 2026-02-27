@@ -3,9 +3,9 @@
 **Defined:** 2026-02-25
 **Core Value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
 
-## v1 Requirements
+## v1 Requirements (Complete)
 
-Requirements for initial release. Each maps to roadmap phases.
+All v1 requirements shipped and validated during milestone v1.0.
 
 ### Authentication & Onboarding
 
@@ -47,9 +47,64 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **TMGMT-01**: Tenant can manage own contact info (name, phone, email, emergency contact)
 
-## v2 Requirements
+## v2.0 Requirements
 
-Deferred to future release. Tracked but not in current roadmap.
+Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phases 7+.
+
+### Financial Ledger
+
+- [ ] **LEDG-01**: Tenant finances tracked via charges table separating what is owed (rent, late fees, one-time charges) from what was paid
+- [ ] **LEDG-02**: Running balance computed per tenant and displayed on tenant dashboard ("You owe $X") and admin views
+- [ ] **LEDG-03**: Admin can manually post charges, credits, and adjustments to any tenant's ledger
+- [ ] **LEDG-04**: Existing historical payment records reconciled with charge records via backfill migration
+- [ ] **LEDG-05**: Stripe webhook uses strict payment intent ID matching for ACH settlements and deduplicates events to prevent duplicate ledger entries
+
+### Late Fees
+
+- [ ] **LATE-01**: System automatically posts a late fee charge to the tenant ledger when rent is unpaid after a configurable grace period
+- [ ] **LATE-02**: Admin can configure late fee rules per property (grace period days, flat or percentage fee, fee amount)
+- [ ] **LATE-03**: Tenant receives notification (email/SMS/in-app) when a late fee is posted to their account
+
+### Infrastructure & Security
+
+- [ ] **INFRA-01**: Maintenance photos and documents stored in S3-compatible cloud storage with presigned URLs for upload and download
+- [ ] **INFRA-02**: User role encoded in JWT so edge middleware can reject unauthorized /admin access without hitting application code
+- [ ] **INFRA-03**: Rent reminders, late fee calculations, and autopay scheduling use property-local timezone instead of UTC
+- [ ] **INFRA-04**: Database driver supports transactions (Neon WebSocket driver) for atomic multi-table operations
+- [ ] **INFRA-05**: Cascade delete constraints replaced with soft-delete and ON DELETE RESTRICT to protect financial history
+
+### Portfolio Management
+
+- [ ] **PORT-01**: Admin can create, edit, and archive properties from the admin dashboard
+- [ ] **PORT-02**: Admin can create, edit, and archive units with rent amount and due day configuration
+- [ ] **PORT-03**: Admin can initiate tenant move-out workflow that sets end date, cancels autopay, posts final charges, and archives the tenancy
+- [ ] **PORT-04**: Moved-out tenant retains read-only portal access to their payment and maintenance history
+
+### Admin UX
+
+- [ ] **AUX-01**: Admin portal uses persistent collapsible sidebar navigation across all admin pages
+- [ ] **AUX-02**: Admin dashboard displays KPI metric cards (collection rate, total outstanding, occupancy rate, open maintenance requests, overdue tenants)
+- [ ] **AUX-03**: All admin tables and lists show polished empty states with contextual guidance
+- [ ] **AUX-04**: Admin layout is mobile-responsive with collapsible sidebar and touch-friendly targets
+
+### Operations
+
+- [ ] **OPS-01**: Admin can manage a vendor directory (name, trade/specialty, phone, email)
+- [ ] **OPS-02**: Admin can assign a vendor to a maintenance request
+- [ ] **OPS-03**: Assigned vendor receives email/SMS notification with a limited-view magic link showing request details and photos (no tenant PII)
+- [ ] **OPS-04**: Admin can record labor and materials costs on work orders with per-unit expense rollup
+
+### Tenant UX
+
+- [ ] **TUX-01**: Tenant with no active unit can enter an invite token directly on their empty-state dashboard to self-associate with a unit
+
+## v2.1 Requirements
+
+Deferred to next milestone. Tracked but not in current roadmap.
+
+### Tenant Lifecycle
+
+- **TLIF-01**: Tenant can transfer between units in the same building preserving payment and maintenance history
 
 ### Payments
 
@@ -73,17 +128,25 @@ Explicitly excluded. Documented to prevent scope creep.
 
 | Feature | Reason |
 |---------|--------|
+| Full double-entry accounting / GL | Separate domain — use QuickBooks or export CSV. Tenant ledger is single-entry. |
+| Security deposit management | Complex state-specific legal requirements (CA: 21-day return, itemized deductions). Track offline. |
+| Vendor portal with login | Overengineered for 2-3 vendors. Magic link limited-view is sufficient. |
+| Automated prorated rent | Proration methods vary; admin posts manual charge for prorated amount. |
+| Rent increase scheduling | Requires legal notice periods. Admin manually updates unit rent when change takes effect. |
+| Tenant financial disputes | Adversarial workflow. Resolved via conversation; admin posts credits/adjustments. |
 | Lease management / e-signatures | Month-to-month tenancy, no leases currently |
 | Tenant screening / background checks | Tenants are already in the building |
-| Full accounting / bookkeeping | Separate domain; use QuickBooks or export data |
 | Vacancy advertising / listing syndication | No vacancies to fill; use Zillow/FB manually |
 | Role-based admin permissions | Small team, everyone gets full access for now |
 | Native mobile apps (iOS/Android) | Responsive web first; 90% of benefit at 10% cost |
 | Real-time chat / two-way messaging | Structured maintenance requests cover 90% of needs |
+| Multi-currency support | USD only. All properties US-based. |
 
 ## Traceability
 
 Which phases cover which requirements. Updated during roadmap creation.
+
+### v1 (Complete)
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
@@ -110,11 +173,43 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NOTIF-05 | Phase 5 | Complete |
 | TMGMT-01 | Phase 4 | Complete |
 
+### v2.0 (Pending)
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| LEDG-01 | — | Pending |
+| LEDG-02 | — | Pending |
+| LEDG-03 | — | Pending |
+| LEDG-04 | — | Pending |
+| LEDG-05 | — | Pending |
+| LATE-01 | — | Pending |
+| LATE-02 | — | Pending |
+| LATE-03 | — | Pending |
+| INFRA-01 | — | Pending |
+| INFRA-02 | — | Pending |
+| INFRA-03 | — | Pending |
+| INFRA-04 | — | Pending |
+| INFRA-05 | — | Pending |
+| PORT-01 | — | Pending |
+| PORT-02 | — | Pending |
+| PORT-03 | — | Pending |
+| PORT-04 | — | Pending |
+| AUX-01 | — | Pending |
+| AUX-02 | — | Pending |
+| AUX-03 | — | Pending |
+| AUX-04 | — | Pending |
+| OPS-01 | — | Pending |
+| OPS-02 | — | Pending |
+| OPS-03 | — | Pending |
+| OPS-04 | — | Pending |
+| TUX-01 | — | Pending |
+
 **Coverage:**
-- v1 requirements: 22 total
-- Mapped to phases: 22
-- Unmapped: 0
+- v1 requirements: 22 total (all complete)
+- v2.0 requirements: 26 total
+- Mapped to phases: 0 (pending roadmap creation)
+- Unmapped: 26
 
 ---
 *Requirements defined: 2026-02-25*
-*Last updated: 2026-02-25 after roadmap creation*
+*Last updated: 2026-02-26 after v2.0 milestone requirements definition*
