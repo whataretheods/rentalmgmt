@@ -13,18 +13,20 @@ export const properties = pgTable("properties", {
   address: text("address").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  archivedAt: timestamp("archived_at"),  // null = active, non-null = archived (soft-deleted)
 })
 
 export const units = pgTable("units", {
   id: uuid("id").primaryKey().defaultRandom(),
   propertyId: uuid("property_id")
-    .references(() => properties.id, { onDelete: "cascade" })
+    .references(() => properties.id, { onDelete: "restrict" })
     .notNull(),
   unitNumber: text("unit_number").notNull(),
   rentAmountCents: integer("rent_amount_cents"),  // nullable until Phase 3 configures it
   rentDueDay: integer("rent_due_day"),             // day of month 1-28, nullable until Phase 3
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  archivedAt: timestamp("archived_at"),  // null = active, non-null = archived (soft-deleted)
 })
 
 // Links a user (tenant) to a unit -- supports historical tenancy records
@@ -32,7 +34,7 @@ export const tenantUnits = pgTable("tenant_units", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: text("user_id").notNull(),              // references Better Auth user.id (text, NOT uuid)
   unitId: uuid("unit_id")
-    .references(() => units.id, { onDelete: "cascade" })
+    .references(() => units.id, { onDelete: "restrict" })
     .notNull(),
   startDate: timestamp("start_date").notNull(),
   endDate: timestamp("end_date"),                 // null = active/current tenancy
@@ -44,7 +46,7 @@ export const tenantUnits = pgTable("tenant_units", {
 export const inviteTokens = pgTable("invite_tokens", {
   id: uuid("id").primaryKey().defaultRandom(),
   unitId: uuid("unit_id")
-    .references(() => units.id, { onDelete: "cascade" })
+    .references(() => units.id, { onDelete: "restrict" })
     .notNull(),
   tokenHash: text("token_hash").notNull().unique(),  // SHA-256 hash of raw token
   status: text("status", { enum: ["pending", "used", "expired"] })
@@ -61,7 +63,7 @@ export const payments = pgTable("payments", {
   id: uuid("id").primaryKey().defaultRandom(),
   tenantUserId: text("tenant_user_id").notNull(),     // Better Auth user.id (text, NOT uuid)
   unitId: uuid("unit_id")
-    .references(() => units.id, { onDelete: "cascade" })
+    .references(() => units.id, { onDelete: "restrict" })
     .notNull(),
   amountCents: integer("amount_cents").notNull(),      // amount in cents (e.g., 150000 = $1,500.00)
   stripeSessionId: text("stripe_session_id").unique(), // null for manual payments, unique to prevent duplicates
@@ -86,7 +88,7 @@ export const maintenanceRequests = pgTable("maintenance_requests", {
   id: uuid("id").primaryKey().defaultRandom(),
   tenantUserId: text("tenant_user_id").notNull(),   // Better Auth user.id (text, NOT uuid)
   unitId: uuid("unit_id")
-    .references(() => units.id, { onDelete: "cascade" })
+    .references(() => units.id, { onDelete: "restrict" })
     .notNull(),
   category: text("category", {
     enum: ["plumbing", "electrical", "hvac", "appliance", "pest_control", "structural", "general"],
@@ -110,6 +112,8 @@ export const maintenancePhotos = pgTable("maintenance_photos", {
   fileName: text("file_name").notNull(),       // original filename
   fileSize: integer("file_size").notNull(),    // bytes
   mimeType: text("mime_type").notNull(),
+  storageBackend: text("storage_backend").default("local").notNull(),  // "local" or "s3"
+  s3Key: text("s3_key"),  // S3 object key, null for local files
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
 
@@ -136,6 +140,8 @@ export const documents = pgTable("documents", {
   fileName: text("file_name").notNull(),
   fileSize: integer("file_size").notNull(),    // bytes
   mimeType: text("mime_type").notNull(),
+  storageBackend: text("storage_backend").default("local").notNull(),  // "local" or "s3"
+  s3Key: text("s3_key"),  // S3 object key, null for local files
   requestId: uuid("request_id"),               // links to admin request if this was requested
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
@@ -189,7 +195,7 @@ export const autopayEnrollments = pgTable("autopay_enrollments", {
   id: uuid("id").primaryKey().defaultRandom(),
   tenantUserId: text("tenant_user_id").notNull().unique(), // one enrollment per tenant
   unitId: uuid("unit_id")
-    .references(() => units.id, { onDelete: "cascade" })
+    .references(() => units.id, { onDelete: "restrict" })
     .notNull(),
   stripeCustomerId: text("stripe_customer_id").notNull(),
   stripePaymentMethodId: text("stripe_payment_method_id").notNull(),
