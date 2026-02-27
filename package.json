@@ -18,6 +18,7 @@
     "seed:phase4-test": "tsx -r tsconfig-paths/register scripts/seed-phase4-test.ts",
     "seed:phase5-test": "tsx -r tsconfig-paths/register scripts/seed-notifications-test.ts",
     "seed:autopay-test": "tsx -r tsconfig-paths/register scripts/seed-autopay-test.ts",
+    "seed:e2e-tenant": "tsx -r tsconfig-paths/register scripts/seed-e2e-tenant.ts",
     "test:e2e": "npx playwright test"
   },
   "keywords": [],

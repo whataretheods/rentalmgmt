@@ -20,12 +20,6 @@ export default function LoginPage() {
               Forgot your password?
             </Link>
           </div>
-          <div className="text-center text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link href="/auth/register" className="text-blue-600 hover:underline">
-              Create one
-            </Link>
-          </div>
         </CardContent>
       </Card>
     </div>

@@ -45,3 +45,12 @@ next-env.d.ts
 # Uploaded files (local storage)
 uploads/*
 !uploads/.gitkeep
+
+# Claude Code / tooling
+.agents/
+.claude/
+.playwright-mcp/
+skills-lock.json
+
+# Playwright
+test-results/

@@ -21,7 +21,7 @@ type LoginValues = z.infer<typeof loginSchema>
 export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/tenant/dashboard"
+  const callbackUrl = searchParams.get("callbackUrl")
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<LoginValues>({
@@ -31,10 +31,9 @@ export function LoginForm() {
 
   async function onSubmit(values: LoginValues) {
     setIsLoading(true)
-    const { error } = await authClient.signIn.email({
+    const { data, error } = await authClient.signIn.email({
       email: values.email,
       password: values.password,
-      callbackURL: callbackUrl,
     })
     setIsLoading(false)
 
@@ -43,7 +42,10 @@ export function LoginForm() {
       return
     }
 
-    router.push(callbackUrl)
+    const role = (data?.user as { role?: string } | undefined)?.role
+    const dest = callbackUrl
+      ?? (role === "admin" ? "/admin/dashboard" : "/tenant/dashboard")
+    router.push(dest)
     router.refresh()
   }
 
