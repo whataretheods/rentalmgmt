@@ -214,3 +214,29 @@ export const autopayEnrollments = pgTable("autopay_enrollments", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
+
+// ==================== Phase 8: Financial Ledger ====================
+
+// Charges — append-only ledger of financial obligations (what is owed)
+export const charges = pgTable("charges", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantUserId: text("tenant_user_id").notNull(),        // Better Auth user.id (text, NOT uuid)
+  unitId: uuid("unit_id")
+    .references(() => units.id, { onDelete: "restrict" })
+    .notNull(),
+  type: text("type", {
+    enum: ["rent", "late_fee", "one_time", "credit", "adjustment"],
+  }).notNull(),
+  description: text("description").notNull(),             // e.g., "Rent for 2026-03", "Late fee", "Parking fee"
+  amountCents: integer("amount_cents").notNull(),          // positive = charge/debit, negative = credit/adjustment
+  billingPeriod: text("billing_period"),                   // YYYY-MM format for rent charges, null for one-time
+  createdBy: text("created_by"),                           // admin user ID for manual entries, null for system-generated
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+// Stripe webhook event deduplication
+export const stripeEvents = pgTable("stripe_events", {
+  id: text("id").primaryKey(),                             // Stripe event ID (e.g., "evt_xxx") — NOT uuid
+  type: text("type").notNull(),                            // Stripe event type (e.g., "payment_intent.succeeded")
+  processedAt: timestamp("processed_at").defaultNow().notNull(),
+})

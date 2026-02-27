@@ -36,6 +36,20 @@
       "when": 1772127048681,
       "tag": "0004_chemical_omega_flight",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1772177112207,
+      "tag": "0005_sharp_lyja",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1772204303401,
+      "tag": "0006_mean_scarecrow",
+      "breakpoints": true
     }
   ]
 }
