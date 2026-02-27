@@ -2,7 +2,7 @@ import { Stripe } from "stripe"
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { db } from "@/db"
-import { payments, units, user } from "@/db/schema"
+import { payments, units, user, stripeEvents } from "@/db/schema"
 import { eq, and } from "drizzle-orm"
 import { resend } from "@/lib/resend"
 
@@ -28,156 +28,175 @@ export async function POST(req: Request) {
   }
 
   try {
-    switch (event.type) {
-      case "checkout.session.completed": {
-        const session = event.data.object as Stripe.Checkout.Session
-        const { tenantUserId, unitId, billingPeriod } = session.metadata || {}
+    // EVENT DEDUPLICATION: Use INSERT ... ON CONFLICT DO NOTHING for atomic dedup.
+    // Wrapped in a transaction so that if processing fails, the event record is
+    // rolled back and Stripe can retry delivery.
+    await db.transaction(async (tx) => {
+      const [inserted] = await tx
+        .insert(stripeEvents)
+        .values({ id: event.id, type: event.type })
+        .onConflictDoNothing()
+        .returning()
 
-        if (!tenantUserId || !unitId || !billingPeriod) {
-          console.error(
-            "Missing metadata in checkout session:",
-            session.id
+      if (!inserted) {
+        // Event already processed — skip re-processing (200 returned below)
+        console.log(`Duplicate webhook event skipped: ${event.id} (${event.type})`)
+        return
+      }
+
+      switch (event.type) {
+        case "checkout.session.completed": {
+          const session = event.data.object as Stripe.Checkout.Session
+          const { tenantUserId, unitId, billingPeriod } =
+            session.metadata || {}
+
+          if (!tenantUserId || !unitId || !billingPeriod) {
+            console.error(
+              "Missing metadata in checkout session:",
+              session.id
+            )
+            break
+          }
+
+          if (session.payment_status === "paid") {
+            // Card payment — immediately confirmed
+            await tx
+              .insert(payments)
+              .values({
+                tenantUserId,
+                unitId,
+                amountCents: session.amount_total!,
+                stripeSessionId: session.id,
+                stripePaymentIntentId: session.payment_intent as string,
+                paymentMethod: "card",
+                status: "succeeded",
+                billingPeriod,
+                paidAt: new Date(),
+              })
+              .onConflictDoNothing() // idempotent — stripeSessionId is unique
+
+            // Send confirmation email (outside tx is fine — fire-and-forget)
+            await sendPaymentConfirmation(
+              tenantUserId,
+              unitId,
+              session.amount_total!,
+              billingPeriod
+            )
+          } else if (session.payment_status === "unpaid") {
+            // ACH — pending bank verification/settlement (3-5 business days)
+            await tx
+              .insert(payments)
+              .values({
+                tenantUserId,
+                unitId,
+                amountCents: session.amount_total!,
+                stripeSessionId: session.id,
+                stripePaymentIntentId: session.payment_intent as string,
+                paymentMethod: "ach",
+                status: "pending",
+                billingPeriod,
+              })
+              .onConflictDoNothing()
+          }
+          break
+        }
+
+        case "checkout.session.async_payment_succeeded": {
+          // ACH payment settled successfully
+          const session = event.data.object as Stripe.Checkout.Session
+          const { tenantUserId, unitId, billingPeriod } =
+            session.metadata || {}
+
+          await tx
+            .update(payments)
+            .set({
+              status: "succeeded",
+              paidAt: new Date(),
+              updatedAt: new Date(),
+            })
+            .where(eq(payments.stripeSessionId, session.id))
+
+          if (tenantUserId && unitId && billingPeriod) {
+            await sendPaymentConfirmation(
+              tenantUserId,
+              unitId,
+              session.amount_total!,
+              billingPeriod
+            )
+          }
+          break
+        }
+
+        case "checkout.session.async_payment_failed": {
+          // ACH payment failed
+          const session = event.data.object as Stripe.Checkout.Session
+          await tx
+            .update(payments)
+            .set({ status: "failed", updatedAt: new Date() })
+            .where(eq(payments.stripeSessionId, session.id))
+          break
+        }
+
+        case "payment_intent.succeeded": {
+          const paymentIntent = event.data.object as Stripe.PaymentIntent
+          const { tenantUserId, unitId, billingPeriod, autopay } =
+            paymentIntent.metadata || {}
+
+          // Only handle autopay payments (one-time payments use checkout.session events)
+          if (autopay !== "true") break
+          if (!tenantUserId || !unitId || !billingPeriod) break
+
+          // Strict PI matching: match on stripePaymentIntentId for precision
+          // (not broad tenant/unit/period match which could hit wrong records)
+          await tx
+            .update(payments)
+            .set({
+              status: "succeeded",
+              paidAt: new Date(),
+              stripePaymentIntentId: paymentIntent.id,
+              updatedAt: new Date(),
+            })
+            .where(
+              and(
+                eq(payments.stripePaymentIntentId, paymentIntent.id),
+                eq(payments.status, "pending")
+              )
+            )
+
+          // Send payment confirmation
+          await sendPaymentConfirmation(
+            tenantUserId,
+            unitId,
+            paymentIntent.amount,
+            billingPeriod
           )
           break
         }
 
-        if (session.payment_status === "paid") {
-          // Card payment — immediately confirmed
-          await db
-            .insert(payments)
-            .values({
-              tenantUserId,
-              unitId,
-              amountCents: session.amount_total!,
-              stripeSessionId: session.id,
-              stripePaymentIntentId: session.payment_intent as string,
-              paymentMethod: "card",
-              status: "succeeded",
-              billingPeriod,
-              paidAt: new Date(),
-            })
-            .onConflictDoNothing() // idempotent — stripeSessionId is unique
+        case "payment_intent.payment_failed": {
+          const paymentIntent = event.data.object as Stripe.PaymentIntent
+          const { autopay } = paymentIntent.metadata || {}
 
-          // Send confirmation email
-          await sendPaymentConfirmation(
-            tenantUserId,
-            unitId,
-            session.amount_total!,
-            billingPeriod
-          )
-        } else if (session.payment_status === "unpaid") {
-          // ACH — pending bank verification/settlement (3-5 business days)
-          await db
-            .insert(payments)
-            .values({
-              tenantUserId,
-              unitId,
-              amountCents: session.amount_total!,
-              stripeSessionId: session.id,
-              stripePaymentIntentId: session.payment_intent as string,
-              paymentMethod: "ach",
-              status: "pending",
-              billingPeriod,
-            })
-            .onConflictDoNothing()
-        }
-        break
-      }
+          if (autopay !== "true") break
 
-      case "checkout.session.async_payment_succeeded": {
-        // ACH payment settled successfully
-        const session = event.data.object as Stripe.Checkout.Session
-        const { tenantUserId, unitId, billingPeriod } = session.metadata || {}
-
-        await db
-          .update(payments)
-          .set({
-            status: "succeeded",
-            paidAt: new Date(),
-            updatedAt: new Date(),
-          })
-          .where(eq(payments.stripeSessionId, session.id))
-
-        if (tenantUserId && unitId && billingPeriod) {
-          await sendPaymentConfirmation(
-            tenantUserId,
-            unitId,
-            session.amount_total!,
-            billingPeriod
-          )
-        }
-        break
-      }
-
-      case "checkout.session.async_payment_failed": {
-        // ACH payment failed
-        const session = event.data.object as Stripe.Checkout.Session
-        await db
-          .update(payments)
-          .set({ status: "failed", updatedAt: new Date() })
-          .where(eq(payments.stripeSessionId, session.id))
-        break
-      }
-
-      case "payment_intent.succeeded": {
-        const paymentIntent = event.data.object as Stripe.PaymentIntent
-        const { tenantUserId, unitId, billingPeriod, autopay } = paymentIntent.metadata || {}
-
-        // Only handle autopay payments (one-time payments use checkout.session events)
-        if (autopay !== "true") break
-        if (!tenantUserId || !unitId || !billingPeriod) break
-
-        // Update payment record from "pending" to "succeeded" if it exists
-        // (The cron may have already recorded it as succeeded for instant card payments,
-        //  but ACH payments arrive async)
-        await db
-          .update(payments)
-          .set({
-            status: "succeeded",
-            paidAt: new Date(),
-            stripePaymentIntentId: paymentIntent.id,
-            updatedAt: new Date(),
-          })
-          .where(
-            and(
-              eq(payments.tenantUserId, tenantUserId),
-              eq(payments.unitId, unitId),
-              eq(payments.billingPeriod, billingPeriod),
-              eq(payments.status, "pending")
+          // Strict PI matching: match on stripePaymentIntentId for precision
+          await tx
+            .update(payments)
+            .set({ status: "failed", updatedAt: new Date() })
+            .where(
+              and(
+                eq(payments.stripePaymentIntentId, paymentIntent.id),
+                eq(payments.status, "pending")
+              )
             )
-          )
+          break
+        }
 
-        // Send payment confirmation
-        await sendPaymentConfirmation(tenantUserId, unitId, paymentIntent.amount, billingPeriod)
-        break
+        default:
+          // Unhandled event type — log but don't error
+          console.log("Unhandled webhook event type:", event.type)
       }
-
-      case "payment_intent.payment_failed": {
-        const paymentIntent = event.data.object as Stripe.PaymentIntent
-        const { tenantUserId, unitId, billingPeriod, autopay } = paymentIntent.metadata || {}
-
-        if (autopay !== "true") break
-        if (!tenantUserId || !unitId || !billingPeriod) break
-
-        // Update payment record to "failed"
-        await db
-          .update(payments)
-          .set({ status: "failed", updatedAt: new Date() })
-          .where(
-            and(
-              eq(payments.tenantUserId, tenantUserId),
-              eq(payments.unitId, unitId),
-              eq(payments.billingPeriod, billingPeriod),
-              eq(payments.status, "pending")
-            )
-          )
-        break
-      }
-
-      default:
-        // Unhandled event type — log but don't error
-        console.log("Unhandled webhook event type:", event.type)
-    }
+    })
   } catch (err) {
     console.error("Webhook handler error:", err)
     return NextResponse.json(
