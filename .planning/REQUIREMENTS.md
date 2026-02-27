@@ -67,11 +67,11 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 
 ### Infrastructure & Security
 
-- [ ] **INFRA-01**: Maintenance photos and documents stored in S3-compatible cloud storage with presigned URLs for upload and download
-- [ ] **INFRA-02**: User role encoded in JWT so edge middleware can reject unauthorized /admin access without hitting application code
+- [x] **INFRA-01**: Maintenance photos and documents stored in S3-compatible cloud storage with presigned URLs for upload and download
+- [x] **INFRA-02**: User role encoded in JWT so edge middleware can reject unauthorized /admin access without hitting application code
 - [ ] **INFRA-03**: Rent reminders, late fee calculations, and autopay scheduling use property-local timezone instead of UTC
-- [ ] **INFRA-04**: Database driver supports transactions (Neon WebSocket driver) for atomic multi-table operations
-- [ ] **INFRA-05**: Cascade delete constraints replaced with soft-delete and ON DELETE RESTRICT to protect financial history
+- [x] **INFRA-04**: Database driver supports transactions (Neon WebSocket driver) for atomic multi-table operations
+- [x] **INFRA-05**: Cascade delete constraints replaced with soft-delete and ON DELETE RESTRICT to protect financial history
 
 ### Portfolio Management
 
@@ -82,7 +82,7 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 
 ### Admin UX
 
-- [ ] **AUX-01**: Admin portal uses persistent collapsible sidebar navigation across all admin pages
+- [x] **AUX-01**: Admin portal uses persistent collapsible sidebar navigation across all admin pages
 - [ ] **AUX-02**: Admin dashboard displays KPI metric cards (collection rate, total outstanding, occupancy rate, open maintenance requests, overdue tenants)
 - [ ] **AUX-03**: All admin tables and lists show polished empty states with contextual guidance
 - [ ] **AUX-04**: Admin layout is mobile-responsive with collapsible sidebar and touch-friendly targets
@@ -177,11 +177,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | Phase 7 | Pending |
-| INFRA-02 | Phase 7 | Pending |
-| INFRA-04 | Phase 7 | Pending |
-| INFRA-05 | Phase 7 | Pending |
-| AUX-01 | Phase 7 | Pending |
+| INFRA-01 | Phase 7 | Complete |
+| INFRA-02 | Phase 7 | Complete |
+| INFRA-04 | Phase 7 | Complete |
+| INFRA-05 | Phase 7 | Complete |
+| AUX-01 | Phase 7 | Complete |
 | LEDG-01 | Phase 8 | Pending |
 | LEDG-02 | Phase 8 | Pending |
 | LEDG-03 | Phase 8 | Pending |

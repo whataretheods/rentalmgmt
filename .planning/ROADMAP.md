@@ -27,7 +27,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ### v2.0 Production-Ready
 
-- [ ] **Phase 7: Infrastructure Prerequisites** - Database transaction support, S3 cloud storage, edge auth, cascade safety, admin sidebar layout
+- [x] **Phase 7: Infrastructure Prerequisites** - Database transaction support, S3 cloud storage, edge auth, cascade safety, admin sidebar layout (2026-02-26)
 - [ ] **Phase 8: Financial Ledger Foundation** - Charges table, running balances, charge management, historical reconciliation, webhook hardening
 - [ ] **Phase 9: Automated Operations** - Late fee automation, configurable fee rules, timezone-aware scheduling, late fee notifications
 - [ ] **Phase 10: Portfolio Management & Tenant Lifecycle** - Property/unit CRUD, move-out workflow, past-tenant access, self-service invite entry
@@ -122,7 +122,7 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 4. Maintenance, Documents, and Profiles | v1.0 | 6/6 | Complete | 2026-02-26 |
 | 5. Notifications and Messaging | v1.0 | 5/5 | Complete | 2026-02-26 |
 | 6. Autopay and Polish | v1.0 | 6/6 | Complete | 2026-02-26 |
-| 7. Infrastructure Prerequisites | v2.0 | 0/4 | Planned | - |
+| 7. Infrastructure Prerequisites | v2.0 | 4/4 | Complete | 2026-02-26 |
 | 8. Financial Ledger Foundation | v2.0 | 0/TBD | Not started | - |
 | 9. Automated Operations | v2.0 | 0/TBD | Not started | - |
 | 10. Portfolio Management & Tenant Lifecycle | v2.0 | 0/TBD | Not started | - |
