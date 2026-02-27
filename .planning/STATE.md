@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Production-Ready
-current_plan: "08-01"
-status: ready_to_plan
-stopped_at: Phase 7 complete — all 4 plans executed, 5/5 success criteria met
-last_updated: "2026-02-26"
-last_activity: 2026-02-26
+current_plan: "08-02"
+status: executing
+stopped_at: Completed 08-01-PLAN.md
+last_updated: "2026-02-27"
+last_activity: 2026-02-27
 progress:
   total_phases: 6
   completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
+  total_plans: 5
+  completed_plans: 5
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 8 — Financial Ledger Foundation (next)
+**Current focus:** Phase 8 — Financial Ledger Foundation (executing)
 
 ## Current Position
 
-**Phase:** 8 of 12 (Financial Ledger Foundation) — next
-**Plan:** Not yet planned
-**Status:** Phase 7 complete — ready to plan Phase 8
-**Last Activity:** 2026-02-26 — Phase 7 executed (4 plans, 3 waves)
+**Phase:** 8 of 12 (Financial Ledger Foundation) — executing
+**Plan:** 08-02 (next)
+**Status:** 08-01 complete — charges schema + balance helper
+**Last Activity:** 2026-02-27 — Phase 8 Plan 01 executed
 
-Progress: [||||||||||||........] 58% (v1.0 complete, v2.0 Phase 7 done)
+Progress: [|||||||||||||.......] 62% (v1.0 complete, v2.0 Phase 7 + 08-01 done)
 
 ## Performance Metrics
 
@@ -40,9 +40,9 @@ Progress: [||||||||||||........] 58% (v1.0 complete, v2.0 Phase 7 done)
 - Total execution time: ~1.9 hours
 
 **Velocity (v2.0):**
-- Total plans completed: 4
-- Average duration: 4.5 min
-- Total execution time: ~18 min
+- Total plans completed: 5
+- Average duration: 4.2 min
+- Total execution time: ~21 min
 
 **By Phase (v1.0):**
 
@@ -60,9 +60,10 @@ Progress: [||||||||||||........] 58% (v1.0 complete, v2.0 Phase 7 done)
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 7. Infrastructure | 4 | 18min | 4.5min |
+| 8. Financial Ledger | 1 | 3min | 3.0min |
 
 **Recent Trend:**
-- Last 4 plans: 5min, 4min, 4min, 5min
+- Last 4 plans: 4min, 4min, 5min, 3min
 - Trend: Stable
 
 ## Accumulated Context
@@ -78,6 +79,10 @@ Recent decisions affecting v2.0:
 - [Phase 7]: Node.js middleware (not Edge runtime) for auth checks — Better Auth requires Node.js APIs
 - [Phase 7]: S3 graceful fallback — when S3 env vars not set, uploads use local filesystem (development-friendly)
 - [Phase 7]: Admin sidebar uses shadcn/ui SidebarProvider with cookie-based state persistence
+- [Phase 8]: Used onDelete restrict for charges.unitId to protect financial history
+- [Phase 8]: charges.amountCents uses positive for debits, negative for credits/adjustments
+- [Phase 8]: stripe_events uses text PK (Stripe event ID format) not uuid
+- [Phase 8]: Raw SQL via db.execute for balance computation (aggregate queries)
 
 ### Pending Todos
 
@@ -90,6 +95,6 @@ None yet.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-26
-**Stopped At:** Phase 7 complete — ready to plan Phase 8 (Financial Ledger Foundation)
+**Last Session:** 2026-02-27
+**Stopped At:** Completed 08-01-PLAN.md — charges schema + balance helper
 **Resume File:** None
