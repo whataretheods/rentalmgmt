@@ -3,6 +3,8 @@ import { headers } from "next/headers"
 import { db } from "@/db"
 import { units, tenantUnits, payments, autopayEnrollments, maintenanceRequests, documentRequests, notifications } from "@/db/schema"
 import { eq, and, desc, count, isNull } from "drizzle-orm"
+import { getTenantBalance } from "@/lib/ledger"
+import { BalanceCard } from "@/components/tenant/BalanceCard"
 import { PayRentButton } from "@/components/tenant/PayRentButton"
 import { PaymentSummaryCard } from "@/components/tenant/PaymentSummaryCard"
 import { AutopayStatusCard } from "@/components/tenant/AutopayStatusCard"
@@ -29,6 +31,24 @@ export default async function TenantDashboard() {
       </div>
     )
   }
+
+  // Compute running balance
+  const balanceCents = await getTenantBalance(session.user.id, link.unitId)
+
+  // Check for pending payments
+  const [pendingPayment] = await db
+    .select({ id: payments.id })
+    .from(payments)
+    .where(
+      and(
+        eq(payments.tenantUserId, session.user.id),
+        eq(payments.unitId, link.unitId),
+        eq(payments.status, "pending")
+      )
+    )
+    .limit(1)
+
+  const hasPendingPayments = !!pendingPayment
 
   // Get unit details
   const [unit] = await db.select().from(units).where(eq(units.id, link.unitId))
@@ -111,6 +131,9 @@ export default async function TenantDashboard() {
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         <p className="mt-1 text-gray-600">Unit {unit?.unitNumber}</p>
       </div>
+
+      {/* Balance Overview */}
+      <BalanceCard balanceCents={balanceCents} hasPendingPayments={hasPendingPayments} />
 
       {/* TOP SECTION: Payment Status + Autopay */}
       <div className="space-y-4">
