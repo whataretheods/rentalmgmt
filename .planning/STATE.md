@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Production-Ready
 current_plan: "08-05"
-status: executing
-stopped_at: Completed 08-03-PLAN.md
+status: phase-complete
+stopped_at: Completed 08-05-PLAN.md
 last_updated: "2026-02-27"
 last_activity: 2026-02-27
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 6
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 8 — Financial Ledger Foundation (executing)
+**Current focus:** Phase 8 — Financial Ledger Foundation (complete)
 
 ## Current Position
 
-**Phase:** 8 of 12 (Financial Ledger Foundation) — executing
-**Plan:** 08-05 (next)
-**Status:** 08-01 + 08-02 + 08-03 + 08-04 complete — charges schema + admin charge UI + balance display + webhook hardening
-**Last Activity:** 2026-02-27 — Phase 8 Plan 03 executed
+**Phase:** 8 of 12 (Financial Ledger Foundation) — complete
+**Plan:** 08-05 (complete, last plan in phase)
+**Status:** Phase 8 complete — charges schema + admin charge UI + balance display + webhook hardening + charge backfill
+**Last Activity:** 2026-02-27 — Phase 8 Plan 05 executed (final)
 
-Progress: [||||||||||||||||....] 72% (v1.0 complete, v2.0 Phase 7 + 08-01/02/03/04 done)
+Progress: [|||||||||||||||||||.] 77% (v1.0 complete, v2.0 Phase 7 + 8 done)
 
 ## Performance Metrics
 
@@ -40,9 +40,9 @@ Progress: [||||||||||||||||....] 72% (v1.0 complete, v2.0 Phase 7 + 08-01/02/03/
 - Total execution time: ~1.9 hours
 
 **Velocity (v2.0):**
-- Total plans completed: 8
-- Average duration: 3.9 min
-- Total execution time: ~32 min
+- Total plans completed: 9
+- Average duration: 3.8 min
+- Total execution time: ~34 min
 
 **By Phase (v1.0):**
 
@@ -60,10 +60,10 @@ Progress: [||||||||||||||||....] 72% (v1.0 complete, v2.0 Phase 7 + 08-01/02/03/
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 7. Infrastructure | 4 | 18min | 4.5min |
-| 8. Financial Ledger | 4 | 14min | 3.5min |
+| 8. Financial Ledger | 5 | 16min | 3.2min |
 
 **Recent Trend:**
-- Last 4 plans: 3min, 2min, 4min, 5min
+- Last 4 plans: 2min, 4min, 5min, 2min
 - Trend: Stable
 
 ## Accumulated Context
@@ -89,6 +89,9 @@ Recent decisions affecting v2.0:
 - [Phase 8]: Strict stripePaymentIntentId matching replaces broad tenant/unit/period queries in webhook
 - [Phase 8]: BalanceCard is server component receiving computed balance as props (no client-side fetch)
 - [Phase 8]: Admin balance uses batch queries (charge/payment totals maps) to avoid N+1
+- [Phase 8]: HTTP driver (neon-http) for standalone scripts — simpler than WebSocket Pool for one-shot scripts
+- [Phase 8]: One charge per tenant-unit-period for backfill — multiple payments for same period use larger amount
+- [Phase 8]: createdBy null to distinguish system-generated backfill charges from admin-posted charges
 
 ### Pending Todos
 
@@ -97,10 +100,10 @@ None yet.
 ### Blockers/Concerns
 
 - Late fee jurisdiction-specific legal requirements need validation before Phase 9 automation
-- Backfill migration scope depends on actual payment record distribution (run COUNT query before Phase 8)
+- Backfill migration scope depends on actual payment record distribution (RESOLVED: script created, 0 historical payments currently)
 
 ## Session Continuity
 
 **Last Session:** 2026-02-27
-**Stopped At:** Completed 08-03-PLAN.md — balance display on tenant dashboard + admin payments
+**Stopped At:** Completed 08-05-PLAN.md — Phase 8 complete (charge backfill migration)
 **Resume File:** None

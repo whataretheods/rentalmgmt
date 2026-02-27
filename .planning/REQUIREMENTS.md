@@ -56,7 +56,7 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 - [x] **LEDG-01**: Tenant finances tracked via charges table separating what is owed (rent, late fees, one-time charges) from what was paid
 - [x] **LEDG-02**: Running balance computed per tenant and displayed on tenant dashboard ("You owe $X") and admin views
 - [x] **LEDG-03**: Admin can manually post charges, credits, and adjustments to any tenant's ledger
-- [ ] **LEDG-04**: Existing historical payment records reconciled with charge records via backfill migration
+- [x] **LEDG-04**: Existing historical payment records reconciled with charge records via backfill migration
 - [x] **LEDG-05**: Stripe webhook uses strict payment intent ID matching for ACH settlements and deduplicates events to prevent duplicate ledger entries
 
 ### Late Fees
@@ -185,7 +185,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LEDG-01 | Phase 8 | Complete |
 | LEDG-02 | Phase 8 | Complete |
 | LEDG-03 | Phase 8 | Complete |
-| LEDG-04 | Phase 8 | Pending |
+| LEDG-04 | Phase 8 | Complete |
 | LEDG-05 | Phase 8 | Complete |
 | LATE-01 | Phase 9 | Pending |
 | LATE-02 | Phase 9 | Pending |
