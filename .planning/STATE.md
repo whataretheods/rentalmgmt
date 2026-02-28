@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Production-Ready
 status: in_progress
-stopped_at: Completed 13-01-PLAN.md (Vitest + daysSinceRentDue fix + middleware cookie fix)
-last_updated: "2026-02-28T07:31:43.000Z"
+stopped_at: Completed 13-03-PLAN.md (Chargeback & NSF fee posting)
+last_updated: "2026-02-28T07:37:07.000Z"
 last_activity: 2026-02-28
 progress:
   total_phases: 13
   completed_phases: 12
   total_plans: 84
-  completed_plans: 62
+  completed_plans: 64
 ---
 
 # Project State
@@ -25,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-02-26)
 ## Current Position
 
 **Phase:** 13 of 13 (FinTech Polish & Edge Cases) — in progress
-**Plan:** 13-01 (complete) — 1 of 4 plans done
+**Plan:** 13-03 (complete) — 3 of 4 plans done
 **Status:** Executing Phase 13
 **Last Activity:** 2026-02-28
 
-Progress: [||||||||||||||||||||||||||||||||||||||||||] 74% (62/84 plans)
+Progress: [||||||||||||||||||||||||||||||||||||||||||] 76% (64/84 plans)
 
 ## Performance Metrics
 
@@ -69,10 +69,10 @@ Progress: [||||||||||||||||||||||||||||||||||||||||||] 74% (62/84 plans)
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 13. FinTech Polish | 1/4 | 3min | 3.0min |
+| 13. FinTech Polish | 3/4 | 7min | 2.3min |
 
 **Recent Trend:**
-- Last 6 plans: 3min, 3min, 2min, 3min, 3min, 3min
+- Last 6 plans: 3min, 2min, 3min, 3min, 3min, 2min
 - Trend: Stable
 
 ## Accumulated Context
@@ -129,6 +129,8 @@ Recent decisions affecting v2.0:
 - [Phase 13]: vitest.config.mts (not .ts) to avoid ESM/CJS conflict in non-module project
 - [Phase 13]: Optional referenceDate parameter for testability without mocking global Date
 - [Phase 13]: getSessionCookie from better-auth/cookies handles both dev and prod cookie prefixes
+- [Phase 13]: Pending payments are informational only -- NOT subtracted from confirmed balance
+- [Phase 13]: Pending amount displayed in all three balance states (owed, credit, current)
 
 ### Pending Todos
 
@@ -146,5 +148,5 @@ None.
 ## Session Continuity
 
 **Last Session:** 2026-02-28
-**Stopped At:** Completed 13-01-PLAN.md (Vitest + daysSinceRentDue fix + middleware cookie fix)
+**Stopped At:** Completed 13-02-PLAN.md (Pending payment amounts in ledger + BalanceCard)
 **Resume File:** None
