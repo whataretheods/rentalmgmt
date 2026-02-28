@@ -1,15 +1,21 @@
 import { db } from "@/db"
 import { sql } from "drizzle-orm"
 
+export interface TenantBalanceResult {
+  balanceCents: number
+  pendingPaymentsCents: number
+}
+
 /**
  * Compute the running balance for a tenant's unit.
  * Balance = SUM(charges.amountCents) - SUM(succeeded payments.amountCents)
  * Positive = tenant owes money. Zero = all caught up. Negative = tenant has credit.
+ * Also returns the sum of pending payment amounts (informational, not subtracted from balance).
  */
 export async function getTenantBalance(
   tenantUserId: string,
   unitId: string
-): Promise<number> {
+): Promise<TenantBalanceResult> {
   const result = await db.execute(sql`
     SELECT
       COALESCE(
@@ -24,10 +30,22 @@ export async function getTenantBalance(
          AND status = 'succeeded'),
         0
       )
-      AS balance_cents
+      AS balance_cents,
+      COALESCE(
+        (SELECT SUM(amount_cents) FROM payments
+         WHERE tenant_user_id = ${tenantUserId} AND unit_id = ${unitId}
+         AND status = 'pending'),
+        0
+      )
+      AS pending_payments_cents
   `)
-  const row = result.rows[0] as { balance_cents: string } | undefined
-  return Number(row?.balance_cents ?? 0)
+  const row = result.rows[0] as
+    | { balance_cents: string; pending_payments_cents: string }
+    | undefined
+  return {
+    balanceCents: Number(row?.balance_cents ?? 0),
+    pendingPaymentsCents: Number(row?.pending_payments_cents ?? 0),
+  }
 }
 
 /**
