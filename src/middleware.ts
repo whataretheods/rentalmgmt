@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
+import { getSessionCookie } from "better-auth/cookies"
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -24,9 +25,10 @@ export async function middleware(request: NextRequest) {
 
   // Tenant routes: lightweight cookie check (full validation in page components)
   if (pathname.startsWith("/tenant")) {
-    const sessionCookie = request.cookies.get("better-auth.session_token")
+    // getSessionCookie handles both unprefixed (dev) and __Secure- prefixed (prod HTTPS) cookie names
+    const sessionToken = getSessionCookie(request)
 
-    if (!sessionCookie) {
+    if (!sessionToken) {
       const loginUrl = new URL("/auth/login", request.url)
       loginUrl.searchParams.set("callbackUrl", pathname)
       return NextResponse.redirect(loginUrl)
