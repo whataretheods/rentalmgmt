@@ -2,10 +2,10 @@ import { CircleCheck, AlertCircle, CreditCard } from "lucide-react"
 
 interface BalanceCardProps {
   balanceCents: number
-  hasPendingPayments: boolean
+  pendingPaymentsCents: number
 }
 
-export function BalanceCard({ balanceCents, hasPendingPayments }: BalanceCardProps) {
+export function BalanceCard({ balanceCents, pendingPaymentsCents }: BalanceCardProps) {
   if (balanceCents > 0) {
     // Tenant owes money
     return (
@@ -17,9 +17,9 @@ export function BalanceCard({ balanceCents, hasPendingPayments }: BalanceCardPro
             <p className="mt-1 text-3xl font-bold text-amber-900">
               You owe ${(balanceCents / 100).toFixed(2)}
             </p>
-            {hasPendingPayments && (
+            {pendingPaymentsCents > 0 && (
               <p className="mt-2 text-sm text-amber-700">
-                Pending payment processing
+                ${(pendingPaymentsCents / 100).toFixed(2)} payment processing
               </p>
             )}
           </div>
@@ -39,6 +39,11 @@ export function BalanceCard({ balanceCents, hasPendingPayments }: BalanceCardPro
             <p className="mt-1 text-3xl font-bold text-blue-900">
               Credit: ${(Math.abs(balanceCents) / 100).toFixed(2)}
             </p>
+            {pendingPaymentsCents > 0 && (
+              <p className="mt-2 text-sm text-amber-700">
+                ${(pendingPaymentsCents / 100).toFixed(2)} payment processing
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -56,6 +61,11 @@ export function BalanceCard({ balanceCents, hasPendingPayments }: BalanceCardPro
             All caught up!
           </p>
           <p className="mt-1 text-sm text-green-700">$0.00</p>
+          {pendingPaymentsCents > 0 && (
+            <p className="mt-2 text-sm text-amber-700">
+              ${(pendingPaymentsCents / 100).toFixed(2)} payment processing
+            </p>
+          )}
         </div>
       </div>
     </div>

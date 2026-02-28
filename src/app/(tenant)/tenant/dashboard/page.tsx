@@ -74,25 +74,8 @@ export default async function TenantDashboard() {
     .from(units)
     .where(eq(units.id, link.unitId))
 
-  // Compute running balance (works for both active and past tenants)
-  const balanceCents = await getTenantBalance(session.user.id, link.unitId)
-
-  // Check for pending payments
-  const [pendingPayment] = isReadOnly
-    ? [undefined]
-    : await db
-        .select({ id: payments.id })
-        .from(payments)
-        .where(
-          and(
-            eq(payments.tenantUserId, session.user.id),
-            eq(payments.unitId, link.unitId),
-            eq(payments.status, "pending")
-          )
-        )
-        .limit(1)
-
-  const hasPendingPayments = !!pendingPayment
+  // Compute running balance and pending payments (works for both active and past tenants)
+  const { balanceCents, pendingPaymentsCents } = await getTenantBalance(session.user.id, link.unitId)
 
   // Get most recent payment
   const [lastPayment] = await db
@@ -196,7 +179,7 @@ export default async function TenantDashboard() {
       {/* Balance Overview */}
       <BalanceCard
         balanceCents={balanceCents}
-        hasPendingPayments={hasPendingPayments}
+        pendingPaymentsCents={isReadOnly ? 0 : pendingPaymentsCents}
       />
 
       {/* TOP SECTION: Payment Status + Autopay (conditional) */}
