@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server"
 import { db } from "@/db"
-import { autopayEnrollments, units, payments } from "@/db/schema/domain"
+import { autopayEnrollments, units, payments, properties } from "@/db/schema/domain"
 import { user } from "@/db/schema/auth"
 import { eq, and } from "drizzle-orm"
 import { stripe } from "@/lib/stripe"
 import { calculateCardFee, calculateAchFee, formatCents } from "@/lib/autopay-fees"
 import { sendNotification } from "@/lib/notifications"
+import { getLocalDate, getLocalBillingPeriod } from "@/lib/timezone"
 
 export async function POST(req: Request) {
   // Validate CRON_SECRET bearer token
@@ -14,11 +15,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const today = new Date()
-  const currentDay = today.getDate()
-  const currentPeriod = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`
-
-  // Query all active autopay enrollments joined with units
+  // Query all active autopay enrollments joined with units and properties for timezone
   const enrollments = await db
     .select({
       enrollmentId: autopayEnrollments.id,
@@ -31,9 +28,11 @@ export async function POST(req: Request) {
       unitNumber: units.unitNumber,
       rentAmountCents: units.rentAmountCents,
       rentDueDay: units.rentDueDay,
+      propertyTimezone: properties.timezone,
     })
     .from(autopayEnrollments)
     .innerJoin(units, eq(units.id, autopayEnrollments.unitId))
+    .innerJoin(properties, eq(properties.id, units.propertyId))
     .where(eq(autopayEnrollments.status, "active"))
 
   let charged = 0
@@ -42,14 +41,20 @@ export async function POST(req: Request) {
   let errors = 0
 
   for (const enrollment of enrollments) {
-    // Hoist isRetryDay so it's accessible in catch block
+    // Hoist isRetryDay and currentPeriod so they're accessible in catch block
     let isRetryDay = false
+    let currentPeriod = ""
     try {
       // Skip units without rent configuration
       if (!enrollment.rentAmountCents || !enrollment.rentDueDay) {
         skipped++
         continue
       }
+
+      // Use property-local timezone for date calculations
+      const localDate = getLocalDate(enrollment.propertyTimezone)
+      const currentDay = localDate.day
+      currentPeriod = getLocalBillingPeriod(enrollment.propertyTimezone)
 
       const isDueDay = currentDay === enrollment.rentDueDay
       isRetryDay = currentDay === enrollment.rentDueDay + 2
@@ -145,8 +150,8 @@ export async function POST(req: Request) {
           paidAt: new Date(),
         })
 
-        // Update enrollment
-        const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, enrollment.rentDueDay)
+        // Update enrollment — compute next charge date in local time
+        const nextMonth = new Date(localDate.year, localDate.month, enrollment.rentDueDay)
         await db
           .update(autopayEnrollments)
           .set({
