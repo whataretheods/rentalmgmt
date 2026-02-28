@@ -11,6 +11,7 @@ export const properties = pgTable("properties", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   address: text("address").notNull(),
+  timezone: text("timezone").notNull().default("America/New_York"),  // IANA timezone identifier
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   archivedAt: timestamp("archived_at"),  // null = active, non-null = archived (soft-deleted)
@@ -211,6 +212,24 @@ export const autopayEnrollments = pgTable("autopay_enrollments", {
   cancelledAt: timestamp("cancelled_at"),
   lastChargeAt: timestamp("last_charge_at"),
   nextChargeDate: text("next_charge_date"),  // "2026-03-01" ISO date string for display
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+// ==================== Phase 9: Automated Operations ====================
+
+// Late fee rules — per-property configuration for automatic late fee assessment
+export const lateFeeRules = pgTable("late_fee_rules", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  propertyId: uuid("property_id")
+    .references(() => properties.id, { onDelete: "cascade" })
+    .notNull()
+    .unique(),  // one rule set per property
+  enabled: boolean("enabled").default(false).notNull(),  // MUST default OFF
+  gracePeriodDays: integer("grace_period_days").notNull().default(5),
+  feeType: text("fee_type", { enum: ["flat", "percentage"] }).notNull().default("flat"),
+  feeAmountCents: integer("fee_amount_cents").notNull().default(5000),  // $50 flat OR 500 = 5% for percentage
+  maxFeeAmountCents: integer("max_fee_amount_cents"),  // optional cap for percentage fees
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
