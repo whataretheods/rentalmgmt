@@ -33,15 +33,22 @@ export default async function AdminLayout({
     <SidebarProvider defaultOpen={defaultOpen}>
       <AdminSidebar user={session.user} />
       <SidebarInset>
-        <header className="flex items-center gap-2 border-b px-4 py-3">
-          <SidebarTrigger />
+        {/* Mobile header — visible only below md breakpoint */}
+        <header className="sticky top-0 z-30 flex items-center justify-between border-b bg-white px-4 py-3 md:hidden">
+          <SidebarTrigger className="min-h-[44px] min-w-[44px]" />
           <span className="font-semibold text-gray-900">Admin Portal</span>
-          <div className="ml-auto flex items-center gap-4">
-            <NotificationBell apiUrl="/api/admin/notifications" inboxUrl="/admin/notifications" />
-            <span className="text-sm text-gray-500">{session.user.email}</span>
-          </div>
+          <NotificationBell apiUrl="/api/admin/notifications" inboxUrl="/admin/notifications" />
         </header>
-        <main className="container mx-auto px-6 py-8">
+
+        {/* Desktop header — visible at md and above */}
+        <header className="hidden md:flex items-center justify-end gap-2 border-b bg-white px-6 py-3">
+          <SidebarTrigger />
+          <span className="font-semibold text-gray-900 mr-auto">Admin Portal</span>
+          <NotificationBell apiUrl="/api/admin/notifications" inboxUrl="/admin/notifications" />
+          <span className="text-sm text-gray-500">{session.user.email}</span>
+        </header>
+
+        <main className="px-4 py-6 sm:px-6 lg:px-8">
           {children}
         </main>
       </SidebarInset>

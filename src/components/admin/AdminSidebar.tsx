@@ -66,6 +66,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
                     asChild
                     isActive={pathname === item.href || pathname.startsWith(item.href + "/")}
                     tooltip={item.title}
+                    size="lg"
                   >
                     <Link href={item.href}>
                       <item.icon />
