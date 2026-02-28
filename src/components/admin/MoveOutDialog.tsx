@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { toast } from "sonner"
+import { calculateProratedRent } from "@/lib/proration"
 
 interface FinalCharge {
   description: string
@@ -22,7 +23,7 @@ interface FinalCharge {
 
 interface MoveOutDialogProps {
   tenant: { userId: string; name: string; email: string }
-  unit: { id: string; unitNumber: string }
+  unit: { id: string; unitNumber: string; rentAmountCents: number | null }
   onSuccess: () => void
   trigger: React.ReactNode
 }
@@ -56,6 +57,23 @@ export function MoveOutDialog({
     const updated = [...finalCharges]
     updated[index] = { ...updated[index], [field]: value }
     setFinalCharges(updated)
+  }
+
+  function addProratedCharge() {
+    if (!unit.rentAmountCents || !moveOutDate) return
+
+    const moveDate = new Date(moveOutDate + "T00:00:00") // Parse YYYY-MM-DD without timezone shift
+    const proratedCents = calculateProratedRent(unit.rentAmountCents, moveDate, "move_out")
+    const proratedDollars = (proratedCents / 100).toFixed(2)
+
+    // Add as a pre-filled final charge that admin can review/adjust
+    setFinalCharges([
+      ...finalCharges,
+      {
+        description: `Prorated rent through ${moveOutDate}`,
+        amountDollars: proratedDollars,
+      },
+    ])
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -169,15 +187,28 @@ export function MoveOutDialog({
                 </Button>
               </div>
             ))}
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={addCharge}
-              disabled={loading}
-            >
-              + Add Final Charge
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addCharge}
+                disabled={loading}
+              >
+                + Add Final Charge
+              </Button>
+              {unit.rentAmountCents && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addProratedCharge}
+                  disabled={loading}
+                >
+                  Calculate Prorated Rent
+                </Button>
+              )}
+            </div>
             {totalCents > 0 && (
               <p className="text-sm text-gray-600">
                 Total final charges: ${(totalCents / 100).toFixed(2)}

@@ -208,6 +208,7 @@ export default function AdminUnitsPage() {
                           unit={{
                             id: unit.id,
                             unitNumber: unit.unitNumber,
+                            rentAmountCents: unit.rentAmountCents,
                           }}
                           onSuccess={fetchUnits}
                           trigger={
