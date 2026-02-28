@@ -3,6 +3,9 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { NotificationBell } from "@/components/ui/NotificationBell"
+import { db } from "@/db"
+import { tenantUnits } from "@/db/schema"
+import { eq, and } from "drizzle-orm"
 
 export default async function TenantLayout({
   children,
@@ -21,28 +24,77 @@ export default async function TenantLayout({
   // If an admin navigates to /tenant/dashboard, let them in (they have a session)
   // The admin layout enforces admin-only access for /admin/* routes
 
+  // Check if tenant has an active unit (for nav link visibility)
+  const [activeLink] = await db
+    .select({ id: tenantUnits.id })
+    .from(tenantUnits)
+    .where(
+      and(
+        eq(tenantUnits.userId, session.user.id),
+        eq(tenantUnits.isActive, true)
+      )
+    )
+    .limit(1)
+
+  const hasActiveUnit = !!activeLink
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b px-6 py-4 flex items-center justify-between">
         <span className="font-semibold text-gray-900">Tenant Portal</span>
         <div className="flex items-center gap-4">
-          <NotificationBell apiUrl="/api/notifications" inboxUrl="/tenant/notifications" />
+          <NotificationBell
+            apiUrl="/api/notifications"
+            inboxUrl="/tenant/notifications"
+          />
           <span className="text-sm text-gray-500">{session.user.email}</span>
         </div>
       </header>
       <nav className="bg-white border-b px-6 py-2">
         <div className="flex items-center gap-4">
-          <Link href="/tenant/dashboard" className="text-sm text-gray-600 hover:text-gray-900">Dashboard</Link>
-          <Link href="/tenant/payments" className="text-sm text-gray-600 hover:text-gray-900">Payments</Link>
-          <Link href="/tenant/maintenance" className="text-sm text-gray-600 hover:text-gray-900">Maintenance</Link>
-          <Link href="/tenant/documents" className="text-sm text-gray-600 hover:text-gray-900">Documents</Link>
-          <Link href="/tenant/profile" className="text-sm text-gray-600 hover:text-gray-900">Profile</Link>
-          <Link href="/tenant/notifications" className="text-sm text-gray-600 hover:text-gray-900">Notifications</Link>
+          <Link
+            href="/tenant/dashboard"
+            className="text-sm text-gray-600 hover:text-gray-900"
+          >
+            Dashboard
+          </Link>
+          <Link
+            href="/tenant/payments"
+            className="text-sm text-gray-600 hover:text-gray-900"
+          >
+            Payments
+          </Link>
+          {hasActiveUnit && (
+            <>
+              <Link
+                href="/tenant/maintenance"
+                className="text-sm text-gray-600 hover:text-gray-900"
+              >
+                Maintenance
+              </Link>
+              <Link
+                href="/tenant/documents"
+                className="text-sm text-gray-600 hover:text-gray-900"
+              >
+                Documents
+              </Link>
+            </>
+          )}
+          <Link
+            href="/tenant/profile"
+            className="text-sm text-gray-600 hover:text-gray-900"
+          >
+            Profile
+          </Link>
+          <Link
+            href="/tenant/notifications"
+            className="text-sm text-gray-600 hover:text-gray-900"
+          >
+            Notifications
+          </Link>
         </div>
       </nav>
-      <main className="container mx-auto px-6 py-8">
-        {children}
-      </main>
+      <main className="container mx-auto px-6 py-8">{children}</main>
     </div>
   )
 }

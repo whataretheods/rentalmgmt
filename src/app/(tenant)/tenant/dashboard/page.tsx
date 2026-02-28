@@ -1,7 +1,15 @@
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { db } from "@/db"
-import { units, tenantUnits, payments, autopayEnrollments, maintenanceRequests, documentRequests, notifications } from "@/db/schema"
+import {
+  units,
+  tenantUnits,
+  payments,
+  autopayEnrollments,
+  maintenanceRequests,
+  documentRequests,
+  notifications,
+} from "@/db/schema"
 import { eq, and, desc, count, isNull } from "drizzle-orm"
 import { getTenantBalance } from "@/lib/ledger"
 import { BalanceCard } from "@/components/tenant/BalanceCard"
@@ -10,64 +18,104 @@ import { PaymentSummaryCard } from "@/components/tenant/PaymentSummaryCard"
 import { AutopayStatusCard } from "@/components/tenant/AutopayStatusCard"
 import { DashboardMaintenance } from "@/components/tenant/DashboardMaintenance"
 import { DashboardNotifications } from "@/components/tenant/DashboardNotifications"
+import { InviteTokenEntry } from "@/components/tenant/InviteTokenEntry"
+import { ReadOnlyBanner } from "@/components/tenant/ReadOnlyBanner"
 
 export default async function TenantDashboard() {
   const session = await auth.api.getSession({ headers: await headers() })
-  if (!session) return null  // layout handles redirect
+  if (!session) return null // layout handles redirect
 
-  // Get tenant's active unit link
-  const [link] = await db
+  // Check for active tenancy
+  const [activeLink] = await db
     .select()
     .from(tenantUnits)
-    .where(and(eq(tenantUnits.userId, session.user.id), eq(tenantUnits.isActive, true)))
+    .where(
+      and(
+        eq(tenantUnits.userId, session.user.id),
+        eq(tenantUnits.isActive, true)
+      )
+    )
 
-  if (!link) {
+  // Check for past tenancies (moved-out)
+  const pastLinks = await db
+    .select()
+    .from(tenantUnits)
+    .where(
+      and(
+        eq(tenantUnits.userId, session.user.id),
+        eq(tenantUnits.isActive, false)
+      )
+    )
+    .orderBy(desc(tenantUnits.endDate))
+
+  // STATE C: No unit at all -- show invite token entry
+  if (!activeLink && pastLinks.length === 0) {
     return (
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-2 text-gray-600">
-          Your account is not linked to a unit yet. Please contact your landlord for an invite.
-        </p>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="mt-2 text-gray-600">
+            Welcome to the tenant portal! Link your account to your unit to get
+            started.
+          </p>
+        </div>
+        <InviteTokenEntry />
       </div>
     )
   }
 
-  // Compute running balance
+  // Determine which link and mode to use
+  const link = activeLink || pastLinks[0] // Use active, or most recent past
+  const isReadOnly = !activeLink // Read-only if no active link
+
+  // Get unit details
+  const [unit] = await db
+    .select()
+    .from(units)
+    .where(eq(units.id, link.unitId))
+
+  // Compute running balance (works for both active and past tenants)
   const balanceCents = await getTenantBalance(session.user.id, link.unitId)
 
   // Check for pending payments
-  const [pendingPayment] = await db
-    .select({ id: payments.id })
-    .from(payments)
-    .where(
-      and(
-        eq(payments.tenantUserId, session.user.id),
-        eq(payments.unitId, link.unitId),
-        eq(payments.status, "pending")
-      )
-    )
-    .limit(1)
+  const [pendingPayment] = isReadOnly
+    ? [undefined]
+    : await db
+        .select({ id: payments.id })
+        .from(payments)
+        .where(
+          and(
+            eq(payments.tenantUserId, session.user.id),
+            eq(payments.unitId, link.unitId),
+            eq(payments.status, "pending")
+          )
+        )
+        .limit(1)
 
   const hasPendingPayments = !!pendingPayment
-
-  // Get unit details
-  const [unit] = await db.select().from(units).where(eq(units.id, link.unitId))
 
   // Get most recent payment
   const [lastPayment] = await db
     .select()
     .from(payments)
-    .where(and(eq(payments.tenantUserId, session.user.id), eq(payments.unitId, link.unitId)))
+    .where(
+      and(
+        eq(payments.tenantUserId, session.user.id),
+        eq(payments.unitId, link.unitId)
+      )
+    )
     .orderBy(desc(payments.createdAt))
     .limit(1)
 
-  // Get autopay enrollment
-  const [enrollment] = await db
-    .select()
-    .from(autopayEnrollments)
-    .where(eq(autopayEnrollments.tenantUserId, session.user.id))
+  // Get autopay enrollment (only relevant for active tenants)
+  const [enrollment] = isReadOnly
+    ? [undefined]
+    : await db
+        .select()
+        .from(autopayEnrollments)
+        .where(eq(autopayEnrollments.tenantUserId, session.user.id))
 
-  // Get recent maintenance requests (limit 3)
+  // Get recent maintenance requests
   const recentMaintenance = await db
     .select({
       id: maintenanceRequests.id,
@@ -81,18 +129,20 @@ export default async function TenantDashboard() {
     .orderBy(desc(maintenanceRequests.createdAt))
     .limit(3)
 
-  // Get pending document requests count
-  const [docReqCount] = await db
-    .select({ value: count() })
-    .from(documentRequests)
-    .where(
-      and(
-        eq(documentRequests.tenantUserId, session.user.id),
-        eq(documentRequests.status, "pending"),
-      )
-    )
+  // Get pending document requests count (only for active tenants)
+  const [docReqCount] = isReadOnly
+    ? [{ value: 0 }]
+    : await db
+        .select({ value: count() })
+        .from(documentRequests)
+        .where(
+          and(
+            eq(documentRequests.tenantUserId, session.user.id),
+            eq(documentRequests.status, "pending")
+          )
+        )
 
-  // Get recent notifications (limit 5)
+  // Get recent notifications
   const recentNotifications = await db
     .select({
       id: notifications.id,
@@ -106,7 +156,7 @@ export default async function TenantDashboard() {
     .where(
       and(
         eq(notifications.userId, session.user.id),
-        eq(notifications.channel, "in_app"),
+        eq(notifications.channel, "in_app")
       )
     )
     .orderBy(desc(notifications.createdAt))
@@ -120,60 +170,84 @@ export default async function TenantDashboard() {
       and(
         eq(notifications.userId, session.user.id),
         eq(notifications.channel, "in_app"),
-        isNull(notifications.readAt),
+        isNull(notifications.readAt)
       )
     )
 
   return (
     <div className="space-y-6">
+      {/* Read-only banner for past tenants */}
+      {isReadOnly && (
+        <ReadOnlyBanner
+          unitNumber={unit?.unitNumber ?? "Unknown"}
+          endDate={link.endDate}
+        />
+      )}
+
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-1 text-gray-600">Unit {unit?.unitNumber}</p>
+        <p className="mt-1 text-gray-600">
+          Unit {unit?.unitNumber}
+          {isReadOnly && " (past tenancy)"}
+        </p>
       </div>
 
       {/* Balance Overview */}
-      <BalanceCard balanceCents={balanceCents} hasPendingPayments={hasPendingPayments} />
+      <BalanceCard
+        balanceCents={balanceCents}
+        hasPendingPayments={hasPendingPayments}
+      />
 
-      {/* TOP SECTION: Payment Status + Autopay */}
+      {/* TOP SECTION: Payment Status + Autopay (conditional) */}
       <div className="space-y-4">
         <PaymentSummaryCard
           rentAmountCents={unit?.rentAmountCents ?? null}
           rentDueDay={unit?.rentDueDay ?? null}
-          lastPayment={lastPayment ? {
-            amountCents: lastPayment.amountCents,
-            status: lastPayment.status,
-            paidAt: lastPayment.paidAt,
-            paymentMethod: lastPayment.paymentMethod,
-          } : null}
+          lastPayment={
+            lastPayment
+              ? {
+                  amountCents: lastPayment.amountCents,
+                  status: lastPayment.status,
+                  paidAt: lastPayment.paidAt,
+                  paymentMethod: lastPayment.paymentMethod,
+                }
+              : null
+          }
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <AutopayStatusCard
-            enrollment={enrollment ? {
-              status: enrollment.status,
-              paymentMethodType: enrollment.paymentMethodType,
-              paymentMethodLast4: enrollment.paymentMethodLast4,
-              paymentMethodBrand: enrollment.paymentMethodBrand,
-              nextChargeDate: enrollment.nextChargeDate,
-              enrolledAt: enrollment.enrolledAt,
-            } : null}
-            rentAmountCents={unit?.rentAmountCents ?? null}
-          />
-          <div className="flex items-stretch">
-            <div className="w-full flex flex-col justify-center rounded-lg border bg-white p-4">
-              <PayRentButton
-                unitId={link.unitId}
-                rentAmountCents={unit?.rentAmountCents ?? null}
-              />
+        {!isReadOnly && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <AutopayStatusCard
+              enrollment={
+                enrollment
+                  ? {
+                      status: enrollment.status,
+                      paymentMethodType: enrollment.paymentMethodType,
+                      paymentMethodLast4: enrollment.paymentMethodLast4,
+                      paymentMethodBrand: enrollment.paymentMethodBrand,
+                      nextChargeDate: enrollment.nextChargeDate,
+                      enrolledAt: enrollment.enrolledAt,
+                    }
+                  : null
+              }
+              rentAmountCents={unit?.rentAmountCents ?? null}
+            />
+            <div className="flex items-stretch">
+              <div className="w-full flex flex-col justify-center rounded-lg border bg-white p-4">
+                <PayRentButton
+                  unitId={link.unitId}
+                  rentAmountCents={unit?.rentAmountCents ?? null}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* MIDDLE SECTION: Maintenance + Documents */}
       <DashboardMaintenance
         recentRequests={recentMaintenance}
-        pendingDocumentRequests={docReqCount?.value ?? 0}
+        pendingDocumentRequests={isReadOnly ? 0 : (docReqCount?.value ?? 0)}
       />
 
       {/* BOTTOM SECTION: Notifications */}
