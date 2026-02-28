@@ -72,7 +72,7 @@ Progress: [||||||||||||||||||||||||||||||||||||||||||] 76% (64/84 plans)
 | 13. FinTech Polish | 3/4 | 7min | 2.3min |
 
 **Recent Trend:**
-- Last 6 plans: 3min, 2min, 3min, 3min, 3min, 2min
+- Last 6 plans: 2min, 3min, 3min, 3min, 2min, 2min
 - Trend: Stable
 
 ## Accumulated Context
@@ -131,6 +131,9 @@ Recent decisions affecting v2.0:
 - [Phase 13]: getSessionCookie from better-auth/cookies handles both dev and prod cookie prefixes
 - [Phase 13]: Pending payments are informational only -- NOT subtracted from confirmed balance
 - [Phase 13]: Pending amount displayed in all three balance states (owed, credit, current)
+- [Phase 13]: Chargeback resolves tenant from maintenance request chain (not active tenancy) so charges apply even if tenant moved out
+- [Phase 13]: NSF fee controlled by NSF_FEE_CENTS env var (0 or unset = disabled) for per-deployment flexibility
+- [Phase 13]: postNsfFee accepts tx parameter to run within existing webhook transaction for atomicity
 
 ### Pending Todos
 
@@ -148,5 +151,5 @@ None.
 ## Session Continuity
 
 **Last Session:** 2026-02-28
-**Stopped At:** Completed 13-02-PLAN.md (Pending payment amounts in ledger + BalanceCard)
+**Stopped At:** Completed 13-03-PLAN.md (Chargeback & NSF fee posting)
 **Resume File:** None
