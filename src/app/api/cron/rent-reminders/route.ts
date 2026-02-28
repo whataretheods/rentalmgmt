@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server"
 import { db } from "@/db"
-import { tenantUnits, units, payments, notifications, autopayEnrollments } from "@/db/schema/domain"
+import { tenantUnits, units, payments, notifications, autopayEnrollments, properties } from "@/db/schema/domain"
 import { user } from "@/db/schema/auth"
 import { eq, and, sql } from "drizzle-orm"
 import { sendNotification } from "@/lib/notifications"
 import { renderRentReminderEmail } from "@/emails/RentReminderEmail"
+import { getLocalDate, getLocalBillingPeriod } from "@/lib/timezone"
 
 type ReminderType = "upcoming" | "due_today" | "overdue_1" | "overdue_3" | "overdue_7"
 
@@ -47,14 +48,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const today = new Date()
-  const currentDay = today.getDate()
-  const currentPeriod = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`
-
-  // Start of today for idempotency check
-  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-
-  // Query all active tenant-unit links with unit details
+  // Query all active tenant-unit links with unit details and property timezone
   const activeLinks = await db
     .select({
       userId: tenantUnits.userId,
@@ -62,9 +56,11 @@ export async function POST(req: Request) {
       unitNumber: units.unitNumber,
       rentAmountCents: units.rentAmountCents,
       rentDueDay: units.rentDueDay,
+      propertyTimezone: properties.timezone,
     })
     .from(tenantUnits)
     .innerJoin(units, eq(units.id, tenantUnits.unitId))
+    .innerJoin(properties, eq(properties.id, units.propertyId))
     .where(eq(tenantUnits.isActive, true))
 
   let sent = 0
@@ -95,6 +91,12 @@ export async function POST(req: Request) {
         skipped++
         continue
       }
+
+      // Use property-local timezone for date calculations
+      const localDate = getLocalDate(link.propertyTimezone)
+      const currentDay = localDate.day
+      const currentPeriod = getLocalBillingPeriod(link.propertyTimezone)
+      const startOfToday = new Date(localDate.year, localDate.month - 1, localDate.day)
 
       const daysUntilDue = link.rentDueDay - currentDay
       const reminderType = getReminderType(daysUntilDue)
