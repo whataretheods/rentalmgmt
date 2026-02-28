@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Production-Ready
-status: planning
-stopped_at: Completed Phase 11 — Admin UX & KPI Dashboard (KPI metrics, empty states, mobile responsive layout)
-last_updated: "2026-02-27T18:00:00.000Z"
+status: complete
+stopped_at: Completed Phase 12 — Vendor & Work Order Management (vendor directory, work orders, magic links, cost tracking)
+last_updated: "2026-02-27T22:00:00.000Z"
 last_activity: 2026-02-27
 progress:
   total_phases: 12
-  completed_phases: 11
-  total_plans: 75
-  completed_plans: 56
+  completed_phases: 12
+  total_plans: 80
+  completed_plans: 61
 ---
 
 # Project State
@@ -20,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 11 — Admin UX & KPI Dashboard (complete)
+**Current focus:** Phase 12 — Vendor & Work Order Management (complete) — v2.0 milestone complete
 
 ## Current Position
 
-**Phase:** 11 of 12 (Admin UX & KPI Dashboard) — complete
-**Plan:** 11-04 (complete, last plan in phase)
-**Status:** Ready to plan Phase 12
+**Phase:** 12 of 12 (Vendor & Work Order Management) — complete
+**Plan:** 12-05 (complete, last plan in phase)
+**Status:** All phases complete — v2.0 Production-Ready milestone done
 **Last Activity:** 2026-02-27
 
-Progress: [||||||||||||||||||||| ] 92% (v1.0 complete, v2.0 Phases 7-11 done)
+Progress: [|||||||||||||||||||||] 100% (v1.0 complete, v2.0 complete)
 
 ## Performance Metrics
 
@@ -39,9 +39,9 @@ Progress: [||||||||||||||||||||| ] 92% (v1.0 complete, v2.0 Phases 7-11 done)
 - Total execution time: ~1.9 hours
 
 **Velocity (v2.0):**
-- Total plans completed: 19
-- Average duration: 3.7 min
-- Total execution time: ~70 min
+- Total plans completed: 24
+- Average duration: 3.5 min
+- Total execution time: ~84 min
 
 **By Phase (v1.0):**
 
@@ -63,9 +63,10 @@ Progress: [||||||||||||||||||||| ] 92% (v1.0 complete, v2.0 Phases 7-11 done)
 | 9. Automated Operations | 4 | 12min | 3.0min |
 | 10. Portfolio Mgmt | 6 | 27min | 4.5min |
 | 11. Admin UX & KPI | 4 | 15min | 3.8min |
+| 12. Vendor & Work Orders | 5 | 14min | 2.8min |
 
 **Recent Trend:**
-- Last 6 plans: 5min, 5min, 4min, 4min, 4min, 3min
+- Last 6 plans: 3min, 3min, 3min, 2min, 3min, 3min
 - Trend: Stable
 
 ## Accumulated Context
@@ -113,10 +114,16 @@ Recent decisions affecting v2.0:
 - [Phase 11]: Existing shadcn Sidebar kept (not replaced) — added size="lg" for 44px touch targets and useEffect for mobile auto-close
 - [Phase 11]: Split admin layout into mobile/desktop headers at md breakpoint (matches sidebar's useIsMobile at 768px)
 - [Phase 11]: EmptyState component enhanced (not replaced) — backward compatible, larger icon with bg circle
+- [Phase 12]: vendorAccessToken uses crypto.randomUUID() for magic link authentication
+- [Phase 12]: Vendor magic link page is server component (no "use client") to prevent client-side PII leakage
+- [Phase 12]: Token-gated photo route validates full chain: token -> work order -> maintenance request -> photo
+- [Phase 12]: Fire-and-forget notifications wrapped in try-catch for environments without Twilio/Resend credentials
+- [Phase 12]: Soft-delete for vendors via status=inactive (row preserved for work order history)
+- [Phase 12]: Dollar-to-cents conversion at cost form boundary (consistent with Phase 10 pattern)
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
@@ -126,5 +133,5 @@ None yet.
 ## Session Continuity
 
 **Last Session:** 2026-02-27
-**Stopped At:** Completed Phase 11 — Admin UX & KPI Dashboard (all 4 plans executed, verified, 14 E2E tests pass)
+**Stopped At:** Completed Phase 12 — Vendor & Work Order Management (all 5 plans executed, 10 E2E tests pass, v2.0 milestone complete)
 **Resume File:** None

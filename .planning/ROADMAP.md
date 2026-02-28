@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 9: Automated Operations** - Late fee automation, configurable fee rules, timezone-aware scheduling, late fee notifications (2026-02-27)
 - [x] **Phase 10: Portfolio Management & Tenant Lifecycle** - Property/unit CRUD, move-out workflow, past-tenant access, self-service invite entry (2026-02-27)
 - [x] **Phase 11: Admin UX & KPI Dashboard** - KPI metric cards, polished empty states, mobile-responsive admin layout (2026-02-27)
-- [ ] **Phase 12: Vendor & Work Order Management** - Vendor directory, maintenance assignment, magic link sharing, cost tracking
+- [x] **Phase 12: Vendor & Work Order Management** - Vendor directory, maintenance assignment, magic link sharing, cost tracking (2026-02-27)
 
 ## Phase Details
 
@@ -117,7 +117,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Admin can assign a vendor from the directory to any open maintenance request
   3. When a vendor is assigned, they receive an email/SMS notification with a magic link that shows the maintenance request details and photos without exposing any tenant personal information
   4. Admin can record labor and materials costs on a work order, and the system rolls up total maintenance expenses per unit
-**Plans**: TBD
+**Plans**: 5 plans, 4 waves
+  - Wave 1: Plan 01 (schemas + notification helper)
+  - Wave 2: Plan 02 (OPS-01: vendor CRUD) + Plan 03 (OPS-02+03: work orders + magic link) — parallel
+  - Wave 3: Plan 04 (OPS-04: cost tracking + expense rollup)
+  - Wave 4: Plan 05 (E2E tests + seed script)
 
 ## Progress
 
@@ -139,4 +143,4 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 9. Automated Operations | v2.0 | 4/4 | Complete | 2026-02-27 |
 | 10. Portfolio Management & Tenant Lifecycle | v2.0 | 6/6 | Complete | 2026-02-27 |
 | 11. Admin UX & KPI Dashboard | v2.0 | 4/4 | Complete | 2026-02-27 |
-| 12. Vendor & Work Order Management | v2.0 | 0/TBD | Not started | - |
+| 12. Vendor & Work Order Management | v2.0 | 5/5 | Complete | 2026-02-27 |
