@@ -12,8 +12,9 @@ export interface LocalDate {
 /**
  * Get the current local date in a specific IANA timezone.
  * Uses Intl.DateTimeFormat.formatToParts() for reliable timezone conversion.
+ * @param referenceDate Optional date to convert (defaults to now). Used for testability.
  */
-export function getLocalDate(timezone: string): LocalDate {
+export function getLocalDate(timezone: string, referenceDate?: Date): LocalDate {
   const formatter = new Intl.DateTimeFormat("en-US", {
     timeZone: timezone,
     year: "numeric",
@@ -21,7 +22,7 @@ export function getLocalDate(timezone: string): LocalDate {
     day: "numeric",
   })
 
-  const parts = formatter.formatToParts(new Date())
+  const parts = formatter.formatToParts(referenceDate ?? new Date())
   const partMap: Record<string, string> = {}
   for (const part of parts) {
     partMap[part.type] = part.value
@@ -43,13 +44,42 @@ export function getLocalBillingPeriod(timezone: string): string {
 }
 
 /**
- * Calculate days elapsed since rent was due this month.
- * Returns 0 on due day, positive after, negative before.
- * Simplified: only considers within the current month.
+ * Calculate days elapsed since the most recent rent due date occurrence.
+ * Returns 0 on due day, positive after. Always returns >= 0 by using the
+ * previous month's due date when current day is before the due day.
+ * Handles February clamping and 31-day month variations.
+ * @param referenceDate Optional date for testability (defaults to now).
  */
-export function daysSinceRentDue(rentDueDay: number, timezone: string): number {
-  const { day } = getLocalDate(timezone)
-  return day - rentDueDay
+export function daysSinceRentDue(
+  rentDueDay: number,
+  timezone: string,
+  referenceDate?: Date
+): number {
+  const { year, month, day } = getLocalDate(timezone, referenceDate)
+
+  // Determine the most recent due date occurrence
+  let dueYear = year
+  let dueMonth = month
+
+  if (day < rentDueDay) {
+    // Due date hasn't occurred this month yet -- use last month's due date
+    dueMonth -= 1
+    if (dueMonth < 1) {
+      dueMonth = 12
+      dueYear -= 1
+    }
+  }
+
+  // Clamp due day to actual days in the due month
+  const daysInDueMonth = new Date(dueYear, dueMonth, 0).getDate()
+  const clampedDueDay = Math.min(rentDueDay, daysInDueMonth)
+
+  // Calculate difference using Date objects for correct calendar math
+  const currentDate = new Date(year, month - 1, day)
+  const dueDate = new Date(dueYear, dueMonth - 1, clampedDueDay)
+  const diffMs = currentDate.getTime() - dueDate.getTime()
+
+  return Math.round(diffMs / (1000 * 60 * 60 * 24))
 }
 
 /**
