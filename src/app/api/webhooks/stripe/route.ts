@@ -5,6 +5,7 @@ import { db } from "@/db"
 import { payments, units, user, stripeEvents } from "@/db/schema"
 import { eq, and } from "drizzle-orm"
 import { resend } from "@/lib/resend"
+import { postNsfFee } from "@/lib/nsf"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
@@ -134,6 +135,12 @@ export async function POST(req: Request) {
             .update(payments)
             .set({ status: "failed", updatedAt: new Date() })
             .where(eq(payments.stripeSessionId, session.id))
+
+          // Post NSF fee if metadata is present and NSF_FEE_CENTS is configured
+          const { tenantUserId: achTenantUserId, unitId: achUnitId, billingPeriod: achBillingPeriod } = session.metadata || {}
+          if (achTenantUserId && achUnitId) {
+            await postNsfFee(tx, achTenantUserId, achUnitId, achBillingPeriod)
+          }
           break
         }
 
@@ -189,6 +196,12 @@ export async function POST(req: Request) {
                 eq(payments.status, "pending")
               )
             )
+
+          // Post NSF fee if metadata is present and NSF_FEE_CENTS is configured
+          const { tenantUserId, unitId, billingPeriod } = paymentIntent.metadata || {}
+          if (tenantUserId && unitId) {
+            await postNsfFee(tx, tenantUserId, unitId, billingPeriod)
+          }
           break
         }
 
