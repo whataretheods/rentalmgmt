@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { db } from "@/db"
 import { units, properties, tenantUnits, payments, charges, user } from "@/db/schema"
-import { eq, and, sql, inArray } from "drizzle-orm"
+import { eq, and, sql, inArray, isNull } from "drizzle-orm"
 
 export async function GET(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() })
@@ -15,7 +15,7 @@ export async function GET(req: Request) {
   const period =
     url.searchParams.get("period") || new Date().toISOString().slice(0, 7)
 
-  // 1. Get all units with properties
+  // 1. Get all active (non-archived) units with properties
   const allUnits = await db
     .select({
       unitId: units.id,
@@ -25,6 +25,7 @@ export async function GET(req: Request) {
     })
     .from(units)
     .innerJoin(properties, eq(units.propertyId, properties.id))
+    .where(and(isNull(units.archivedAt), isNull(properties.archivedAt)))
     .orderBy(units.unitNumber)
 
   // 2. Get active tenant links

@@ -1,10 +1,10 @@
 import { db } from "@/db"
 import { units, properties, inviteTokens } from "@/db/schema"
-import { eq, desc } from "drizzle-orm"
+import { eq, desc, and, isNull } from "drizzle-orm"
 import { InviteManager } from "@/components/admin/InviteManager"
 
 export default async function AdminInvitesPage() {
-  // Fetch all units with their property name
+  // Fetch all active (non-archived) units with their property name
   const allUnits = await db
     .select({
       id: units.id,
@@ -14,6 +14,7 @@ export default async function AdminInvitesPage() {
     })
     .from(units)
     .innerJoin(properties, eq(units.propertyId, properties.id))
+    .where(and(isNull(units.archivedAt), isNull(properties.archivedAt)))
     .orderBy(units.unitNumber)
 
   // Fetch latest invite for each unit (pending only)

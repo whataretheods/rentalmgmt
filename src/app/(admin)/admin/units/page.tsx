@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table"
 import { toast } from "sonner"
 import { UnitForm } from "@/components/admin/UnitForm"
+import { MoveOutDialog } from "@/components/admin/MoveOutDialog"
 
 interface Unit {
   id: string
@@ -193,6 +194,29 @@ export default function AdminUnitsPage() {
                           </Button>
                         }
                       />
+                      {unit.currentTenantName && unit.currentTenantUserId && (
+                        <MoveOutDialog
+                          tenant={{
+                            userId: unit.currentTenantUserId,
+                            name: unit.currentTenantName,
+                            email: unit.currentTenantEmail || "",
+                          }}
+                          unit={{
+                            id: unit.id,
+                            unitNumber: unit.unitNumber,
+                          }}
+                          onSuccess={fetchUnits}
+                          trigger={
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              Move Out
+                            </Button>
+                          }
+                        />
+                      )}
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button
