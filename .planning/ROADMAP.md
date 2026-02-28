@@ -144,3 +144,26 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 10. Portfolio Management & Tenant Lifecycle | v2.0 | 6/6 | Complete | 2026-02-27 |
 | 11. Admin UX & KPI Dashboard | v2.0 | 4/4 | Complete | 2026-02-27 |
 | 12. Vendor & Work Order Management | v2.0 | 5/5 | Complete | 2026-02-27 |
+
+### Phase 13: FinTech Polish & Edge Cases
+
+**Goal:** Critical financial logic bugs are fixed (date math, cookie auth, pending balance UX), and new operational workflows (work order chargebacks, NSF fees, proration) are implemented with comprehensive unit test coverage via Vitest
+**Depends on:** Phase 12
+**Requirements**: FIN-01, FIN-02, FIN-03, FIN-04, FIN-05, FIN-06
+**Success Criteria** (what must be TRUE):
+  1. Late fees are correctly assessed for tenants with due dates 20-28 when the cron runs after the month boundary (daysSinceRentDue returns positive values across month boundaries)
+  2. Tenant dashboard shows the dollar amount of pending payments separately from the confirmed balance (not just a boolean flag)
+  3. Middleware cookie detection works in both development and production environments (handles __Secure- prefix)
+  4. Admin can bill a work order cost to the tenant's ledger by toggling billToTenant when adding costs
+  5. Failed ACH payments (both autopay and one-time) post an NSF fee to the tenant ledger when NSF_FEE_CENTS is configured
+  6. Admin can calculate prorated rent in the move-out dialog, pre-filling a final charge that can be reviewed and adjusted
+**Plans**: 4 plans, 3 waves
+  - Wave 1: Plan 01 (FIN-01 + FIN-03: Vitest setup, daysSinceRentDue TDD fix, middleware cookie fix)
+  - Wave 2: Plan 02 (FIN-02: pending balance + BalanceCard UX) + Plan 03 (FIN-04 + FIN-05: chargebacks + NSF fees) -- parallel
+  - Wave 3: Plan 04 (FIN-06: proration utility + MoveOutDialog integration)
+
+Plans:
+- [ ] 13-01-PLAN.md -- Vitest infra + daysSinceRentDue TDD fix + middleware cookie fix
+- [ ] 13-02-PLAN.md -- Pending balance ledger enhancement + BalanceCard UX
+- [ ] 13-03-PLAN.md -- Work order chargebacks + NSF fee handling
+- [ ] 13-04-PLAN.md -- Proration utility + MoveOutDialog integration

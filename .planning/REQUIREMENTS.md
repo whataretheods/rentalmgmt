@@ -98,6 +98,17 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 
 - [x] **TUX-01**: Tenant with no active unit can enter an invite token directly on their empty-state dashboard to self-associate with a unit
 
+## v2.0+ Requirements (Phase 13)
+
+### FinTech Polish & Edge Cases
+
+- [ ] **FIN-01**: daysSinceRentDue correctly computes days across month boundaries (returns positive values, not negative, when checking after month-end for late-month due dates)
+- [ ] **FIN-02**: Tenant dashboard shows pending payment dollar amounts separately from confirmed balance (not just a boolean flag)
+- [ ] **FIN-03**: Middleware cookie detection works in production with Better Auth's __Secure- cookie prefix
+- [ ] **FIN-04**: Admin can bill work order costs to the tenant's ledger via billToTenant toggle, with charge posted to the original requester
+- [ ] **FIN-05**: Failed ACH payments post NSF fee to tenant ledger when NSF_FEE_CENTS env var is configured (both autopay and one-time)
+- [ ] **FIN-06**: Admin can calculate prorated rent in the move-out dialog, pre-filling a final charge based on actual days in month
+
 ## v2.1 Requirements
 
 Deferred to next milestone. Tracked but not in current roadmap.
@@ -131,7 +142,7 @@ Explicitly excluded. Documented to prevent scope creep.
 | Full double-entry accounting / GL | Separate domain — use QuickBooks or export CSV. Tenant ledger is single-entry. |
 | Security deposit management | Complex state-specific legal requirements (CA: 21-day return, itemized deductions). Track offline. |
 | Vendor portal with login | Overengineered for 2-3 vendors. Magic link limited-view is sufficient. |
-| Automated prorated rent | Proration methods vary; admin posts manual charge for prorated amount. |
+| Fully automated prorated rent | Admin reviews prorated amount via convenience button (FIN-06); fully automatic proration without admin review remains out of scope. |
 | Rent increase scheduling | Requires legal notice periods. Admin manually updates unit rent when change takes effect. |
 | Tenant financial disputes | Adversarial workflow. Resolved via conversation; admin posts credits/adjustments. |
 | Lease management / e-signatures | Month-to-month tenancy, no leases currently |
@@ -204,12 +215,24 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OPS-03 | Phase 12 | Complete |
 | OPS-04 | Phase 12 | Complete |
 
+### v2.0+ (Phase 13)
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| FIN-01 | Phase 13 | Planned |
+| FIN-02 | Phase 13 | Planned |
+| FIN-03 | Phase 13 | Planned |
+| FIN-04 | Phase 13 | Planned |
+| FIN-05 | Phase 13 | Planned |
+| FIN-06 | Phase 13 | Planned |
+
 **Coverage:**
 - v1 requirements: 22 total (all complete)
-- v2.0 requirements: 26 total
-- Mapped to phases: 26/26
+- v2.0 requirements: 26 total (all complete)
+- v2.0+ requirements: 6 total (Phase 13)
+- Mapped to phases: 54/54
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-25*
-*Last updated: 2026-02-26 after v2.0 roadmap creation*
+*Last updated: 2026-02-27 after Phase 13 planning*
