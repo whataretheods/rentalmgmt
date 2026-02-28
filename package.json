@@ -19,6 +19,8 @@
     "seed:phase5-test": "tsx -r tsconfig-paths/register scripts/seed-notifications-test.ts",
     "seed:autopay-test": "tsx -r tsconfig-paths/register scripts/seed-autopay-test.ts",
     "seed:e2e-tenant": "tsx -r tsconfig-paths/register scripts/seed-e2e-tenant.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:e2e": "npx playwright test",
     "backfill:charges": "tsx -r tsconfig-paths/register scripts/backfill-charges.ts"
   },
@@ -69,11 +71,13 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/ws": "^8.18.1",
+    "@vitest/coverage-v8": "^4.0.18",
     "drizzle-kit": "^0.31.9",
     "shadcn": "^3.8.5",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.21.0",
     "tw-animate-css": "^1.4.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   }
 }
