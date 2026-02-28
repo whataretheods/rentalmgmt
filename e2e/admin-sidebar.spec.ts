@@ -21,9 +21,10 @@ test.describe("Admin Sidebar", () => {
     const sidebar = page.locator('[data-sidebar="sidebar"]')
     await expect(sidebar).toBeVisible({ timeout: 10000 })
 
-    // Check for all 9 navigation links
+    // Check for all 12 navigation links (including v2.0 additions)
     const navLinks = [
       "Dashboard",
+      "Properties",
       "Units",
       "Payments",
       "Maintenance",
@@ -32,6 +33,8 @@ test.describe("Admin Sidebar", () => {
       "Invites",
       "Notifications",
       "Broadcast",
+      "Vendors",
+      "Work Orders",
     ]
 
     for (const linkText of navLinks) {

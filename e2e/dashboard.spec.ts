@@ -21,7 +21,7 @@ test.describe("Dashboard Consolidation", () => {
     await expect(rentAmount).toBeVisible({ timeout: 10000 })
 
     // Verify due date section exists
-    const dueDate = page.locator("text=/Due Date/i").first()
+    const dueDate = page.locator("text=Next Due Date").first()
     await expect(dueDate).toBeVisible()
 
     // Verify last payment section exists

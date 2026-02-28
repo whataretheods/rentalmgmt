@@ -40,7 +40,7 @@ export default async function TenantLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b px-6 py-4 flex items-center justify-between">
+      <header className="bg-white border-b px-4 sm:px-6 py-4 flex items-center justify-between min-w-0">
         <span className="font-semibold text-gray-900">Tenant Portal</span>
         <div className="flex items-center gap-4">
           <NotificationBell
@@ -50,8 +50,8 @@ export default async function TenantLayout({
           <span className="text-sm text-gray-500">{session.user.email}</span>
         </div>
       </header>
-      <nav className="bg-white border-b px-6 py-2">
-        <div className="flex items-center gap-4">
+      <nav className="bg-white border-b px-4 sm:px-6 py-2 overflow-x-auto">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
           <Link
             href="/tenant/dashboard"
             className="text-sm text-gray-600 hover:text-gray-900"
@@ -94,7 +94,7 @@ export default async function TenantLayout({
           </Link>
         </div>
       </nav>
-      <main className="container mx-auto px-6 py-8">{children}</main>
+      <main className="container mx-auto px-4 sm:px-6 py-8 overflow-x-hidden">{children}</main>
     </div>
   )
 }

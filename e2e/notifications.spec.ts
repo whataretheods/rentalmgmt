@@ -104,16 +104,12 @@ test.describe("Rent Reminder Cron", () => {
 
 test.describe("Admin Broadcast", () => {
   test.beforeEach(async ({ page }) => {
-    // Admin login redirects to /tenant/dashboard by default, then we navigate to admin
     await page.goto(`${BASE_URL}/auth/login`)
     await page.waitForLoadState("networkidle")
     await page.fill('input[type="email"]', ADMIN_EMAIL)
     await page.fill('input[type="password"]', ADMIN_PASSWORD)
     await page.click('button[type="submit"]')
-    await page.waitForURL("**/tenant/dashboard", { timeout: 30000 })
-    // Now navigate to admin dashboard
-    await page.goto(`${BASE_URL}/admin/dashboard`)
-    await page.waitForLoadState("networkidle")
+    await page.waitForURL("**/admin/dashboard", { timeout: 30000 })
   })
 
   test("@smoke admin can view broadcast page", async ({ page }) => {

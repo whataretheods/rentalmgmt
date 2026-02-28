@@ -12,7 +12,7 @@ test.describe("Admin Payment Flows", () => {
     await page.fill('input[type="email"]', ADMIN_EMAIL)
     await page.fill('input[type="password"]', ADMIN_PASSWORD)
     await page.click('button[type="submit"]')
-    await page.waitForURL("**/tenant/dashboard", { timeout: 15000 })
+    await page.waitForURL("**/admin/dashboard", { timeout: 15000 })
   })
 
   test("@smoke admin can configure rent for a unit", async ({ page }) => {

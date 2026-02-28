@@ -75,10 +75,10 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 
 ### Portfolio Management
 
-- [ ] **PORT-01**: Admin can create, edit, and archive properties from the admin dashboard
-- [ ] **PORT-02**: Admin can create, edit, and archive units with rent amount and due day configuration
-- [ ] **PORT-03**: Admin can initiate tenant move-out workflow that sets end date, cancels autopay, posts final charges, and archives the tenancy
-- [ ] **PORT-04**: Moved-out tenant retains read-only portal access to their payment and maintenance history
+- [x] **PORT-01**: Admin can create, edit, and archive properties from the admin dashboard
+- [x] **PORT-02**: Admin can create, edit, and archive units with rent amount and due day configuration
+- [x] **PORT-03**: Admin can initiate tenant move-out workflow that sets end date, cancels autopay, posts final charges, and archives the tenancy
+- [x] **PORT-04**: Moved-out tenant retains read-only portal access to their payment and maintenance history
 
 ### Admin UX
 
@@ -89,14 +89,14 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 
 ### Operations
 
-- [ ] **OPS-01**: Admin can manage a vendor directory (name, trade/specialty, phone, email)
-- [ ] **OPS-02**: Admin can assign a vendor to a maintenance request
-- [ ] **OPS-03**: Assigned vendor receives email/SMS notification with a limited-view magic link showing request details and photos (no tenant PII)
-- [ ] **OPS-04**: Admin can record labor and materials costs on work orders with per-unit expense rollup
+- [x] **OPS-01**: Admin can manage a vendor directory (name, trade/specialty, phone, email)
+- [x] **OPS-02**: Admin can assign a vendor to a maintenance request
+- [x] **OPS-03**: Assigned vendor receives email/SMS notification with a limited-view magic link showing request details and photos (no tenant PII)
+- [x] **OPS-04**: Admin can record labor and materials costs on work orders with per-unit expense rollup
 
 ### Tenant UX
 
-- [ ] **TUX-01**: Tenant with no active unit can enter an invite token directly on their empty-state dashboard to self-associate with a unit
+- [x] **TUX-01**: Tenant with no active unit can enter an invite token directly on their empty-state dashboard to self-associate with a unit
 
 ## v2.1 Requirements
 
@@ -191,18 +191,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LATE-02 | Phase 9 | Complete |
 | LATE-03 | Phase 9 | Complete |
 | INFRA-03 | Phase 9 | Complete |
-| PORT-01 | Phase 10 | Pending |
-| PORT-02 | Phase 10 | Pending |
-| PORT-03 | Phase 10 | Pending |
-| PORT-04 | Phase 10 | Pending |
-| TUX-01 | Phase 10 | Pending |
-| AUX-02 | Phase 11 | Pending |
-| AUX-03 | Phase 11 | Pending |
-| AUX-04 | Phase 11 | Pending |
-| OPS-01 | Phase 12 | Pending |
-| OPS-02 | Phase 12 | Pending |
-| OPS-03 | Phase 12 | Pending |
-| OPS-04 | Phase 12 | Pending |
+| PORT-01 | Phase 10 | Complete |
+| PORT-02 | Phase 10 | Complete |
+| PORT-03 | Phase 10 | Complete |
+| PORT-04 | Phase 10 | Complete |
+| TUX-01 | Phase 10 | Complete |
+| AUX-02 | Phase 11 | Complete |
+| AUX-03 | Phase 11 | Complete |
+| AUX-04 | Phase 11 | Complete |
+| OPS-01 | Phase 12 | Complete |
+| OPS-02 | Phase 12 | Complete |
+| OPS-03 | Phase 12 | Complete |
+| OPS-04 | Phase 12 | Complete |
 
 **Coverage:**
 - v1 requirements: 22 total (all complete)

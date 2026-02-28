@@ -153,8 +153,7 @@ test.describe("Admin Maintenance Kanban", () => {
     await page.fill('input[type="email"]', ADMIN_EMAIL)
     await page.fill('input[type="password"]', ADMIN_PASSWORD)
     await page.click('button[type="submit"]')
-    // Admin also redirects to /tenant/dashboard initially
-    await page.waitForURL("**/tenant/dashboard", { timeout: 15000 })
+    await page.waitForURL("**/admin/dashboard", { timeout: 15000 })
   })
 
   test("@smoke kanban board loads with status columns", async ({ page }) => {
