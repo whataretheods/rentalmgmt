@@ -256,14 +256,25 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUX-02 | Phase 14 | Complete |
 | OPS-04 | Phase 14 | Complete |
 
+### v2.1 (Production Hardening)
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| HARD-01 | Phase 15 | Pending |
+| HARD-02 | Phase 15 | Pending |
+| HARD-03 | Phase 16 | Pending |
+| HARD-04 | Phase 16 | Pending |
+| HARD-05 | Phase 16 | Pending |
+
 **Coverage:**
 - v1 requirements: 22 total (all complete)
 - v2.0 requirements: 26 total (all complete)
 - v2.0+ requirements: 6 total (Phase 13, all complete)
 - v2.0+ gap closure: 7 requirement gaps addressed in Phase 14 (all complete)
-- Mapped to phases: 54/54 + 7 gap closures
+- v2.1 requirements: 5 total (Phases 15-16, all pending)
+- Mapped to phases: 59/59 + 7 gap closures
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-25*
-*Last updated: 2026-02-28 after milestone v2.1 requirements definition*
+*Last updated: 2026-02-28 after v2.1 roadmap creation*
