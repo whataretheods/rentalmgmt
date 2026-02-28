@@ -16,6 +16,7 @@ export async function GET() {
       id: properties.id,
       name: properties.name,
       address: properties.address,
+      timezone: properties.timezone,
       createdAt: properties.createdAt,
       updatedAt: properties.updatedAt,
       unitCount: count(units.id),
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  let body: { name?: string; address?: string }
+  let body: { name?: string; address?: string; timezone?: string }
   try {
     body = await request.json()
   } catch {
@@ -58,6 +59,7 @@ export async function POST(request: NextRequest) {
     .values({
       name: name.trim(),
       address: address.trim(),
+      ...(body.timezone?.trim() ? { timezone: body.timezone.trim() } : {}),
     })
     .returning()
 

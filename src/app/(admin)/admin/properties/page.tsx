@@ -29,6 +29,7 @@ interface Property {
   id: string
   name: string
   address: string
+  timezone?: string
   unitCount: number
   createdAt: string
 }

@@ -13,11 +13,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { toast } from "sonner"
+import { US_TIMEZONES } from "@/lib/timezone"
 
 interface PropertyFormProps {
   mode: "create" | "edit"
-  property?: { id: string; name: string; address: string }
+  property?: { id: string; name: string; address: string; timezone?: string }
   onSuccess: () => void
   trigger: React.ReactNode
 }
@@ -31,6 +39,7 @@ export function PropertyForm({
   const [open, setOpen] = useState(false)
   const [name, setName] = useState(property?.name ?? "")
   const [address, setAddress] = useState(property?.address ?? "")
+  const [timezone, setTimezone] = useState(property?.timezone ?? "America/New_York")
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
@@ -51,7 +60,7 @@ export function PropertyForm({
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), address: address.trim() }),
+        body: JSON.stringify({ name: name.trim(), address: address.trim(), timezone }),
       })
 
       if (!res.ok) {
@@ -66,6 +75,7 @@ export function PropertyForm({
       if (mode === "create") {
         setName("")
         setAddress("")
+        setTimezone("America/New_York")
       }
       onSuccess()
     } catch (err: unknown) {
@@ -110,6 +120,21 @@ export function PropertyForm({
               placeholder="e.g., 123 Oak Street, City, ST 12345"
               disabled={loading}
             />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="property-timezone">Timezone</Label>
+            <Select value={timezone} onValueChange={setTimezone}>
+              <SelectTrigger id="property-timezone">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {US_TIMEZONES.map((tz) => (
+                  <SelectItem key={tz.value} value={tz.value}>
+                    {tz.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <DialogFooter>
             <Button type="submit" disabled={loading}>

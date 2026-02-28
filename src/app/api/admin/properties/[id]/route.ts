@@ -15,7 +15,7 @@ export async function PUT(
   }
 
   const { id } = await params
-  let body: { name?: string; address?: string }
+  let body: { name?: string; address?: string; timezone?: string }
   try {
     body = await request.json()
   } catch {
@@ -25,6 +25,7 @@ export async function PUT(
   const updates: Record<string, unknown> = { updatedAt: new Date() }
   if (body.name?.trim()) updates.name = body.name.trim()
   if (body.address?.trim()) updates.address = body.address.trim()
+  if (body.timezone?.trim()) updates.timezone = body.timezone.trim()
 
   const [updated] = await db
     .update(properties)
