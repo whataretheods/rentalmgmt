@@ -219,18 +219,31 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FIN-01 | Phase 13 | Planned |
-| FIN-02 | Phase 13 | Planned |
-| FIN-03 | Phase 13 | Planned |
-| FIN-04 | Phase 13 | Planned |
-| FIN-05 | Phase 13 | Planned |
-| FIN-06 | Phase 13 | Planned |
+| FIN-01 | Phase 13 | Complete |
+| FIN-02 | Phase 13 | Complete |
+| FIN-03 | Phase 13 | Complete |
+| FIN-04 | Phase 13 | Complete |
+| FIN-05 | Phase 13 | Complete |
+| FIN-06 | Phase 13 | Complete |
+
+### v2.0+ (Phase 14 — Gap Closure)
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| INFRA-03 | Phase 14 | Planned |
+| LEDG-03 | Phase 14 | Planned |
+| LATE-02 | Phase 14 | Planned |
+| OPS-02 | Phase 14 | Planned |
+| FIN-04 | Phase 14 | Planned |
+| AUX-02 | Phase 14 | Planned |
+| OPS-04 | Phase 14 | Planned |
 
 **Coverage:**
 - v1 requirements: 22 total (all complete)
 - v2.0 requirements: 26 total (all complete)
-- v2.0+ requirements: 6 total (Phase 13)
-- Mapped to phases: 54/54
+- v2.0+ requirements: 6 total (Phase 13, all complete)
+- v2.0+ gap closure: 7 requirement gaps addressed in Phase 14
+- Mapped to phases: 54/54 + 7 gap closures
 - Unmapped: 0
 
 ---

@@ -3,7 +3,7 @@
 ## Milestones
 
 - **v1.0 MVP** - Phases 1-6 (shipped 2026-02-26)
-- **v2.0 Production-Ready** - Phases 7-12 (in progress)
+- **v2.0 Production-Ready** - Phases 7-14 (in progress)
 
 ## Phases
 
@@ -33,6 +33,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 10: Portfolio Management & Tenant Lifecycle** - Property/unit CRUD, move-out workflow, past-tenant access, self-service invite entry (2026-02-27)
 - [x] **Phase 11: Admin UX & KPI Dashboard** - KPI metric cards, polished empty states, mobile-responsive admin layout (2026-02-27)
 - [x] **Phase 12: Vendor & Work Order Management** - Vendor directory, maintenance assignment, magic link sharing, cost tracking (2026-02-27)
+- [x] **Phase 13: FinTech Polish & Edge Cases** - Date math fixes, pending balance UX, chargebacks, NSF fees, proration (2026-02-28)
+- [ ] **Phase 14: Audit Gap Closure** - Admin UI wiring, timezone config, KPI charges fix, nav and form enhancements
 
 ## Phase Details
 
@@ -144,6 +146,8 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 10. Portfolio Management & Tenant Lifecycle | v2.0 | 6/6 | Complete | 2026-02-27 |
 | 11. Admin UX & KPI Dashboard | v2.0 | 4/4 | Complete | 2026-02-27 |
 | 12. Vendor & Work Order Management | v2.0 | 5/5 | Complete | 2026-02-27 |
+| 13. FinTech Polish & Edge Cases | v2.0 | 4/4 | Complete | 2026-02-28 |
+| 14. Audit Gap Closure | v2.0 | 0/4 | Not Started | — |
 
 ### Phase 13: FinTech Polish & Edge Cases
 
@@ -163,7 +167,25 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
   - Wave 3: Plan 04 (FIN-06: proration utility + MoveOutDialog integration)
 
 Plans:
-- [ ] 13-01-PLAN.md -- Vitest infra + daysSinceRentDue TDD fix + middleware cookie fix
-- [ ] 13-02-PLAN.md -- Pending balance ledger enhancement + BalanceCard UX
-- [ ] 13-03-PLAN.md -- Work order chargebacks + NSF fee handling
-- [ ] 13-04-PLAN.md -- Proration utility + MoveOutDialog integration
+- [x] 13-01-PLAN.md -- Vitest infra + daysSinceRentDue TDD fix + middleware cookie fix
+- [x] 13-02-PLAN.md -- Pending balance ledger enhancement + BalanceCard UX
+- [x] 13-03-PLAN.md -- Work order chargebacks + NSF fee handling
+- [x] 13-04-PLAN.md -- Proration utility + MoveOutDialog integration
+
+### Phase 14: Audit Gap Closure
+**Goal:** All admin features are discoverable through navigation, configurable through UI controls, and reflected in the KPI dashboard — closing every gap from the v2.0 milestone audit
+**Depends on:** Phase 13
+**Requirements**: INFRA-03, LEDG-03, LATE-02, OPS-02, FIN-04, AUX-02, OPS-04
+**Success Criteria** (what must be TRUE):
+  1. Admin can select a timezone for each property from a dropdown of US timezones, and the value persists to the database
+  2. Admin sidebar includes a "Charges" navigation link that opens the /admin/charges page
+  3. Properties page table rows include a "Late Fees" action that navigates to /admin/properties/[id]/late-fees
+  4. Admin maintenance detail page includes a "Create Work Order" button that initiates work order creation for that request
+  5. Work order cost form includes a "Bill to Tenant" checkbox that sends billToTenant=true to the API
+  6. KPI dashboard "Total Outstanding" and "Overdue Tenants" metrics incorporate the charges table (not just payments)
+
+Plans:
+- [ ] 14-01-PLAN.md -- Charges nav + late fees action (LEDG-03, LATE-02)
+- [ ] 14-02-PLAN.md -- Timezone config + work order + bill-to-tenant form (INFRA-03, OPS-02, FIN-04)
+- [ ] 14-03-PLAN.md -- KPI charges fix (AUX-02, OPS-04)
+- [ ] 14-04-PLAN.md -- Traceability + cleanup
