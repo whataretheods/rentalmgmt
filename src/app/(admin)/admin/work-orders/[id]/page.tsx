@@ -121,6 +121,7 @@ export default function WorkOrderDetailPage() {
     description: "",
     amount: "",
     category: "labor",
+    billToTenant: false,
   })
   const [addingCost, setAddingCost] = useState(false)
 
@@ -266,12 +267,13 @@ export default function WorkOrderDetailPage() {
             description: costForm.description.trim(),
             amountCents: Math.round(amountDollars * 100),
             category: costForm.category,
+            billToTenant: costForm.billToTenant,
           }),
         }
       )
       if (!res.ok) throw new Error("Failed to add cost")
       toast.success("Cost added")
-      setCostForm({ description: "", amount: "", category: "labor" })
+      setCostForm({ description: "", amount: "", category: "labor", billToTenant: false })
       fetchCosts()
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Unknown error"
@@ -632,6 +634,20 @@ export default function WorkOrderDetailPage() {
                 >
                   {addingCost ? "Adding..." : "Add Cost"}
                 </Button>
+              </div>
+              <div className="flex items-center gap-2 md:col-span-4">
+                <input
+                  type="checkbox"
+                  id="billToTenant"
+                  checked={costForm.billToTenant}
+                  onChange={(e) =>
+                    setCostForm({ ...costForm, billToTenant: e.target.checked })
+                  }
+                  className="h-4 w-4 rounded border-gray-300"
+                />
+                <Label htmlFor="billToTenant" className="text-sm font-normal">
+                  Bill to Tenant
+                </Label>
               </div>
             </div>
           </div>
