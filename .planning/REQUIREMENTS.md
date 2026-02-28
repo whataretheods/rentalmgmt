@@ -102,9 +102,9 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 
 ### FinTech Polish & Edge Cases
 
-- [ ] **FIN-01**: daysSinceRentDue correctly computes days across month boundaries (returns positive values, not negative, when checking after month-end for late-month due dates)
+- [x] **FIN-01**: daysSinceRentDue correctly computes days across month boundaries (returns positive values, not negative, when checking after month-end for late-month due dates)
 - [ ] **FIN-02**: Tenant dashboard shows pending payment dollar amounts separately from confirmed balance (not just a boolean flag)
-- [ ] **FIN-03**: Middleware cookie detection works in production with Better Auth's __Secure- cookie prefix
+- [x] **FIN-03**: Middleware cookie detection works in production with Better Auth's __Secure- cookie prefix
 - [ ] **FIN-04**: Admin can bill work order costs to the tenant's ledger via billToTenant toggle, with charge posted to the original requester
 - [ ] **FIN-05**: Failed ACH payments post NSF fee to tenant ledger when NSF_FEE_CENTS env var is configured (both autopay and one-time)
 - [ ] **FIN-06**: Admin can calculate prorated rent in the move-out dialog, pre-filling a final charge based on actual days in month

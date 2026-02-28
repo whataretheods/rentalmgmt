@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Production-Ready
-status: complete
-stopped_at: Completed Phase 12 — Vendor & Work Order Management (vendor directory, work orders, magic links, cost tracking)
-last_updated: "2026-02-27T22:00:00.000Z"
-last_activity: 2026-02-27
+status: in_progress
+stopped_at: Completed 13-01-PLAN.md (Vitest + daysSinceRentDue fix + middleware cookie fix)
+last_updated: "2026-02-28T07:31:43.000Z"
+last_activity: 2026-02-28
 progress:
-  total_phases: 12
+  total_phases: 13
   completed_phases: 12
-  total_plans: 80
-  completed_plans: 61
+  total_plans: 84
+  completed_plans: 62
 ---
 
 # Project State
@@ -20,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 12 — Vendor & Work Order Management (complete) — v2.0 milestone complete
+**Current focus:** Phase 13 — FinTech Polish & Edge Cases (in progress)
 
 ## Current Position
 
-**Phase:** 12 of 12 (Vendor & Work Order Management) — complete
-**Plan:** 12-05 (complete, last plan in phase)
-**Status:** All phases complete — v2.0 Production-Ready milestone done
-**Last Activity:** 2026-02-27
+**Phase:** 13 of 13 (FinTech Polish & Edge Cases) — in progress
+**Plan:** 13-01 (complete) — 1 of 4 plans done
+**Status:** Executing Phase 13
+**Last Activity:** 2026-02-28
 
-Progress: [|||||||||||||||||||||] 100% (v1.0 complete, v2.0 complete)
+Progress: [||||||||||||||||||||||||||||||||||||||||||] 74% (62/84 plans)
 
 ## Performance Metrics
 
@@ -65,8 +65,14 @@ Progress: [|||||||||||||||||||||] 100% (v1.0 complete, v2.0 complete)
 | 11. Admin UX & KPI | 4 | 15min | 3.8min |
 | 12. Vendor & Work Orders | 5 | 14min | 2.8min |
 
+**Phase 13 (FinTech Polish):**
+
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| 13. FinTech Polish | 1/4 | 3min | 3.0min |
+
 **Recent Trend:**
-- Last 6 plans: 3min, 3min, 3min, 2min, 3min, 3min
+- Last 6 plans: 3min, 3min, 2min, 3min, 3min, 3min
 - Trend: Stable
 
 ## Accumulated Context
@@ -120,10 +126,17 @@ Recent decisions affecting v2.0:
 - [Phase 12]: Fire-and-forget notifications wrapped in try-catch for environments without Twilio/Resend credentials
 - [Phase 12]: Soft-delete for vendors via status=inactive (row preserved for work order history)
 - [Phase 12]: Dollar-to-cents conversion at cost form boundary (consistent with Phase 10 pattern)
+- [Phase 13]: vitest.config.mts (not .ts) to avoid ESM/CJS conflict in non-module project
+- [Phase 13]: Optional referenceDate parameter for testability without mocking global Date
+- [Phase 13]: getSessionCookie from better-auth/cookies handles both dev and prod cookie prefixes
 
 ### Pending Todos
 
 None.
+
+### Roadmap Evolution
+
+- Phase 13 added: FinTech Polish & Edge Cases
 
 ### Blockers/Concerns
 
@@ -132,6 +145,6 @@ None.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-27
-**Stopped At:** Completed Phase 12 — Vendor & Work Order Management (all 5 plans executed, 10 E2E tests pass, v2.0 milestone complete)
+**Last Session:** 2026-02-28
+**Stopped At:** Completed 13-01-PLAN.md (Vitest + daysSinceRentDue fix + middleware cookie fix)
 **Resume File:** None
