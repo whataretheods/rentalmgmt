@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Production-Ready
 status: in_progress
-stopped_at: Completed 13-03-PLAN.md (Chargeback & NSF fee posting)
-last_updated: "2026-02-28T07:37:07.000Z"
+stopped_at: Completed 13-04-PLAN.md (Prorated rent calculation)
+last_updated: "2026-02-28T07:41:31.000Z"
 last_activity: 2026-02-28
 progress:
   total_phases: 13
-  completed_phases: 12
+  completed_phases: 13
   total_plans: 84
-  completed_plans: 64
+  completed_plans: 65
 ---
 
 # Project State
@@ -20,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 13 — FinTech Polish & Edge Cases (in progress)
+**Current focus:** Phase 13 — FinTech Polish & Edge Cases (complete)
 
 ## Current Position
 
-**Phase:** 13 of 13 (FinTech Polish & Edge Cases) — in progress
-**Plan:** 13-03 (complete) — 3 of 4 plans done
-**Status:** Executing Phase 13
+**Phase:** 13 of 13 (FinTech Polish & Edge Cases) — complete
+**Plan:** 13-04 (complete) — 4 of 4 plans done
+**Status:** Phase 13 complete
 **Last Activity:** 2026-02-28
 
-Progress: [||||||||||||||||||||||||||||||||||||||||||] 76% (64/84 plans)
+Progress: [||||||||||||||||||||||||||||||||||||||||||||||||||] 77% (65/84 plans)
 
 ## Performance Metrics
 
@@ -69,10 +69,10 @@ Progress: [||||||||||||||||||||||||||||||||||||||||||] 76% (64/84 plans)
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 13. FinTech Polish | 3/4 | 7min | 2.3min |
+| 13. FinTech Polish | 4/4 | 9min | 2.3min |
 
 **Recent Trend:**
-- Last 6 plans: 2min, 3min, 3min, 3min, 2min, 2min
+- Last 6 plans: 3min, 3min, 3min, 2min, 2min, 2min
 - Trend: Stable
 
 ## Accumulated Context
@@ -134,6 +134,8 @@ Recent decisions affecting v2.0:
 - [Phase 13]: Chargeback resolves tenant from maintenance request chain (not active tenancy) so charges apply even if tenant moved out
 - [Phase 13]: NSF fee controlled by NSF_FEE_CENTS env var (0 or unset = disabled) for per-deployment flexibility
 - [Phase 13]: postNsfFee accepts tx parameter to run within existing webhook transaction for atomicity
+- [Phase 13]: Math.round at final step only for proration -- avoids floating-point accumulation in cent calculations
+- [Phase 13]: Proration button pre-fills editable charge -- admin always has final say over amount
 
 ### Pending Todos
 
@@ -151,5 +153,5 @@ None.
 ## Session Continuity
 
 **Last Session:** 2026-02-28
-**Stopped At:** Completed 13-03-PLAN.md (Chargeback & NSF fee posting)
+**Stopped At:** Completed 13-04-PLAN.md (Prorated rent calculation) -- Phase 13 complete
 **Resume File:** None

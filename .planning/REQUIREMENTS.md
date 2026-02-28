@@ -107,7 +107,7 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 - [x] **FIN-03**: Middleware cookie detection works in production with Better Auth's __Secure- cookie prefix
 - [x] **FIN-04**: Admin can bill work order costs to the tenant's ledger via billToTenant toggle, with charge posted to the original requester
 - [x] **FIN-05**: Failed ACH payments post NSF fee to tenant ledger when NSF_FEE_CENTS env var is configured (both autopay and one-time)
-- [ ] **FIN-06**: Admin can calculate prorated rent in the move-out dialog, pre-filling a final charge based on actual days in month
+- [x] **FIN-06**: Admin can calculate prorated rent in the move-out dialog, pre-filling a final charge based on actual days in month
 
 ## v2.1 Requirements
 
