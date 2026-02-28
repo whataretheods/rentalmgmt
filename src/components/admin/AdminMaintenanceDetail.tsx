@@ -15,6 +15,7 @@ import {
   Send,
   ArrowLeft,
   Clock,
+  ClipboardList,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -96,6 +97,7 @@ export function AdminMaintenanceDetail({
   const [newStatus, setNewStatus] = useState("")
   const [statusNote, setStatusNote] = useState("")
   const [updatingStatus, setUpdatingStatus] = useState(false)
+  const [creatingWorkOrder, setCreatingWorkOrder] = useState(false)
 
   const fetchDetail = useCallback(async () => {
     try {
@@ -237,6 +239,47 @@ export function AdminMaintenanceDetail({
           </div>
         </CardContent>
       </Card>
+
+      {/* Create Work Order */}
+      {request.status !== "resolved" && (
+        <Card>
+          <CardContent className="pt-6">
+            <Button
+              variant="outline"
+              className="w-full"
+              disabled={creatingWorkOrder}
+              onClick={async () => {
+                setCreatingWorkOrder(true)
+                try {
+                  const res = await fetch("/api/admin/work-orders", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      maintenanceRequestId: requestId,
+                      priority: "medium",
+                    }),
+                  })
+                  if (res.ok) {
+                    const data = await res.json()
+                    toast.success("Work order created")
+                    window.location.href = `/admin/work-orders/${data.workOrder.id}`
+                  } else {
+                    const data = await res.json()
+                    toast.error(data.error || "Failed to create work order")
+                  }
+                } catch {
+                  toast.error("Something went wrong")
+                } finally {
+                  setCreatingWorkOrder(false)
+                }
+              }}
+            >
+              <ClipboardList className="size-4 mr-2" />
+              {creatingWorkOrder ? "Creating..." : "Create Work Order"}
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Admin Status Update */}
       <Card>

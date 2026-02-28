@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table"
 import { toast } from "sonner"
 import { PropertyForm } from "@/components/admin/PropertyForm"
+import Link from "next/link"
 
 interface Property {
   id: string
@@ -126,6 +127,11 @@ export default function AdminPropertiesPage() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href={`/admin/properties/${property.id}/late-fees`}>
+                          Late Fees
+                        </Link>
+                      </Button>
                       <PropertyForm
                         mode="edit"
                         property={property}

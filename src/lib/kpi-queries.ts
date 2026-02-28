@@ -1,5 +1,5 @@
 import { db } from "@/db"
-import { units, tenantUnits, payments, maintenanceRequests } from "@/db/schema"
+import { units, tenantUnits, payments, maintenanceRequests, charges } from "@/db/schema"
 import { eq, ne, and, sql, isNotNull } from "drizzle-orm"
 
 export interface KpiMetrics {
@@ -62,7 +62,7 @@ async function getCollectionMetrics(
   overdueTenantsCount: number
 }> {
   // Step A: Get all occupied units with rent configured
-  const [occupiedUnitsWithRent, paymentTotals] = await Promise.all([
+  const [occupiedUnitsWithRent, paymentTotals, chargeTotals] = await Promise.all([
     db
       .select({
         unitId: tenantUnits.unitId,
@@ -91,6 +91,20 @@ async function getCollectionMetrics(
         )
       )
       .groupBy(payments.unitId),
+    // Step B2: Get non-rent charges per unit for current period (late fees, one-time, etc.)
+    db
+      .select({
+        unitId: charges.unitId,
+        totalCharged: sql<number>`coalesce(sum(${charges.amountCents}), 0)::int`,
+      })
+      .from(charges)
+      .where(
+        and(
+          eq(charges.billingPeriod, period),
+          sql`${charges.type} != 'rent'`
+        )
+      )
+      .groupBy(charges.unitId),
   ])
 
   // Step C: Compute metrics in JS
@@ -99,19 +113,26 @@ async function getCollectionMetrics(
     paymentMap.set(row.unitId, row.totalPaid)
   }
 
+  const chargeMap = new Map<string, number>()
+  for (const row of chargeTotals) {
+    chargeMap.set(row.unitId, row.totalCharged)
+  }
+
   let paidCount = 0
   let totalOutstandingCents = 0
   let overdueTenantsCount = 0
 
   for (const unit of occupiedUnitsWithRent) {
     const rentAmount = unit.rentAmountCents ?? 0
+    const extraCharges = chargeMap.get(unit.unitId) ?? 0
+    const totalOwed = rentAmount + extraCharges
     const totalPaid = paymentMap.get(unit.unitId) ?? 0
 
-    if (totalPaid >= rentAmount) {
+    if (totalPaid >= totalOwed) {
       paidCount++
     }
 
-    const outstanding = Math.max(rentAmount - totalPaid, 0)
+    const outstanding = Math.max(totalOwed - totalPaid, 0)
     totalOutstandingCents += outstanding
 
     // Overdue: past due day AND no payment at all
