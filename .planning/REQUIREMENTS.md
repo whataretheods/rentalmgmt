@@ -63,7 +63,7 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 
 - [x] **LATE-01**: System automatically posts a late fee charge to the tenant ledger when rent is unpaid after a configurable grace period
 - [ ] **LATE-02**: Admin can configure late fee rules per property (grace period days, flat or percentage fee, fee amount)
-- [ ] **LATE-03**: Tenant receives notification (email/SMS/in-app) when a late fee is posted to their account
+- [x] **LATE-03**: Tenant receives notification (email/SMS/in-app) when a late fee is posted to their account
 
 ### Infrastructure & Security
 
@@ -189,7 +189,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LEDG-05 | Phase 8 | Complete |
 | LATE-01 | Phase 9 | Complete |
 | LATE-02 | Phase 9 | Pending |
-| LATE-03 | Phase 9 | Pending |
+| LATE-03 | Phase 9 | Complete |
 | INFRA-03 | Phase 9 | Complete |
 | PORT-01 | Phase 10 | Pending |
 | PORT-02 | Phase 10 | Pending |
