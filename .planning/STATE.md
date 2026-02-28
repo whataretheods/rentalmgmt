@@ -4,8 +4,8 @@ milestone: v2.1
 milestone_name: Production Hardening
 status: completed
 stopped_at: Completed 15-02-PLAN.md -- Phase 15 complete
-last_updated: "2026-02-28T23:29:12.312Z"
-last_activity: 2026-02-28 -- Completed 15-02 (webhook UPSERT for ACH out-of-order delivery)
+last_updated: "2026-02-28T23:31:49.204Z"
+last_activity: 2026-02-28
 progress:
   total_phases: 15
   completed_phases: 15
@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Phase:** 15 of 16 (Financial Integrity & Concurrency)
 **Plan:** 2 of 2 complete
-**Status:** Phase 15 complete
-**Last Activity:** 2026-02-28 -- Completed 15-02 (webhook UPSERT for ACH out-of-order delivery)
+**Status:** Milestone complete
+**Last Activity:** 2026-02-28
 
 Progress: [##################################################] 100%
 
