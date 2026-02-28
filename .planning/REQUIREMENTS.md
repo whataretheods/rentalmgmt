@@ -83,9 +83,9 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 ### Admin UX
 
 - [x] **AUX-01**: Admin portal uses persistent collapsible sidebar navigation across all admin pages
-- [ ] **AUX-02**: Admin dashboard displays KPI metric cards (collection rate, total outstanding, occupancy rate, open maintenance requests, overdue tenants)
-- [ ] **AUX-03**: All admin tables and lists show polished empty states with contextual guidance
-- [ ] **AUX-04**: Admin layout is mobile-responsive with collapsible sidebar and touch-friendly targets
+- [x] **AUX-02**: Admin dashboard displays KPI metric cards (collection rate, total outstanding, occupancy rate, open maintenance requests, overdue tenants)
+- [x] **AUX-03**: All admin tables and lists show polished empty states with contextual guidance
+- [x] **AUX-04**: Admin layout is mobile-responsive with collapsible sidebar and touch-friendly targets
 
 ### Operations
 

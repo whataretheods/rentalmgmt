@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 8: Financial Ledger Foundation** - Charges table, running balances, charge management, historical reconciliation, webhook hardening (2026-02-27)
 - [x] **Phase 9: Automated Operations** - Late fee automation, configurable fee rules, timezone-aware scheduling, late fee notifications (2026-02-27)
 - [x] **Phase 10: Portfolio Management & Tenant Lifecycle** - Property/unit CRUD, move-out workflow, past-tenant access, self-service invite entry (2026-02-27)
-- [ ] **Phase 11: Admin UX & KPI Dashboard** - KPI metric cards, polished empty states, mobile-responsive admin layout
+- [x] **Phase 11: Admin UX & KPI Dashboard** - KPI metric cards, polished empty states, mobile-responsive admin layout (2026-02-27)
 - [ ] **Phase 12: Vendor & Work Order Management** - Vendor directory, maintenance assignment, magic link sharing, cost tracking
 
 ## Phase Details
@@ -103,7 +103,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Admin dashboard displays KPI metric cards showing collection rate, total outstanding balance, occupancy rate, open maintenance requests, and count of overdue tenants — with data derived from the live ledger
   2. Every admin table and list view shows a polished empty state with contextual guidance when no data exists (e.g., "No tenants yet — generate an invite to get started")
   3. Admin layout is fully usable on mobile devices — sidebar collapses to a hamburger menu and all interactive elements have touch-friendly tap targets
-**Plans**: TBD
+**Plans**: 4 plans, 3 waves
+  - Wave 1: Plan 01 (AUX-04: mobile responsive sidebar) + Plan 02 (AUX-02: KPI dashboard) -- parallel
+  - Wave 2: Plan 03 (AUX-03: empty states for all admin pages)
+  - Wave 3: Plan 04 (E2E tests for all requirements)
 
 ### Phase 12: Vendor & Work Order Management
 **Goal**: Admin can manage vendors, assign them to maintenance requests, share limited-view details via magic links, and track work order costs per unit
@@ -135,5 +138,5 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 8. Financial Ledger Foundation | v2.0 | 5/5 | Complete | 2026-02-27 |
 | 9. Automated Operations | v2.0 | 4/4 | Complete | 2026-02-27 |
 | 10. Portfolio Management & Tenant Lifecycle | v2.0 | 6/6 | Complete | 2026-02-27 |
-| 11. Admin UX & KPI Dashboard | v2.0 | 0/TBD | Not started | - |
+| 11. Admin UX & KPI Dashboard | v2.0 | 4/4 | Complete | 2026-02-27 |
 | 12. Vendor & Work Order Management | v2.0 | 0/TBD | Not started | - |

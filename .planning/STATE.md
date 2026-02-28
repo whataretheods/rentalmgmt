@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Production-Ready
 status: planning
-stopped_at: Completed Phase 10 — Portfolio Management & Tenant Lifecycle (property/unit CRUD, move-out, read-only, invites)
-last_updated: "2026-02-27T12:00:00.000Z"
+stopped_at: Completed Phase 11 — Admin UX & KPI Dashboard (KPI metrics, empty states, mobile responsive layout)
+last_updated: "2026-02-27T18:00:00.000Z"
 last_activity: 2026-02-27
 progress:
   total_phases: 12
-  completed_phases: 10
-  total_plans: 71
-  completed_plans: 52
+  completed_phases: 11
+  total_plans: 75
+  completed_plans: 56
 ---
 
 # Project State
@@ -20,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 10 — Portfolio Management & Tenant Lifecycle (complete)
+**Current focus:** Phase 11 — Admin UX & KPI Dashboard (complete)
 
 ## Current Position
 
-**Phase:** 10 of 12 (Portfolio Management & Tenant Lifecycle) — complete
-**Plan:** 10-06 (complete, last plan in phase)
-**Status:** Ready to plan
+**Phase:** 11 of 12 (Admin UX & KPI Dashboard) — complete
+**Plan:** 11-04 (complete, last plan in phase)
+**Status:** Ready to plan Phase 12
 **Last Activity:** 2026-02-27
 
-Progress: [||||||||||||||||||||] 87% (v1.0 complete, v2.0 Phases 7-10 done)
+Progress: [||||||||||||||||||||| ] 92% (v1.0 complete, v2.0 Phases 7-11 done)
 
 ## Performance Metrics
 
@@ -62,9 +62,10 @@ Progress: [||||||||||||||||||||] 87% (v1.0 complete, v2.0 Phases 7-10 done)
 | 8. Financial Ledger | 5 | 16min | 3.2min |
 | 9. Automated Operations | 4 | 12min | 3.0min |
 | 10. Portfolio Mgmt | 6 | 27min | 4.5min |
+| 11. Admin UX & KPI | 4 | 15min | 3.8min |
 
 **Recent Trend:**
-- Last 6 plans: 4min, 4min, 5min, 4min, 5min, 5min
+- Last 6 plans: 5min, 5min, 4min, 4min, 4min, 3min
 - Trend: Stable
 
 ## Accumulated Context
@@ -107,6 +108,11 @@ Recent decisions affecting v2.0:
 - [Phase 10]: rentDueDay validated 1-28 to avoid month-end ambiguity
 - [Phase 10]: Dollar-to-cents conversion at form submission boundary in UI components
 - [Phase 10]: isNull(archivedAt) filter required on all admin queries touching properties/units
+- [Phase 11]: KPI queries use Promise.all for parallel execution (occupancy, maintenance, collection independent)
+- [Phase 11]: KpiCard is server component receiving pre-formatted string values (no client-side formatting)
+- [Phase 11]: Existing shadcn Sidebar kept (not replaced) — added size="lg" for 44px touch targets and useEffect for mobile auto-close
+- [Phase 11]: Split admin layout into mobile/desktop headers at md breakpoint (matches sidebar's useIsMobile at 768px)
+- [Phase 11]: EmptyState component enhanced (not replaced) — backward compatible, larger icon with bg circle
 
 ### Pending Todos
 
@@ -120,5 +126,5 @@ None yet.
 ## Session Continuity
 
 **Last Session:** 2026-02-27
-**Stopped At:** Completed Phase 10 — Portfolio Management & Tenant Lifecycle (all 6 plans executed, verified)
+**Stopped At:** Completed Phase 11 — Admin UX & KPI Dashboard (all 4 plans executed, verified, 14 E2E tests pass)
 **Resume File:** None
