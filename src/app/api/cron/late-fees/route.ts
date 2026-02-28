@@ -5,13 +5,13 @@ import {
   lateFeeRules,
   units,
   tenantUnits,
-  payments,
   charges,
 } from "@/db/schema/domain"
 import { user } from "@/db/schema/auth"
-import { eq, and, inArray } from "drizzle-orm"
+import { eq, and } from "drizzle-orm"
 import { getLocalDate, getLocalBillingPeriod, daysSinceRentDue } from "@/lib/timezone"
 import { calculateLateFee, formatCentsAsDollars } from "@/lib/late-fees"
+import { getTenantBalance } from "@/lib/ledger"
 import { sendNotification } from "@/lib/notifications"
 import { renderLateFeeEmail } from "@/emails/LateFeeEmail"
 
@@ -82,40 +82,17 @@ export async function POST(req: Request) {
             continue
           }
 
-          // Check if rent is already paid (succeeded) for this billing period
-          const [paid] = await db
-            .select({ id: payments.id })
-            .from(payments)
-            .where(
-              and(
-                eq(payments.tenantUserId, link.userId),
-                eq(payments.unitId, link.unitId),
-                eq(payments.billingPeriod, currentPeriod),
-                eq(payments.status, "succeeded")
-              )
-            )
-            .limit(1)
+          // Check tenant balance via ledger (replaces payment-existence queries)
+          const { balanceCents, pendingPaymentsCents } = await getTenantBalance(link.userId, link.unitId)
 
-          if (paid) {
+          // Skip if pending ACH payment exists
+          if (pendingPaymentsCents > 0) {
             skipped++
             continue
           }
 
-          // Check for pending ACH payment — do not assess late fee if payment is pending
-          const [pendingPayment] = await db
-            .select({ id: payments.id })
-            .from(payments)
-            .where(
-              and(
-                eq(payments.tenantUserId, link.userId),
-                eq(payments.unitId, link.unitId),
-                eq(payments.billingPeriod, currentPeriod),
-                eq(payments.status, "pending")
-              )
-            )
-            .limit(1)
-
-          if (pendingPayment) {
+          // Skip if tenant balance is zero or credit (fully paid or overpaid)
+          if (balanceCents <= 0) {
             skipped++
             continue
           }
