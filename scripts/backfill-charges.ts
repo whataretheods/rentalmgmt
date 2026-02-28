@@ -183,7 +183,7 @@ async function backfill() {
       )
     `)
     console.log(
-      `Payments without matching charges: ${JSON.stringify(orphaned[0])}`
+      `Payments without matching charges: ${JSON.stringify(orphaned.rows[0])}`
     )
   }
 

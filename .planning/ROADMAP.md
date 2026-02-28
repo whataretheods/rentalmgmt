@@ -28,7 +28,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ### v2.0 Production-Ready
 
 - [x] **Phase 7: Infrastructure Prerequisites** - Database transaction support, S3 cloud storage, edge auth, cascade safety, admin sidebar layout (2026-02-26)
-- [ ] **Phase 8: Financial Ledger Foundation** - Charges table, running balances, charge management, historical reconciliation, webhook hardening
+- [x] **Phase 8: Financial Ledger Foundation** - Charges table, running balances, charge management, historical reconciliation, webhook hardening (2026-02-27)
 - [ ] **Phase 9: Automated Operations** - Late fee automation, configurable fee rules, timezone-aware scheduling, late fee notifications
 - [ ] **Phase 10: Portfolio Management & Tenant Lifecycle** - Property/unit CRUD, move-out workflow, past-tenant access, self-service invite entry
 - [ ] **Phase 11: Admin UX & KPI Dashboard** - KPI metric cards, polished empty states, mobile-responsive admin layout
@@ -61,7 +61,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Admin can manually post a charge, credit, or adjustment to any tenant's ledger with a description, and it immediately updates their running balance
   4. All historical payment records from v1.0 have been reconciled with corresponding charge records via a validated backfill migration
   5. Stripe webhook processes ACH settlements and payment confirmations using strict payment intent ID matching, and duplicate webhook events do not create duplicate ledger entries
-**Plans**: TBD
+**Plans**: 5 plans, 3 waves
+  - Wave 1: Plan 01 (LEDG-01: charges schema + balance helper) + Plan 04 (LEDG-05: webhook hardening) — parallel
+  - Wave 2: Plan 02 (LEDG-03: admin charge management) + Plan 03 (LEDG-02: balance display) — parallel
+  - Wave 3: Plan 05 (LEDG-04: charge backfill migration)
 
 ### Phase 9: Automated Operations
 **Goal**: The system automatically assesses late fees when rent goes unpaid past a configurable grace period, all time-sensitive operations use property-local timezone, and tenants are notified when fees are posted
@@ -123,7 +126,7 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 5. Notifications and Messaging | v1.0 | 5/5 | Complete | 2026-02-26 |
 | 6. Autopay and Polish | v1.0 | 6/6 | Complete | 2026-02-26 |
 | 7. Infrastructure Prerequisites | v2.0 | 4/4 | Complete | 2026-02-26 |
-| 8. Financial Ledger Foundation | 2/5 | In Progress|  | - |
+| 8. Financial Ledger Foundation | v2.0 | 5/5 | Complete | 2026-02-27 |
 | 9. Automated Operations | v2.0 | 0/TBD | Not started | - |
 | 10. Portfolio Management & Tenant Lifecycle | v2.0 | 0/TBD | Not started | - |
 | 11. Admin UX & KPI Dashboard | v2.0 | 0/TBD | Not started | - |

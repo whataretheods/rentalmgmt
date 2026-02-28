@@ -64,7 +64,7 @@ Each task was committed atomically:
 
 1. **Task 1: Add event ID deduplication and strict PI matching to Stripe webhook** - `a000d94` (feat)
 
-**Plan metadata:** _pending_ (docs: complete plan)
+**Plan metadata:** `13d981f` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/app/api/webhooks/stripe/route.ts` - Stripe webhook handler with event dedup, transaction wrapping, and strict PI matching
