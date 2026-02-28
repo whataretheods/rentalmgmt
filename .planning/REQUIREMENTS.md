@@ -61,7 +61,7 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 
 ### Late Fees
 
-- [ ] **LATE-01**: System automatically posts a late fee charge to the tenant ledger when rent is unpaid after a configurable grace period
+- [x] **LATE-01**: System automatically posts a late fee charge to the tenant ledger when rent is unpaid after a configurable grace period
 - [ ] **LATE-02**: Admin can configure late fee rules per property (grace period days, flat or percentage fee, fee amount)
 - [ ] **LATE-03**: Tenant receives notification (email/SMS/in-app) when a late fee is posted to their account
 
@@ -69,7 +69,7 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 
 - [x] **INFRA-01**: Maintenance photos and documents stored in S3-compatible cloud storage with presigned URLs for upload and download
 - [x] **INFRA-02**: User role encoded in JWT so edge middleware can reject unauthorized /admin access without hitting application code
-- [ ] **INFRA-03**: Rent reminders, late fee calculations, and autopay scheduling use property-local timezone instead of UTC
+- [x] **INFRA-03**: Rent reminders, late fee calculations, and autopay scheduling use property-local timezone instead of UTC
 - [x] **INFRA-04**: Database driver supports transactions (Neon WebSocket driver) for atomic multi-table operations
 - [x] **INFRA-05**: Cascade delete constraints replaced with soft-delete and ON DELETE RESTRICT to protect financial history
 
@@ -187,10 +187,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LEDG-03 | Phase 8 | Complete |
 | LEDG-04 | Phase 8 | Complete |
 | LEDG-05 | Phase 8 | Complete |
-| LATE-01 | Phase 9 | Pending |
+| LATE-01 | Phase 9 | Complete |
 | LATE-02 | Phase 9 | Pending |
 | LATE-03 | Phase 9 | Pending |
-| INFRA-03 | Phase 9 | Pending |
+| INFRA-03 | Phase 9 | Complete |
 | PORT-01 | Phase 10 | Pending |
 | PORT-02 | Phase 10 | Pending |
 | PORT-03 | Phase 10 | Pending |
