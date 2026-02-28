@@ -5,6 +5,7 @@ import Link from "next/link"
 import {
   LayoutDashboard,
   Building2,
+  Home,
   CreditCard,
   Wrench,
   FileText,
@@ -28,6 +29,7 @@ import {
 
 const navItems = [
   { title: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { title: "Properties", href: "/admin/properties", icon: Home },
   { title: "Units", href: "/admin/units", icon: Building2 },
   { title: "Payments", href: "/admin/payments", icon: CreditCard },
   { title: "Maintenance", href: "/admin/maintenance", icon: Wrench },

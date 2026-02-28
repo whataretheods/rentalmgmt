@@ -1,73 +1,240 @@
-import { db } from "@/db"
-import { units, properties } from "@/db/schema"
-import { eq } from "drizzle-orm"
-import { RentConfigForm } from "@/components/admin/RentConfigForm"
+"use client"
 
-export default async function AdminUnitsPage() {
-  // Fetch all units with their property info
-  const allUnits = await db
-    .select({
-      id: units.id,
-      unitNumber: units.unitNumber,
-      rentAmountCents: units.rentAmountCents,
-      rentDueDay: units.rentDueDay,
-      propertyName: properties.name,
-      propertyAddress: properties.address,
-    })
-    .from(units)
-    .innerJoin(properties, eq(units.propertyId, properties.id))
-    .orderBy(units.unitNumber)
+import { useState, useEffect, useCallback } from "react"
+import { Button } from "@/components/ui/button"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { toast } from "sonner"
+import { UnitForm } from "@/components/admin/UnitForm"
+
+interface Unit {
+  id: string
+  unitNumber: string
+  propertyId: string
+  propertyName: string
+  propertyAddress: string
+  rentAmountCents: number | null
+  rentDueDay: number | null
+  currentTenantUserId: string | null
+  currentTenantName: string | null
+  currentTenantEmail: string | null
+  createdAt: string
+}
+
+interface Property {
+  id: string
+  name: string
+}
+
+export default function AdminUnitsPage() {
+  const [units, setUnits] = useState<Unit[]>([])
+  const [properties, setProperties] = useState<Property[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const fetchUnits = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/units")
+      if (!res.ok) throw new Error("Failed to fetch units")
+      const data = await res.json()
+      setUnits(data)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error"
+      toast.error(message)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  const fetchProperties = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/properties")
+      if (!res.ok) throw new Error("Failed to fetch properties")
+      const data = await res.json()
+      setProperties(data.map((p: Property & { address: string }) => ({ id: p.id, name: p.name })))
+    } catch {
+      // Properties list is for the create dialog, non-critical
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchUnits()
+    fetchProperties()
+  }, [fetchUnits, fetchProperties])
+
+  async function handleArchive(id: string, unitNumber: string) {
+    try {
+      const res = await fetch(`/api/admin/units/${id}`, { method: "DELETE" })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Failed to archive unit")
+      }
+      toast.success(`Unit ${unitNumber} archived`)
+      fetchUnits()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error"
+      toast.error(message)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">
+          Units & Rent Configuration
+        </h1>
+        <p className="mt-4 text-gray-500">Loading units...</p>
+      </div>
+    )
+  }
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900">Units & Rent Configuration</h1>
-      <p className="mt-2 text-gray-600">
-        Set the rent amount and due date for each unit. Tenants will see this amount when paying rent.
-      </p>
-
-      <div className="mt-6">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="border-b text-left text-sm font-medium text-gray-500">
-              <th className="pb-3 pr-4">Unit</th>
-              <th className="pb-3 pr-4">Property</th>
-              <th className="pb-3 pr-4">Current Rent</th>
-              <th className="pb-3">Configuration</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allUnits.map((unit) => (
-              <tr key={unit.id} className="border-b">
-                <td className="py-4 pr-4 font-medium">{unit.unitNumber}</td>
-                <td className="py-4 pr-4 text-gray-600">{unit.propertyName}</td>
-                <td className="py-4 pr-4">
-                  {unit.rentAmountCents != null ? (
-                    <span className="text-gray-900">
-                      ${(unit.rentAmountCents / 100).toFixed(2)} / due day {unit.rentDueDay}
-                    </span>
-                  ) : (
-                    <span className="text-amber-600 text-sm">Not configured</span>
-                  )}
-                </td>
-                <td className="py-4">
-                  <RentConfigForm
-                    unitId={unit.id}
-                    initialAmountCents={unit.rentAmountCents}
-                    initialDueDay={unit.rentDueDay}
-                  />
-                </td>
-              </tr>
-            ))}
-            {allUnits.length === 0 && (
-              <tr>
-                <td colSpan={4} className="py-8 text-center text-gray-500">
-                  No units found. Add properties and units first.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Units & Rent Configuration
+          </h1>
+          <p className="mt-1 text-gray-600">
+            Manage units, set rent amounts, and configure due days.
+          </p>
+        </div>
+        <UnitForm
+          mode="create"
+          properties={properties}
+          onSuccess={() => {
+            fetchUnits()
+            fetchProperties()
+          }}
+          trigger={<Button>Add Unit</Button>}
+        />
       </div>
+
+      {units.length === 0 ? (
+        <div className="mt-8 text-center py-12 border rounded-lg bg-gray-50">
+          <p className="text-gray-500">
+            No units found. Add your first property, then create units.
+          </p>
+        </div>
+      ) : (
+        <div className="mt-6">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Unit</TableHead>
+                <TableHead>Property</TableHead>
+                <TableHead>Rent</TableHead>
+                <TableHead>Current Tenant</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {units.map((unit) => (
+                <TableRow key={unit.id}>
+                  <TableCell className="font-medium">
+                    {unit.unitNumber}
+                  </TableCell>
+                  <TableCell className="text-gray-600">
+                    {unit.propertyName}
+                  </TableCell>
+                  <TableCell>
+                    {unit.rentAmountCents != null ? (
+                      <span>
+                        ${(unit.rentAmountCents / 100).toFixed(2)}
+                        {unit.rentDueDay ? ` / due day ${unit.rentDueDay}` : ""}
+                      </span>
+                    ) : (
+                      <span className="text-amber-600 text-sm">
+                        Not configured
+                      </span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {unit.currentTenantName ? (
+                      <div>
+                        <span className="text-gray-900">
+                          {unit.currentTenantName}
+                        </span>
+                        <br />
+                        <span className="text-xs text-gray-500">
+                          {unit.currentTenantEmail}
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-gray-400 text-sm">Vacant</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <UnitForm
+                        mode="edit"
+                        unit={unit}
+                        properties={properties}
+                        onSuccess={fetchUnits}
+                        trigger={
+                          <Button variant="outline" size="sm">
+                            Edit
+                          </Button>
+                        }
+                      />
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-red-600 hover:text-red-700"
+                          >
+                            Archive
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Archive Unit {unit.unitNumber}?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This will hide Unit {unit.unitNumber} from active
+                              lists. Financial and maintenance history will be
+                              preserved. This action cannot be easily undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() =>
+                                handleArchive(unit.id, unit.unitNumber)
+                              }
+                              className="bg-red-600 hover:bg-red-700"
+                            >
+                              Archive
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </div>
   )
 }
