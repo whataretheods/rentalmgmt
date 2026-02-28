@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server"
 import { db } from "@/db"
-import { autopayEnrollments, units, notifications } from "@/db/schema/domain"
+import { autopayEnrollments, units, notifications, properties } from "@/db/schema/domain"
 import { user } from "@/db/schema/auth"
 import { eq, and, sql } from "drizzle-orm"
 import { sendNotification } from "@/lib/notifications"
 import { calculateCardFee, calculateAchFee, formatCents, getPaymentMethodLabel } from "@/lib/autopay-fees"
 import { renderAutopayChargeEmail } from "@/emails/AutopayChargeEmail"
+import { getLocalDate } from "@/lib/timezone"
 
 export async function POST(req: Request) {
   // Validate CRON_SECRET bearer token
@@ -14,11 +15,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const today = new Date()
-  const currentDay = today.getDate()
-  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
-
-  // Query all active autopay enrollments joined with units
+  // Query all active autopay enrollments joined with units and properties for timezone
   const enrollments = await db
     .select({
       tenantUserId: autopayEnrollments.tenantUserId,
@@ -29,9 +26,11 @@ export async function POST(req: Request) {
       unitNumber: units.unitNumber,
       rentAmountCents: units.rentAmountCents,
       rentDueDay: units.rentDueDay,
+      propertyTimezone: properties.timezone,
     })
     .from(autopayEnrollments)
     .innerJoin(units, eq(units.id, autopayEnrollments.unitId))
+    .innerJoin(properties, eq(properties.id, units.propertyId))
     .where(eq(autopayEnrollments.status, "active"))
 
   let notified = 0
@@ -45,6 +44,11 @@ export async function POST(req: Request) {
         skipped++
         continue
       }
+
+      // Use property-local timezone for date calculations
+      const localDate = getLocalDate(enrollment.propertyTimezone)
+      const currentDay = localDate.day
+      const startOfToday = new Date(localDate.year, localDate.month - 1, localDate.day)
 
       // Only notify exactly 3 days before due date
       const daysUntilDue = enrollment.rentDueDay - currentDay
@@ -82,8 +86,8 @@ export async function POST(req: Request) {
       const feeAmount = formatCents(feeCents)
       const totalAmount = formatCents(totalCents)
 
-      // Calculate charge date
-      const chargeDate = new Date(today.getFullYear(), today.getMonth(), enrollment.rentDueDay)
+      // Calculate charge date using property-local time
+      const chargeDate = new Date(localDate.year, localDate.month - 1, enrollment.rentDueDay)
       const chargeDateStr = chargeDate.toLocaleDateString("en-US", {
         weekday: "long",
         year: "numeric",
