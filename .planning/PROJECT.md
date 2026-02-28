@@ -68,17 +68,15 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 - **Scale**: 5 units now, architecture should accommodate growth without major rewrites
 - **Zero Regression**: v2.0 must not break existing Stripe Checkout, Better Auth sessions, Twilio SMS, or autopay flows
 
-## Current Milestone: v2.0 Production-Ready
+## Current Milestone: v2.1 Production Hardening
 
-**Goal:** Elevate from functional MVP to enterprise-grade property management platform — financial integrity, security hardening, portfolio management, tenant lifecycle workflows, and professional admin UX.
+**Goal:** Eliminate critical financial, concurrency, and security vulnerabilities identified in architectural audit — ensuring production-grade integrity before tenant onboarding.
 
 **Target features:**
-- Ledger-based financial model (charges, balances, late fees)
-- S3 cloud storage replacing local file uploads
-- Edge-level JWT role authorization
-- Full property/unit CRUD and tenant lifecycle management
-- Professional admin UI with sidebar navigation and KPI dashboard
-- Vendor management and work order cost tracking
+- Ledger-balance-based late fee assessment (close partial payment loophole)
+- Idempotent webhook UPSERT handling (fix ACH race conditions)
+- UTC-based date math for DST-proof day calculations
+- Session-validated middleware for tenant routes
 
 ## Key Decisions
 
@@ -99,4 +97,4 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 | Multi-channel sendNotification | Single dispatch helper routes to in-app, email, and SMS based on user prefs | ✓ Phase 5 |
 
 ---
-*Last updated: 2026-02-26 after milestone v2.0 initialization*
+*Last updated: 2026-02-28 after milestone v2.1 initialization*
