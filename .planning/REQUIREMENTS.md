@@ -109,9 +109,27 @@ Requirements for milestone v2.0 — Production-Ready. Each maps to roadmap phase
 - [x] **FIN-05**: Failed ACH payments post NSF fee to tenant ledger when NSF_FEE_CENTS env var is configured (both autopay and one-time)
 - [x] **FIN-06**: Admin can calculate prorated rent in the move-out dialog, pre-filling a final charge based on actual days in month
 
-## v2.1 Requirements
+## v2.1 Requirements — Production Hardening
 
-Deferred to next milestone. Tracked but not in current roadmap.
+Requirements for milestone v2.1 — Production Hardening. Fixes critical financial, concurrency, date math, and security vulnerabilities identified in architectural audit.
+
+### Financial Integrity
+
+- [ ] **HARD-01**: Late fee cron job assesses fees based on actual tenant ledger balance (getTenantBalance) rather than checking for the existence of any succeeded payment — closing the partial payment loophole where a $1 payment would suppress a late fee on $1,499 owed
+- [ ] **HARD-02**: Stripe webhook handlers for checkout.session.async_payment_succeeded and async_payment_failed use UPSERT (INSERT ... ON CONFLICT DO UPDATE) so out-of-order ACH webhook delivery does not permanently trap payments in "pending" status
+
+### Date Math
+
+- [ ] **HARD-03**: daysSinceRentDue calculates day differences using Date.UTC() instead of local Date() constructors, eliminating DST boundary bleeding where 23-hour gaps produce incorrect day counts
+- [ ] **HARD-04**: Timezone unit tests explicitly cover DST spring-forward and fall-back transitions to prove the fix
+
+### Security
+
+- [ ] **HARD-05**: Tenant middleware validates the session (not just cookie existence) so suspended accounts, revoked sessions, and expired cookies are rejected at the edge — or all tenant API routes are audited to confirm they independently enforce auth.api.getSession()
+
+## Future Requirements
+
+Deferred to future milestones. Tracked but not in current roadmap.
 
 ### Tenant Lifecycle
 
@@ -248,4 +266,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-25*
-*Last updated: 2026-02-28 after Phase 14 completion*
+*Last updated: 2026-02-28 after milestone v2.1 requirements definition*
