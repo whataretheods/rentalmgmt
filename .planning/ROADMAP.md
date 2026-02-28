@@ -42,7 +42,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ### v2.1 Production Hardening
 
-- [ ] **Phase 15: Financial Integrity & Concurrency** - Balance-based late fee assessment and idempotent webhook UPSERT for ACH race conditions
+- [x] **Phase 15: Financial Integrity & Concurrency** - Balance-based late fee assessment and idempotent webhook UPSERT for ACH race conditions (completed 2026-02-28)
 - [ ] **Phase 16: Date Math & Security** - UTC-based day calculations with DST proof tests and session-validated tenant middleware
 
 ## Phase Details
@@ -129,11 +129,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. A tenant who makes a partial payment (e.g., $1 on a $1,500 balance) still receives a late fee when their remaining balance exceeds zero after the grace period -- the late fee cron checks getTenantBalance(), not "does any succeeded payment exist"
   2. When Stripe delivers ACH webhooks out of order (e.g., async_payment_succeeded arrives before checkout.session.completed finishes), the payment record is created or updated via UPSERT and never remains permanently stuck in "pending" status
   3. When Stripe delivers the same webhook event multiple times, no duplicate payment records or ledger entries are created (idempotency preserved through the UPSERT pattern)
-**Plans**: TBD
+**Plans**: 0/2
 
 Plans:
-- [ ] 15-01: TBD
-- [ ] 15-02: TBD
+- [ ] 15-01: Balance-based late fee assessment (HARD-01)
+- [ ] 15-02: UPSERT webhook handlers for ACH race conditions (HARD-02)
 
 ### Phase 16: Date Math & Security
 **Goal**: Day-difference calculations are immune to DST transitions and tenant routes reject invalid/expired sessions at the edge
@@ -171,5 +171,5 @@ Phases execute in numeric order: 15 -> 16
 | 12. Vendor & Work Order Management | v2.0 | 5/5 | Complete | 2026-02-27 |
 | 13. FinTech Polish & Edge Cases | v2.0 | 4/4 | Complete | 2026-02-28 |
 | 14. Audit Gap Closure | v2.0 | 4/4 | Complete | 2026-02-28 |
-| 15. Financial Integrity & Concurrency | v2.1 | 0/0 | Not started | - |
+| 15. Financial Integrity & Concurrency | 2/2 | Complete   | 2026-02-28 | - |
 | 16. Date Math & Security | v2.1 | 0/0 | Not started | - |

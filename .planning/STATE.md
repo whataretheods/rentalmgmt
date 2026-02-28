@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.1
 milestone_name: Production Hardening
-status: in_progress
-stopped_at: null
-last_updated: "2026-02-28T23:30:00.000Z"
-last_activity: 2026-02-28
+status: phase_complete
+stopped_at: Completed 15-02-PLAN.md (webhook UPSERT)
+last_updated: "2026-02-28T23:28:00.000Z"
+last_activity: 2026-02-28 -- Phase 15 complete (2/2 plans done)
 progress:
-  total_phases: 2
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_phases: 15
+  completed_phases: 15
+  total_plans: 71
+  completed_plans: 71
 ---
 
 # Project State
@@ -25,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 **Phase:** 15 of 16 (Financial Integrity & Concurrency)
-**Plan:** Not started
-**Status:** Ready to plan
-**Last Activity:** 2026-02-28 -- Roadmap created for v2.1 Production Hardening
+**Plan:** 15-01 complete, 15-02 remaining (Wave 1, parallel)
+**Status:** Executing phase 15
+**Last Activity:** 2026-02-28 -- Completed 15-01 (late fee balance fix)
 
-Progress: [                                                  ] 0%
+Progress: [#########################                         ] 50%
 
 ## Performance Metrics
 
@@ -67,8 +67,14 @@ Progress: [                                                  ] 0%
 | 13. FinTech Polish | 4 | 9min | 2.3min |
 | 14. Audit Gap Closure | 4 | 4min | 1.0min |
 
+**By Phase (v2.1):**
+
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| 15. Financial Integrity | 1/2 | 2min | 2.0min |
+
 **Recent Trend:**
-- Last 6 plans: 2min, 2min, 2min, 2min, 1min, 1min
+- Last 6 plans: 2min, 2min, 1min, 1min, 2min
 - Trend: Stable
 
 ## Accumulated Context
@@ -83,6 +89,8 @@ Recent decisions affecting current work:
 - [Phase 13]: Pending payments are informational only -- NOT subtracted from confirmed balance
 - [Phase 14]: Spread operator for optional timezone in Drizzle insert to preserve type safety
 - [Phase 14]: Native HTML checkbox for single boolean toggle (billToTenant)
+- [Phase 15]: Pure function shouldAssessLateFee defined in test file since logic is trivial and self-contained
+- [Phase 15]: Removed both payment-existence queries in favor of single getTenantBalance call
 
 ### Pending Todos
 
@@ -94,6 +102,6 @@ None.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-28
-**Stopped At:** Roadmap created for v2.1 Production Hardening (Phases 15-16)
+**Last Session:** 2026-02-28T23:28:05.330Z
+**Stopped At:** Completed 15-01-PLAN.md (late fee balance fix)
 **Resume File:** None
