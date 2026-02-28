@@ -12,7 +12,7 @@ test.describe.serial("Vendor Directory (OPS-01)", () => {
     await page.fill('input[type="email"]', ADMIN_EMAIL)
     await page.fill('input[type="password"]', ADMIN_PASSWORD)
     await page.click('button[type="submit"]')
-    await page.waitForURL("**/tenant/dashboard", { timeout: 15000 })
+    await page.waitForURL("**/admin/dashboard", { timeout: 15000 })
   })
 
   test("admin can view vendor list page", async ({ page }) => {
@@ -41,8 +41,8 @@ test.describe.serial("Vendor Directory (OPS-01)", () => {
     await page.click('#specialty')
     await page.click('div[role="option"]:has-text("Plumbing")')
 
-    // Submit
-    await page.click("button:has-text('Add Vendor')")
+    // Submit (target the button inside the dialog footer, not the header button)
+    await page.locator('[data-slot="dialog-content"] button:has-text("Add Vendor")').click()
 
     // Verify vendor appears in list
     await expect(
@@ -84,8 +84,18 @@ test.describe.serial("Vendor Directory (OPS-01)", () => {
       page.locator("td", { hasText: "E2E Test Plumbing Co" })
     ).toBeVisible({ timeout: 10000 })
 
-    // Click Deactivate on the E2E test vendor row
     const row = page.locator("tr", { hasText: "E2E Test Plumbing Co" })
+
+    // If vendor is already inactive from a previous run, reactivate first
+    const activateBtn = row.locator("button:has-text('Activate')")
+    if (await activateBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+      await activateBtn.click()
+      await expect(
+        row.locator("span", { hasText: "active" }).first()
+      ).toBeVisible({ timeout: 10000 })
+    }
+
+    // Click Deactivate on the E2E test vendor row
     await row.locator("button:has-text('Deactivate')").click()
 
     // Verify status changes to inactive

@@ -21,27 +21,35 @@ export async function notifyVendorAssignment(
 
   // Email notification (if vendor has email)
   if (vendor.email) {
-    void resend.emails.send({
-      from: emailFrom,
-      to: vendor.email,
-      subject: "New Work Order Assignment - RentalMgmt",
-      html: `
-        <h2>New Work Order Assignment</h2>
-        <p>Hello ${vendor.companyName},</p>
-        <p>You have been assigned a new work order:</p>
-        <p><strong>${requestSummary}</strong></p>
-        <p><a href="${workOrderUrl}" style="display:inline-block;padding:10px 20px;background:#2563eb;color:#fff;text-decoration:none;border-radius:6px;">View Work Order Details</a></p>
-        <p style="color:#6b7280;font-size:0.875rem;">This link provides access to the work order details. No login required.</p>
-      `,
-    })
+    try {
+      void resend.emails.send({
+        from: emailFrom,
+        to: vendor.email,
+        subject: "New Work Order Assignment - RentalMgmt",
+        html: `
+          <h2>New Work Order Assignment</h2>
+          <p>Hello ${vendor.companyName},</p>
+          <p>You have been assigned a new work order:</p>
+          <p><strong>${requestSummary}</strong></p>
+          <p><a href="${workOrderUrl}" style="display:inline-block;padding:10px 20px;background:#2563eb;color:#fff;text-decoration:none;border-radius:6px;">View Work Order Details</a></p>
+          <p style="color:#6b7280;font-size:0.875rem;">This link provides access to the work order details. No login required.</p>
+        `,
+      })
+    } catch (err) {
+      console.error("Failed to send vendor email notification:", err)
+    }
   }
 
   // SMS notification (if vendor has phone)
   if (vendor.phone) {
-    void getTwilioClient().messages.create({
-      messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID!,
-      to: vendor.phone,
-      body: `RentalMgmt: New work order assigned - ${requestSummary}. View details: ${workOrderUrl}`,
-    })
+    try {
+      void getTwilioClient().messages.create({
+        messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID!,
+        to: vendor.phone,
+        body: `RentalMgmt: New work order assigned - ${requestSummary}. View details: ${workOrderUrl}`,
+      })
+    } catch (err) {
+      console.error("Failed to send vendor SMS notification:", err)
+    }
   }
 }

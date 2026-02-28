@@ -12,7 +12,7 @@ test.describe("Work Orders", () => {
     await page.fill('input[type="email"]', ADMIN_EMAIL)
     await page.fill('input[type="password"]', ADMIN_PASSWORD)
     await page.click('button[type="submit"]')
-    await page.waitForURL("**/tenant/dashboard", { timeout: 15000 })
+    await page.waitForURL("**/admin/dashboard", { timeout: 15000 })
   })
 
   test("admin can view work order list page", async ({ page }) => {
@@ -98,7 +98,7 @@ test.describe("Vendor Magic Link (OPS-03)", () => {
     await page.fill('input[type="email"]', ADMIN_EMAIL)
     await page.fill('input[type="password"]', ADMIN_PASSWORD)
     await page.click('button[type="submit"]')
-    await page.waitForURL("**/tenant/dashboard", { timeout: 15000 })
+    await page.waitForURL("**/admin/dashboard", { timeout: 15000 })
 
     // Get maintenance request with tenant info
     const maintRes = await page.request.get(
@@ -164,7 +164,7 @@ test.describe("Cost Tracking (OPS-04)", () => {
     await page.fill('input[type="email"]', ADMIN_EMAIL)
     await page.fill('input[type="password"]', ADMIN_PASSWORD)
     await page.click('button[type="submit"]')
-    await page.waitForURL("**/tenant/dashboard", { timeout: 15000 })
+    await page.waitForURL("**/admin/dashboard", { timeout: 15000 })
 
     // Get existing work orders
     const woRes = await page.request.get(
@@ -213,7 +213,7 @@ test.describe("Cost Tracking (OPS-04)", () => {
     await page.fill('input[type="email"]', ADMIN_EMAIL)
     await page.fill('input[type="password"]', ADMIN_PASSWORD)
     await page.click('button[type="submit"]')
-    await page.waitForURL("**/tenant/dashboard", { timeout: 15000 })
+    await page.waitForURL("**/admin/dashboard", { timeout: 15000 })
 
     // Call the expense rollup API
     const res = await page.request.get(
