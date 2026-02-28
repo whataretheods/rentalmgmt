@@ -147,7 +147,7 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 11. Admin UX & KPI Dashboard | v2.0 | 4/4 | Complete | 2026-02-27 |
 | 12. Vendor & Work Order Management | v2.0 | 5/5 | Complete | 2026-02-27 |
 | 13. FinTech Polish & Edge Cases | v2.0 | 4/4 | Complete | 2026-02-28 |
-| 14. Audit Gap Closure | v2.0 | 0/4 | Not Started | — |
+| 14. Audit Gap Closure | v2.0 | 1/4 | In Progress | — |
 
 ### Phase 13: FinTech Polish & Edge Cases
 
@@ -190,6 +190,6 @@ Plans:
 
 Plans:
 - [ ] 14-01-PLAN.md -- Timezone config + verify pre-closed gaps (INFRA-03, LEDG-03, LATE-02, OPS-02)
-- [ ] 14-02-PLAN.md -- Bill-to-tenant checkbox on cost form (FIN-04, OPS-04)
+- [x] 14-02-PLAN.md -- Bill-to-tenant checkbox on cost form (FIN-04, OPS-04)
 - [ ] 14-03-PLAN.md -- KPI overdue tenants charges fix (AUX-02)
 - [ ] 14-04-PLAN.md -- Traceability + cleanup

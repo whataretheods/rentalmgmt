@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Production-Ready
-status: completed
-stopped_at: Completed 13-04-PLAN.md (Prorated rent calculation) -- Phase 13 complete
-last_updated: "2026-02-28T07:46:27.493Z"
+status: in-progress
+stopped_at: Completed 14-02-PLAN.md (Bill-to-tenant checkbox)
+last_updated: "2026-02-28T22:01:09Z"
 last_activity: 2026-02-28
 progress:
-  total_phases: 13
+  total_phases: 14
   completed_phases: 13
-  total_plans: 65
-  completed_plans: 65
+  total_plans: 69
+  completed_plans: 66
 ---
 
 # Project State
@@ -20,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 13 — FinTech Polish & Edge Cases (complete)
+**Current focus:** Phase 14 — Audit Gap Closure (in progress)
 
 ## Current Position
 
-**Phase:** 13 of 13 (FinTech Polish & Edge Cases) — complete
-**Plan:** 13-04 (complete) — 4 of 4 plans done
-**Status:** Milestone complete
+**Phase:** 14 of 14 (Audit Gap Closure) — in progress
+**Plan:** 14-02 (complete) — 1 of 4 plans done
+**Status:** In progress
 **Last Activity:** 2026-02-28
 
-Progress: [||||||||||||||||||||||||||||||||||||||||||||||||||] 77% (65/84 plans)
+Progress: [||||||||||||||||||||||||||||||||||||||||||||||||  ] 96% (66/69 plans)
 
 ## Performance Metrics
 
@@ -136,6 +136,7 @@ Recent decisions affecting v2.0:
 - [Phase 13]: postNsfFee accepts tx parameter to run within existing webhook transaction for atomicity
 - [Phase 13]: Math.round at final step only for proration -- avoids floating-point accumulation in cent calculations
 - [Phase 13]: Proration button pre-fills editable charge -- admin always has final say over amount
+- [Phase 14]: Native HTML checkbox for single boolean toggle (billToTenant) -- avoids unnecessary shadcn component dependency
 
 ### Pending Todos
 
@@ -153,5 +154,5 @@ None.
 ## Session Continuity
 
 **Last Session:** 2026-02-28
-**Stopped At:** Completed 13-04-PLAN.md (Prorated rent calculation) -- Phase 13 complete
+**Stopped At:** Completed 14-02-PLAN.md (Bill-to-tenant checkbox)
 **Resume File:** None
