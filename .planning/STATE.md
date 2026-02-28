@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: Production-Ready
 status: planning
-stopped_at: Completed 08-05-PLAN.md — Phase 8 complete (charge backfill migration)
-last_updated: "2026-02-28T04:08:18.265Z"
+stopped_at: Completed Phase 9 — Automated Operations (late fees, timezone, admin config)
+last_updated: "2026-02-28T05:00:00.000Z"
 last_activity: 2026-02-28
 progress:
   total_phases: 12
-  completed_phases: 8
-  total_plans: 61
-  completed_plans: 42
+  completed_phases: 9
+  total_plans: 65
+  completed_plans: 46
 ---
 
 # Project State
@@ -20,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 8 — Financial Ledger Foundation (complete)
+**Current focus:** Phase 9 — Automated Operations (complete)
 
 ## Current Position
 
-**Phase:** 8 of 12 (Financial Ledger Foundation) — complete
-**Plan:** 08-05 (complete, last plan in phase)
+**Phase:** 9 of 12 (Automated Operations) — complete
+**Plan:** 09-04 (complete, last plan in phase)
 **Status:** Ready to plan
 **Last Activity:** 2026-02-28
 
-Progress: [|||||||||||||||||||.] 77% (v1.0 complete, v2.0 Phase 7 + 8 done)
+Progress: [||||||||||||||||||||] 83% (v1.0 complete, v2.0 Phases 7-9 done)
 
 ## Performance Metrics
 
@@ -39,9 +39,9 @@ Progress: [|||||||||||||||||||.] 77% (v1.0 complete, v2.0 Phase 7 + 8 done)
 - Total execution time: ~1.9 hours
 
 **Velocity (v2.0):**
-- Total plans completed: 9
-- Average duration: 3.8 min
-- Total execution time: ~34 min
+- Total plans completed: 13
+- Average duration: 3.5 min
+- Total execution time: ~46 min
 
 **By Phase (v1.0):**
 
@@ -60,9 +60,10 @@ Progress: [|||||||||||||||||||.] 77% (v1.0 complete, v2.0 Phase 7 + 8 done)
 |-------|-------|-------|----------|
 | 7. Infrastructure | 4 | 18min | 4.5min |
 | 8. Financial Ledger | 5 | 16min | 3.2min |
+| 9. Automated Operations | 4 | 12min | 3.0min |
 
 **Recent Trend:**
-- Last 4 plans: 2min, 4min, 5min, 2min
+- Last 4 plans: 3min, 3min, 3min, 3min
 - Trend: Stable
 
 ## Accumulated Context
@@ -91,6 +92,12 @@ Recent decisions affecting v2.0:
 - [Phase 8]: HTTP driver (neon-http) for standalone scripts — simpler than WebSocket Pool for one-shot scripts
 - [Phase 8]: One charge per tenant-unit-period for backfill — multiple payments for same period use larger amount
 - [Phase 8]: createdBy null to distinguish system-generated backfill charges from admin-posted charges
+- [Phase 9]: Intl.DateTimeFormat for timezone conversion — zero external date library dependencies
+- [Phase 9]: Per-iteration local date computation in crons (not pre-computed) since different properties may be in different timezones
+- [Phase 9]: Late fee rules default enabled:false — admin must explicitly enable per property
+- [Phase 9]: Basis points storage for percentage fees (500 = 5%, stored as integer feeAmountCents)
+- [Phase 9]: Hoisted currentPeriod in autopay-charge for catch block accessibility
+- [Phase 9]: Drizzle upsert with onConflictDoUpdate for late fee rules (one rule set per property)
 
 ### Pending Todos
 
@@ -98,11 +105,11 @@ None yet.
 
 ### Blockers/Concerns
 
-- Late fee jurisdiction-specific legal requirements need validation before Phase 9 automation
 - Backfill migration scope depends on actual payment record distribution (RESOLVED: script created, 0 historical payments currently)
+- Late fee jurisdiction-specific legal requirements need validation before production deployment (RESOLVED: configurable per-property rules with admin control, default OFF)
 
 ## Session Continuity
 
-**Last Session:** 2026-02-27
-**Stopped At:** Completed 08-05-PLAN.md — Phase 8 complete (charge backfill migration)
+**Last Session:** 2026-02-28
+**Stopped At:** Completed Phase 9 — Automated Operations (all 4 plans executed, verified)
 **Resume File:** None

@@ -29,7 +29,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 7: Infrastructure Prerequisites** - Database transaction support, S3 cloud storage, edge auth, cascade safety, admin sidebar layout (2026-02-26)
 - [x] **Phase 8: Financial Ledger Foundation** - Charges table, running balances, charge management, historical reconciliation, webhook hardening (2026-02-27)
-- [ ] **Phase 9: Automated Operations** - Late fee automation, configurable fee rules, timezone-aware scheduling, late fee notifications
+- [x] **Phase 9: Automated Operations** - Late fee automation, configurable fee rules, timezone-aware scheduling, late fee notifications (2026-02-27)
 - [ ] **Phase 10: Portfolio Management & Tenant Lifecycle** - Property/unit CRUD, move-out workflow, past-tenant access, self-service invite entry
 - [ ] **Phase 11: Admin UX & KPI Dashboard** - KPI metric cards, polished empty states, mobile-responsive admin layout
 - [ ] **Phase 12: Vendor & Work Order Management** - Vendor directory, maintenance assignment, magic link sharing, cost tracking
@@ -75,7 +75,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Admin can configure late fee rules per property — grace period days, flat or percentage fee type, and fee amount — and can disable automatic late fees entirely (default: off)
   3. Tenant receives a notification (email, SMS, and/or in-app per their preferences) when a late fee is posted to their account
   4. Rent reminders, late fee calculations, and autopay scheduling all use the property's configured timezone — a tenant with rent due on the 1st is not charged late on December 31st at 7pm because the server runs in UTC
-**Plans**: TBD
+**Plans**: 4 plans, 2 waves
+  - Wave 1: Plan 01 (schema + timezone utilities + tests)
+  - Wave 2: Plan 02 (late fee cron + notifications) + Plan 03 (admin config UI + API) + Plan 04 (retrofit existing crons) — parallel
 
 ### Phase 10: Portfolio Management & Tenant Lifecycle
 **Goal**: Admin can manage the full property portfolio and tenant lifecycle from the dashboard — creating properties and units, moving tenants out with proper financial reconciliation, and tenants can self-associate via invite tokens
@@ -127,7 +129,7 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 6. Autopay and Polish | v1.0 | 6/6 | Complete | 2026-02-26 |
 | 7. Infrastructure Prerequisites | v2.0 | 4/4 | Complete | 2026-02-26 |
 | 8. Financial Ledger Foundation | v2.0 | 5/5 | Complete | 2026-02-27 |
-| 9. Automated Operations | v2.0 | 0/TBD | Not started | - |
+| 9. Automated Operations | v2.0 | 4/4 | Complete | 2026-02-27 |
 | 10. Portfolio Management & Tenant Lifecycle | v2.0 | 0/TBD | Not started | - |
 | 11. Admin UX & KPI Dashboard | v2.0 | 0/TBD | Not started | - |
 | 12. Vendor & Work Order Management | v2.0 | 0/TBD | Not started | - |
