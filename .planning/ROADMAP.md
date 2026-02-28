@@ -184,8 +184,12 @@ Plans:
   5. Work order cost form includes a "Bill to Tenant" checkbox that sends billToTenant=true to the API
   6. KPI dashboard "Total Outstanding" and "Overdue Tenants" metrics incorporate the charges table (not just payments)
 
+**Plans**: 4 plans, 2 waves
+  - Wave 1: Plan 01 (INFRA-03 + LEDG-03 + LATE-02 + OPS-02: timezone config + gap verification) + Plan 02 (FIN-04 + OPS-04: billToTenant checkbox) — parallel
+  - Wave 2: Plan 03 (AUX-02: KPI overdue fix) + Plan 04 (traceability + cleanup) — parallel
+
 Plans:
-- [ ] 14-01-PLAN.md -- Charges nav + late fees action (LEDG-03, LATE-02)
-- [ ] 14-02-PLAN.md -- Timezone config + work order + bill-to-tenant form (INFRA-03, OPS-02, FIN-04)
-- [ ] 14-03-PLAN.md -- KPI charges fix (AUX-02, OPS-04)
+- [ ] 14-01-PLAN.md -- Timezone config + verify pre-closed gaps (INFRA-03, LEDG-03, LATE-02, OPS-02)
+- [ ] 14-02-PLAN.md -- Bill-to-tenant checkbox on cost form (FIN-04, OPS-04)
+- [ ] 14-03-PLAN.md -- KPI overdue tenants charges fix (AUX-02)
 - [ ] 14-04-PLAN.md -- Traceability + cleanup
