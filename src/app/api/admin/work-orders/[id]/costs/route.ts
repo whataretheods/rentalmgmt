@@ -4,6 +4,7 @@ import { headers } from "next/headers"
 import { db } from "@/db"
 import { workOrders, workOrderCosts } from "@/db/schema"
 import { eq, and, sql } from "drizzle-orm"
+import { resolveAndPostChargeback } from "@/lib/chargeback"
 
 export async function GET(
   _req: Request,
@@ -68,7 +69,7 @@ export async function POST(
   }
 
   const body = await req.json()
-  const { description, amountCents, category, receiptPath } = body
+  const { description, amountCents, category, receiptPath, billToTenant } = body
 
   if (!description || typeof description !== "string" || description.trim() === "") {
     return NextResponse.json({ error: "Description is required" }, { status: 400 })
@@ -97,7 +98,12 @@ export async function POST(
     })
     .returning()
 
-  return NextResponse.json({ cost }, { status: 201 })
+  let chargePosted = false
+  if (billToTenant) {
+    chargePosted = await resolveAndPostChargeback(id, description, amountCents, session.user.id)
+  }
+
+  return NextResponse.json({ cost, chargePosted }, { status: 201 })
 }
 
 export async function DELETE(
