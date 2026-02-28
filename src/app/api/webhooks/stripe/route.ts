@@ -108,39 +108,72 @@ export async function POST(req: Request) {
           const { tenantUserId, unitId, billingPeriod } =
             session.metadata || {}
 
-          await tx
-            .update(payments)
-            .set({
-              status: "succeeded",
-              paidAt: new Date(),
-              updatedAt: new Date(),
-            })
-            .where(eq(payments.stripeSessionId, session.id))
+          if (!tenantUserId || !unitId || !billingPeriod) {
+            console.error("Missing metadata in async_payment_succeeded:", session.id)
+            break
+          }
 
-          if (tenantUserId && unitId && billingPeriod) {
-            await sendPaymentConfirmation(
+          // UPSERT: INSERT if checkout.session.completed hasn't created the record yet,
+          // or UPDATE if it has (normal flow). Handles out-of-order webhook delivery.
+          await tx
+            .insert(payments)
+            .values({
               tenantUserId,
               unitId,
-              session.amount_total!,
-              billingPeriod
-            )
-          }
+              amountCents: session.amount_total!,
+              stripeSessionId: session.id,
+              stripePaymentIntentId: session.payment_intent as string,
+              paymentMethod: "ach",
+              status: "succeeded",
+              billingPeriod,
+              paidAt: new Date(),
+            })
+            .onConflictDoUpdate({
+              target: payments.stripeSessionId,
+              set: {
+                status: "succeeded",
+                paidAt: new Date(),
+                updatedAt: new Date(),
+              },
+            })
+
+          await sendPaymentConfirmation(tenantUserId, unitId, session.amount_total!, billingPeriod)
           break
         }
 
         case "checkout.session.async_payment_failed": {
           // ACH payment failed
           const session = event.data.object as Stripe.Checkout.Session
-          await tx
-            .update(payments)
-            .set({ status: "failed", updatedAt: new Date() })
-            .where(eq(payments.stripeSessionId, session.id))
-
-          // Post NSF fee if metadata is present and NSF_FEE_CENTS is configured
           const { tenantUserId: achTenantUserId, unitId: achUnitId, billingPeriod: achBillingPeriod } = session.metadata || {}
-          if (achTenantUserId && achUnitId) {
-            await postNsfFee(tx, achTenantUserId, achUnitId, achBillingPeriod)
+
+          if (!achTenantUserId || !achUnitId || !achBillingPeriod) {
+            console.error("Missing metadata in async_payment_failed:", session.id)
+            break
           }
+
+          // UPSERT: INSERT if completed hasn't run yet, or UPDATE if it has.
+          await tx
+            .insert(payments)
+            .values({
+              tenantUserId: achTenantUserId,
+              unitId: achUnitId,
+              amountCents: session.amount_total!,
+              stripeSessionId: session.id,
+              stripePaymentIntentId: session.payment_intent as string,
+              paymentMethod: "ach",
+              status: "failed",
+              billingPeriod: achBillingPeriod,
+            })
+            .onConflictDoUpdate({
+              target: payments.stripeSessionId,
+              set: {
+                status: "failed",
+                updatedAt: new Date(),
+              },
+            })
+
+          // Post NSF fee
+          await postNsfFee(tx, achTenantUserId, achUnitId, achBillingPeriod)
           break
         }
 
