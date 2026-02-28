@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 11: Admin UX & KPI Dashboard** - KPI metric cards, polished empty states, mobile-responsive admin layout (2026-02-27)
 - [x] **Phase 12: Vendor & Work Order Management** - Vendor directory, maintenance assignment, magic link sharing, cost tracking (2026-02-27)
 - [x] **Phase 13: FinTech Polish & Edge Cases** - Date math fixes, pending balance UX, chargebacks, NSF fees, proration (2026-02-28)
-- [ ] **Phase 14: Audit Gap Closure** - Admin UI wiring, timezone config, KPI charges fix, nav and form enhancements
+- [x] **Phase 14: Audit Gap Closure** - Admin UI wiring, timezone config, KPI charges fix, nav and form enhancements (completed 2026-02-28)
 
 ## Phase Details
 
@@ -147,7 +147,7 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 11. Admin UX & KPI Dashboard | v2.0 | 4/4 | Complete | 2026-02-27 |
 | 12. Vendor & Work Order Management | v2.0 | 5/5 | Complete | 2026-02-27 |
 | 13. FinTech Polish & Edge Cases | v2.0 | 4/4 | Complete | 2026-02-28 |
-| 14. Audit Gap Closure | 2/4 | In Progress|  | — |
+| 14. Audit Gap Closure | 4/4 | Complete   | 2026-02-28 | — |
 
 ### Phase 13: FinTech Polish & Edge Cases
 
