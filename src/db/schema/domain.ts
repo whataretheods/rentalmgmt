@@ -259,3 +259,60 @@ export const stripeEvents = pgTable("stripe_events", {
   type: text("type").notNull(),                            // Stripe event type (e.g., "payment_intent.succeeded")
   processedAt: timestamp("processed_at").defaultNow().notNull(),
 })
+
+// ==================== Phase 12: Vendor & Work Order Management ====================
+
+// Vendor directory
+export const vendors = pgTable("vendors", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  companyName: text("company_name").notNull(),
+  contactName: text("contact_name"),
+  email: text("email"),
+  phone: text("phone"),
+  specialty: text("specialty", {
+    enum: ["plumbing", "electrical", "hvac", "appliance", "pest_control",
+           "general_maintenance", "painting", "cleaning", "landscaping", "other"],
+  }),
+  notes: text("notes"),
+  status: text("status", { enum: ["active", "inactive"] }).default("active").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+// Work orders linking vendors to maintenance requests
+export const workOrders = pgTable("work_orders", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  maintenanceRequestId: uuid("maintenance_request_id")
+    .references(() => maintenanceRequests.id, { onDelete: "restrict" })
+    .notNull(),
+  vendorId: uuid("vendor_id")
+    .references(() => vendors.id, { onDelete: "set null" }),
+  assignedByUserId: text("assigned_by_user_id").notNull(),
+  status: text("status", {
+    enum: ["assigned", "scheduled", "in_progress", "completed", "cancelled"],
+  }).default("assigned").notNull(),
+  priority: text("priority", {
+    enum: ["low", "medium", "high", "emergency"],
+  }).default("medium").notNull(),
+  scheduledDate: timestamp("scheduled_date"),
+  completedDate: timestamp("completed_date"),
+  notes: text("notes"),
+  vendorAccessToken: text("vendor_access_token").unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+// Cost line items on work orders
+export const workOrderCosts = pgTable("work_order_costs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  workOrderId: uuid("work_order_id")
+    .references(() => workOrders.id, { onDelete: "cascade" })
+    .notNull(),
+  description: text("description").notNull(),
+  amountCents: integer("amount_cents").notNull(),
+  category: text("category", {
+    enum: ["labor", "materials", "permits", "other"],
+  }).notNull(),
+  receiptPath: text("receipt_path"),  // S3 key for receipt upload (Phase 7)
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})

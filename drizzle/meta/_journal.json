@@ -50,6 +50,13 @@
       "when": 1772204303401,
       "tag": "0006_mean_scarecrow",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1772255794434,
+      "tag": "0007_familiar_viper",
+      "breakpoints": true
     }
   ]
 }
