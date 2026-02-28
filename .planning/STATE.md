@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v2.1
 milestone_name: Production Hardening
-status: phase_complete
-stopped_at: Completed 15-02-PLAN.md (webhook UPSERT)
-last_updated: "2026-02-28T23:28:00.000Z"
-last_activity: 2026-02-28 -- Phase 15 complete (2/2 plans done)
+status: completed
+stopped_at: Completed 15-02-PLAN.md -- Phase 15 complete
+last_updated: "2026-02-28T23:29:12.312Z"
+last_activity: 2026-02-28 -- Completed 15-02 (webhook UPSERT for ACH out-of-order delivery)
 progress:
   total_phases: 15
   completed_phases: 15
@@ -25,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 **Phase:** 15 of 16 (Financial Integrity & Concurrency)
-**Plan:** 15-01 complete, 15-02 remaining (Wave 1, parallel)
-**Status:** Executing phase 15
-**Last Activity:** 2026-02-28 -- Completed 15-01 (late fee balance fix)
+**Plan:** 2 of 2 complete
+**Status:** Phase 15 complete
+**Last Activity:** 2026-02-28 -- Completed 15-02 (webhook UPSERT for ACH out-of-order delivery)
 
-Progress: [#########################                         ] 50%
+Progress: [##################################################] 100%
 
 ## Performance Metrics
 
@@ -71,11 +71,12 @@ Progress: [#########################                         ] 50%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 15. Financial Integrity | 1/2 | 2min | 2.0min |
+| 15. Financial Integrity | 2/2 | 4min | 2.0min |
 
 **Recent Trend:**
-- Last 6 plans: 2min, 2min, 1min, 1min, 2min
+- Last 6 plans: 2min, 2min, 1min, 1min, 2min, 2min
 - Trend: Stable
+| Phase 15 P02 | 2min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -91,6 +92,9 @@ Recent decisions affecting current work:
 - [Phase 14]: Native HTML checkbox for single boolean toggle (billToTenant)
 - [Phase 15]: Pure function shouldAssessLateFee defined in test file since logic is trivial and self-contained
 - [Phase 15]: Removed both payment-existence queries in favor of single getTenantBalance call
+- [Phase 15]: Pure function buildAchPaymentUpsert extracts UPSERT value construction for unit testing without DB/HTTP mocking
+- [Phase 15]: ON CONFLICT targets stripeSessionId UNIQUE constraint as second layer of defense after stripe_events dedup
+- [Phase 15]: Pure function buildAchPaymentUpsert extracts UPSERT value construction for unit testing
 
 ### Pending Todos
 
@@ -102,6 +106,6 @@ None.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-28T23:28:05.330Z
-**Stopped At:** Completed 15-01-PLAN.md (late fee balance fix)
+**Last Session:** 2026-02-28T23:29:08.767Z
+**Stopped At:** Completed 15-02-PLAN.md -- Phase 15 complete
 **Resume File:** None

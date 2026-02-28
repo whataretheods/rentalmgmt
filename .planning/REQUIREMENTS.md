@@ -116,7 +116,7 @@ Requirements for milestone v2.1 — Production Hardening. Fixes critical financi
 ### Financial Integrity
 
 - [x] **HARD-01**: Late fee cron job assesses fees based on actual tenant ledger balance (getTenantBalance) rather than checking for the existence of any succeeded payment — closing the partial payment loophole where a $1 payment would suppress a late fee on $1,499 owed
-- [ ] **HARD-02**: Stripe webhook handlers for checkout.session.async_payment_succeeded and async_payment_failed use UPSERT (INSERT ... ON CONFLICT DO UPDATE) so out-of-order ACH webhook delivery does not permanently trap payments in "pending" status
+- [x] **HARD-02**: Stripe webhook handlers for checkout.session.async_payment_succeeded and async_payment_failed use UPSERT (INSERT ... ON CONFLICT DO UPDATE) so out-of-order ACH webhook delivery does not permanently trap payments in "pending" status
 
 ### Date Math
 
@@ -261,7 +261,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | HARD-01 | Phase 15 | Complete |
-| HARD-02 | Phase 15 | Pending |
+| HARD-02 | Phase 15 | Complete |
 | HARD-03 | Phase 16 | Pending |
 | HARD-04 | Phase 16 | Pending |
 | HARD-05 | Phase 16 | Pending |
