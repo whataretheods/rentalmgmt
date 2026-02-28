@@ -7,7 +7,7 @@ export interface KpiMetrics {
   totalOutstandingCents: number // total unpaid amount in cents
   occupancyRate: number        // percentage 0-100
   openMaintenanceCount: number // count of non-resolved requests
-  overdueTenantsCount: number  // count of tenants past due with no payment
+  overdueTenantsCount: number  // count of tenants past due with outstanding balance
 }
 
 export async function getKpiMetrics(): Promise<KpiMetrics> {
@@ -135,9 +135,9 @@ async function getCollectionMetrics(
     const outstanding = Math.max(totalOwed - totalPaid, 0)
     totalOutstandingCents += outstanding
 
-    // Overdue: past due day AND no payment at all
+    // Overdue: past due day AND total paid less than total owed (rent + charges)
     const dueDay = unit.rentDueDay ?? 1
-    if (currentDay > dueDay && totalPaid === 0) {
+    if (currentDay > dueDay && totalPaid < totalOwed) {
       overdueTenantsCount++
     }
   }
