@@ -30,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 7: Infrastructure Prerequisites** - Database transaction support, S3 cloud storage, edge auth, cascade safety, admin sidebar layout (2026-02-26)
 - [x] **Phase 8: Financial Ledger Foundation** - Charges table, running balances, charge management, historical reconciliation, webhook hardening (2026-02-27)
 - [x] **Phase 9: Automated Operations** - Late fee automation, configurable fee rules, timezone-aware scheduling, late fee notifications (2026-02-27)
-- [ ] **Phase 10: Portfolio Management & Tenant Lifecycle** - Property/unit CRUD, move-out workflow, past-tenant access, self-service invite entry
+- [x] **Phase 10: Portfolio Management & Tenant Lifecycle** - Property/unit CRUD, move-out workflow, past-tenant access, self-service invite entry (2026-02-27)
 - [ ] **Phase 11: Admin UX & KPI Dashboard** - KPI metric cards, polished empty states, mobile-responsive admin layout
 - [ ] **Phase 12: Vendor & Work Order Management** - Vendor directory, maintenance assignment, magic link sharing, cost tracking
 
@@ -89,7 +89,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Admin can initiate a tenant move-out that atomically sets an end date, cancels active autopay, posts any final charges, and archives the tenancy — no partial state is possible
   4. A moved-out tenant can still log in and view their payment history and maintenance request history in read-only mode
   5. A tenant with no active unit sees an empty-state dashboard where they can enter an invite token to self-associate with a unit
-**Plans**: TBD
+**Plans**: 6 plans, 4 waves
+  - Wave 1: Plan 01 (PORT-01: property CRUD API) + Plan 02 (PORT-02: unit CRUD API) -- parallel
+  - Wave 2: Plan 03 (PORT-01+02: admin UI) + Plan 04 (PORT-03: atomic move-out) -- parallel
+  - Wave 3: Plan 05 (PORT-04+TUX-01: read-only dashboard + invite entry)
+  - Wave 4: Plan 06 (ALL: integration, E2E tests, seed script)
 
 ### Phase 11: Admin UX & KPI Dashboard
 **Goal**: The admin dashboard surfaces key portfolio metrics at a glance and all admin interfaces are polished with proper empty states and mobile responsiveness
@@ -130,6 +134,6 @@ Note: Phase 10 depends on Phase 8 (not Phase 9) — it can execute in parallel w
 | 7. Infrastructure Prerequisites | v2.0 | 4/4 | Complete | 2026-02-26 |
 | 8. Financial Ledger Foundation | v2.0 | 5/5 | Complete | 2026-02-27 |
 | 9. Automated Operations | v2.0 | 4/4 | Complete | 2026-02-27 |
-| 10. Portfolio Management & Tenant Lifecycle | v2.0 | 0/TBD | Not started | - |
+| 10. Portfolio Management & Tenant Lifecycle | v2.0 | 6/6 | Complete | 2026-02-27 |
 | 11. Admin UX & KPI Dashboard | v2.0 | 0/TBD | Not started | - |
 | 12. Vendor & Work Order Management | v2.0 | 0/TBD | Not started | - |

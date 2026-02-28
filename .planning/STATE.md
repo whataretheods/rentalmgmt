@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
+milestone: v2.0
 milestone_name: Production-Ready
 status: planning
-stopped_at: Completed Phase 9 — Automated Operations (late fees, timezone, admin config)
-last_updated: "2026-02-28T05:00:00.000Z"
-last_activity: 2026-02-28
+stopped_at: Completed Phase 10 — Portfolio Management & Tenant Lifecycle (property/unit CRUD, move-out, read-only, invites)
+last_updated: "2026-02-27T12:00:00.000Z"
+last_activity: 2026-02-27
 progress:
   total_phases: 12
-  completed_phases: 9
-  total_plans: 65
-  completed_plans: 46
+  completed_phases: 10
+  total_plans: 71
+  completed_plans: 52
 ---
 
 # Project State
@@ -20,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid — replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 9 — Automated Operations (complete)
+**Current focus:** Phase 10 — Portfolio Management & Tenant Lifecycle (complete)
 
 ## Current Position
 
-**Phase:** 9 of 12 (Automated Operations) — complete
-**Plan:** 09-04 (complete, last plan in phase)
+**Phase:** 10 of 12 (Portfolio Management & Tenant Lifecycle) — complete
+**Plan:** 10-06 (complete, last plan in phase)
 **Status:** Ready to plan
-**Last Activity:** 2026-02-28
+**Last Activity:** 2026-02-27
 
-Progress: [||||||||||||||||||||] 83% (v1.0 complete, v2.0 Phases 7-9 done)
+Progress: [||||||||||||||||||||] 87% (v1.0 complete, v2.0 Phases 7-10 done)
 
 ## Performance Metrics
 
@@ -39,9 +39,9 @@ Progress: [||||||||||||||||||||] 83% (v1.0 complete, v2.0 Phases 7-9 done)
 - Total execution time: ~1.9 hours
 
 **Velocity (v2.0):**
-- Total plans completed: 13
-- Average duration: 3.5 min
-- Total execution time: ~46 min
+- Total plans completed: 19
+- Average duration: 3.7 min
+- Total execution time: ~70 min
 
 **By Phase (v1.0):**
 
@@ -61,9 +61,10 @@ Progress: [||||||||||||||||||||] 83% (v1.0 complete, v2.0 Phases 7-9 done)
 | 7. Infrastructure | 4 | 18min | 4.5min |
 | 8. Financial Ledger | 5 | 16min | 3.2min |
 | 9. Automated Operations | 4 | 12min | 3.0min |
+| 10. Portfolio Mgmt | 6 | 27min | 4.5min |
 
 **Recent Trend:**
-- Last 4 plans: 3min, 3min, 3min, 3min
+- Last 6 plans: 4min, 4min, 5min, 4min, 5min, 5min
 - Trend: Stable
 
 ## Accumulated Context
@@ -98,6 +99,14 @@ Recent decisions affecting v2.0:
 - [Phase 9]: Basis points storage for percentage fees (500 = 5%, stored as integer feeAmountCents)
 - [Phase 9]: Hoisted currentPeriod in autopay-charge for catch block accessibility
 - [Phase 9]: Drizzle upsert with onConflictDoUpdate for late fee rules (one rule set per property)
+- [Phase 10]: archivedAt column already existed from Phase 7 — no schema migration needed for soft-delete
+- [Phase 10]: Atomic move-out uses db.transaction() for tenancy end + autopay cancel + final charges
+- [Phase 10]: Notifications sent AFTER transaction commit (fire-and-forget, not in transaction)
+- [Phase 10]: 3-state tenant dashboard: active, read-only (past tenant), empty (no unit)
+- [Phase 10]: Atomic invite token consumption: UPDATE WHERE status='pending' AND expiresAt > now()
+- [Phase 10]: rentDueDay validated 1-28 to avoid month-end ambiguity
+- [Phase 10]: Dollar-to-cents conversion at form submission boundary in UI components
+- [Phase 10]: isNull(archivedAt) filter required on all admin queries touching properties/units
 
 ### Pending Todos
 
@@ -110,6 +119,6 @@ None yet.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-28
-**Stopped At:** Completed Phase 9 — Automated Operations (all 4 plans executed, verified)
+**Last Session:** 2026-02-27
+**Stopped At:** Completed Phase 10 — Portfolio Management & Tenant Lifecycle (all 6 plans executed, verified)
 **Resume File:** None
