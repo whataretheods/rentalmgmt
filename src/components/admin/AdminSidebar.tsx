@@ -14,6 +14,8 @@ import {
   Mail,
   Bell,
   Megaphone,
+  HardHat,
+  ClipboardList,
 } from "lucide-react"
 import {
   Sidebar,
@@ -40,6 +42,8 @@ const navItems = [
   { title: "Invites", href: "/admin/invites", icon: Mail },
   { title: "Notifications", href: "/admin/notifications", icon: Bell },
   { title: "Broadcast", href: "/admin/broadcast", icon: Megaphone },
+  { title: "Vendors", href: "/admin/vendors", icon: HardHat },
+  { title: "Work Orders", href: "/admin/work-orders", icon: ClipboardList },
 ]
 
 interface AdminSidebarProps {
