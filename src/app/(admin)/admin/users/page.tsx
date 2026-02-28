@@ -2,6 +2,10 @@ import { db } from "@/db"
 import { user } from "@/db/schema"
 import { desc } from "drizzle-orm"
 import { UserTable } from "@/components/admin/UserTable"
+import { EmptyState } from "@/components/ui/empty-state"
+import { Users } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export default async function AdminUsersPage() {
   const users = await db
@@ -23,7 +27,20 @@ export default async function AdminUsersPage() {
           All registered accounts &mdash; {users.length} total
         </p>
       </div>
-      <UserTable users={users} />
+      {users.length === 0 ? (
+        <EmptyState
+          icon={Users}
+          title="No tenants yet"
+          description="Generate an invite code to onboard your first tenant. They'll create their account and be linked to their unit automatically."
+          action={
+            <Button asChild>
+              <Link href="/admin/invites">Generate Invite</Link>
+            </Button>
+          }
+        />
+      ) : (
+        <UserTable users={users} />
+      )}
     </div>
   )
 }

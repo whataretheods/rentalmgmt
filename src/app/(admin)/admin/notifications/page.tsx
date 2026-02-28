@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Bell, ArrowLeft, Check } from "lucide-react"
 import { toast } from "sonner"
+import { EmptyState } from "@/components/ui/empty-state"
 
 interface Notification {
   id: string
@@ -158,10 +159,11 @@ export default function AdminNotificationsPage() {
       </div>
 
       {notifications.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">
-          <Bell className="size-12 mx-auto mb-4 opacity-30" />
-          <p>No notifications yet</p>
-        </div>
+        <EmptyState
+          icon={Bell}
+          title="No notifications yet"
+          description="System notifications will appear here as payment activity, maintenance requests, and other events occur."
+        />
       ) : (
         <div className="space-y-2">
           {notifications.map((n) => (

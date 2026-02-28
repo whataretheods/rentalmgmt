@@ -9,6 +9,8 @@ import {
 } from "@hello-pangea/dnd"
 import { MaintenanceCard, type MaintenanceRequestData } from "./MaintenanceCard"
 import { toast } from "sonner"
+import { EmptyState } from "@/components/ui/empty-state"
+import { Wrench } from "lucide-react"
 
 const STATUS_COLUMNS = [
   { id: "submitted", label: "Submitted", color: "bg-yellow-100 border-yellow-300" },
@@ -125,6 +127,16 @@ export default function MaintenanceKanban() {
       <div className="text-center py-12 text-gray-500">
         Loading maintenance requests...
       </div>
+    )
+  }
+
+  if (requests.length === 0) {
+    return (
+      <EmptyState
+        icon={Wrench}
+        title="No maintenance requests"
+        description="Maintenance requests from tenants will appear here. You can drag cards between columns to update their status."
+      />
     )
   }
 

@@ -1,6 +1,8 @@
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { PaymentDashboard } from "@/components/admin/PaymentDashboard"
+import { EmptyState } from "@/components/ui/empty-state"
+import { CreditCard } from "lucide-react"
 
 export default async function AdminPaymentsPage() {
   const session = await auth.api.getSession({ headers: await headers() })
@@ -34,10 +36,18 @@ export default async function AdminPaymentsPage() {
         check, or Venmo.
       </p>
       <div className="mt-6">
-        <PaymentDashboard
-          initialData={initialData}
-          initialPeriod={currentPeriod}
-        />
+        {initialData.length === 0 ? (
+          <EmptyState
+            icon={CreditCard}
+            title="No payments recorded"
+            description="Payments will appear here once tenants start paying rent online or you record manual payments."
+          />
+        ) : (
+          <PaymentDashboard
+            initialData={initialData}
+            initialPeriod={currentPeriod}
+          />
+        )}
       </div>
     </div>
   )

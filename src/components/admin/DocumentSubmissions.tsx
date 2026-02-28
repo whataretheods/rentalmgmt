@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { EmptyState } from "@/components/ui/empty-state"
+import { FileText } from "lucide-react"
 
 const DOCUMENT_TYPE_LABELS: Record<string, string> = {
   government_id: "Government ID",
@@ -84,7 +86,11 @@ export function DocumentSubmissions({ refreshKey }: DocumentSubmissionsProps) {
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-sm text-gray-500">No document requests found.</p>
+        <EmptyState
+          icon={FileText}
+          title="No documents submitted"
+          description="Documents will appear here when tenants upload them or respond to your requests."
+        />
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">

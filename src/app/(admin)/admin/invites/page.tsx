@@ -2,6 +2,8 @@ import { db } from "@/db"
 import { units, properties, inviteTokens } from "@/db/schema"
 import { eq, desc, and, isNull } from "drizzle-orm"
 import { InviteManager } from "@/components/admin/InviteManager"
+import { EmptyState } from "@/components/ui/empty-state"
+import { Mail } from "lucide-react"
 
 export default async function AdminInvitesPage() {
   // Fetch all active (non-archived) units with their property name
@@ -50,7 +52,15 @@ export default async function AdminInvitesPage() {
           create their account and get linked automatically.
         </p>
       </div>
-      <InviteManager units={unitsWithStatus} />
+      {unitsWithStatus.length === 0 ? (
+        <EmptyState
+          icon={Mail}
+          title="No units available for invites"
+          description="Create properties and units first, then you can generate invite codes for tenants."
+        />
+      ) : (
+        <InviteManager units={unitsWithStatus} />
+      )}
     </div>
   )
 }

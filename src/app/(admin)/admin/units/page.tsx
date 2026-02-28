@@ -24,6 +24,8 @@ import {
 import { toast } from "sonner"
 import { UnitForm } from "@/components/admin/UnitForm"
 import { MoveOutDialog } from "@/components/admin/MoveOutDialog"
+import { EmptyState } from "@/components/ui/empty-state"
+import { Building2 } from "lucide-react"
 
 interface Unit {
   id: string
@@ -128,10 +130,12 @@ export default function AdminUnitsPage() {
       </div>
 
       {units.length === 0 ? (
-        <div className="mt-8 text-center py-12 border rounded-lg bg-gray-50">
-          <p className="text-gray-500">
-            No units found. Add your first property, then create units.
-          </p>
+        <div className="mt-8">
+          <EmptyState
+            icon={Building2}
+            title="No units configured"
+            description="Add properties and units to start managing rent collection. Each unit can have its own rent amount and due date."
+          />
         </div>
       ) : (
         <div className="mt-6">
