@@ -74,9 +74,9 @@ export function daysSinceRentDue(
   const daysInDueMonth = new Date(dueYear, dueMonth, 0).getDate()
   const clampedDueDay = Math.min(rentDueDay, daysInDueMonth)
 
-  // Calculate difference using Date objects for correct calendar math
-  const currentDate = new Date(year, month - 1, day)
-  const dueDate = new Date(dueYear, dueMonth - 1, clampedDueDay)
+  // Calculate difference using UTC dates — immune to DST 23/25-hour day variations
+  const currentDate = new Date(Date.UTC(year, month - 1, day))
+  const dueDate = new Date(Date.UTC(dueYear, dueMonth - 1, clampedDueDay))
   const diffMs = currentDate.getTime() - dueDate.getTime()
 
   return Math.round(diffMs / (1000 * 60 * 60 * 24))
