@@ -144,11 +144,11 @@ Plans:
   2. Unit tests explicitly exercise DST spring-forward (March) and fall-back (November) date pairs and assert correct day counts across those boundaries
   3. A tenant with a revoked session, suspended account, or expired cookie is rejected by middleware when accessing any tenant route -- not just checked for cookie existence but validated against the session store
   4. If middleware session validation is not feasible at the edge, all tenant API routes are audited to confirm they independently call auth.api.getSession() and reject unauthorized requests
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 16-01: TBD
-- [ ] 16-02: TBD
+- [ ] 16-01-PLAN.md — DST-proof daysSinceRentDue with Date.UTC() and DST boundary tests (HARD-03, HARD-04)
+- [ ] 16-02-PLAN.md — Full session validation for tenant middleware (HARD-05)
 
 ## Progress
 
@@ -171,5 +171,5 @@ Phases execute in numeric order: 15 -> 16
 | 12. Vendor & Work Order Management | v2.0 | 5/5 | Complete | 2026-02-27 |
 | 13. FinTech Polish & Edge Cases | v2.0 | 4/4 | Complete | 2026-02-28 |
 | 14. Audit Gap Closure | v2.0 | 4/4 | Complete | 2026-02-28 |
-| 15. Financial Integrity & Concurrency | 2/2 | Complete    | 2026-02-28 | - |
-| 16. Date Math & Security | v2.1 | 0/0 | Not started | - |
+| 15. Financial Integrity & Concurrency | v2.1 | 2/2 | Complete | 2026-02-28 |
+| 16. Date Math & Security | v2.1 | 0/2 | Not started | - |
