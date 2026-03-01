@@ -4,7 +4,7 @@ milestone: v2.1
 milestone_name: Production Hardening
 status: completed
 stopped_at: Completed 16-02-PLAN.md -- Phase 16 complete
-last_updated: "2026-03-01T00:10:20.237Z"
+last_updated: "2026-03-01T00:17:50.056Z"
 last_activity: 2026-03-01
 progress:
   total_phases: 16
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Phase:** 16 of 16 (Date Math & Security)
 **Plan:** 2 of 2 complete
-**Status:** Milestone complete
+**Status:** v2.1 milestone complete
 **Last Activity:** 2026-03-01
 
 Progress: [##################################################] 100%

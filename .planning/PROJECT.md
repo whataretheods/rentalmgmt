@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A self-hosted property management portal for a 5-unit residential building. Tenants use the portal to pay rent, submit maintenance requests, upload documents, and manage their contact information. An admin portal gives the landlord and team full visibility into payments, requests, and tenant communications. Built as a personal alternative to expensive commercial solutions like AppFolio.
+A self-hosted property management portal for a 5-unit residential building. Tenants pay rent online, submit maintenance requests, upload documents, and manage contact info. Admin portal provides full visibility into payments, ledger balances, maintenance, vendor work orders, and tenant lifecycle. Production-hardened with financial integrity guarantees, DST-proof date math, and session-validated security.
 
 ## Core Value
 
@@ -14,87 +14,78 @@ Tenants can pay rent online and the landlord can see who's paid — replacing sc
 
 <!-- Shipped and confirmed valuable. -->
 
-- ✓ Multi-user admin access (full permissions for all team members) — Phase 1
-- ✓ Tenant onboarding via QR code (scan → create account → linked to unit) — Phase 2
-- ✓ Rent payment through Stripe with multiple payment methods — Phase 3
-- ✓ Per-unit rent amounts and due dates (fully variable) — Phase 3
-- ✓ Payment tracking dashboard (who's paid, who hasn't) — Phase 3
-- ✓ Structured maintenance requests (issue type, description, photos, admin kanban) — Phase 4
-- ✓ Document uploads (ID/proof docs and admin request workflow) — Phase 4
-- ✓ Tenant contact info management (name, phone, email, emergency contact) — Phase 4
-- ✓ Admin portal with full tenant/payment/request management — Phase 4
-- ✓ Notifications via email, SMS, and in-app (reminders, inbox, admin broadcast) — Phase 5
+- ✓ Multi-user admin access (full permissions for all team members) — v1.0
+- ✓ Tenant onboarding via QR code (scan → create account → linked to unit) — v1.0
+- ✓ Rent payment through Stripe with multiple payment methods — v1.0
+- ✓ Per-unit rent amounts and due dates (fully variable) — v1.0
+- ✓ Payment tracking dashboard (who's paid, who hasn't) — v1.0
+- ✓ Structured maintenance requests (issue type, description, photos, admin kanban) — v1.0
+- ✓ Document uploads (ID/proof docs and admin request workflow) — v1.0
+- ✓ Tenant contact info management (name, phone, email, emergency contact) — v1.0
+- ✓ Admin portal with full tenant/payment/request management — v1.0
+- ✓ Notifications via email, SMS, and in-app (reminders, inbox, admin broadcast) — v1.0
+- ✓ Autopay enrollment for recurring rent payments — v1.0
+- ✓ Ledger-based financial model with charges, running balances, manual adjustments — v2.0
+- ✓ Webhook hardening with strict payment intent ID matching and event deduplication — v2.0
+- ✓ S3-compatible cloud storage for maintenance photos and documents — v2.0
+- ✓ Edge-level role authorization in JWT/middleware — v2.0
+- ✓ Timezone-aware operations (reminders, late fees, autopay) — v2.0
+- ✓ Property/unit CRUD and tenant move-out workflow — v2.0
+- ✓ Admin KPI dashboard, persistent sidebar, mobile-responsive layout — v2.0
+- ✓ Vendor directory, work order assignment, magic link sharing, cost tracking — v2.0
+- ✓ NSF fees, proration, chargeback handling, pending balance UX — v2.0
+- ✓ Balance-based late fee assessment (closes partial payment loophole) — v2.1
+- ✓ UPSERT webhook handlers for ACH race condition resilience — v2.1
+- ✓ DST-proof date math with Date.UTC() and boundary tests — v2.1
+- ✓ Session-validated tenant middleware (rejects revoked/expired sessions) — v2.1
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Ledger-based financial model with charges table, running balances, partial payments, and automated late fees
-- [ ] Webhook hardening — strict Stripe intent ID matching for ACH settlements and partial payment edge cases
-- [ ] S3-compatible cloud storage migration for maintenance photos and documents (replace local uploads/)
-- [ ] Edge-level role authorization in JWT/middleware for instant admin route rejection
-- [ ] Timezone-aware CRON job for rent reminders (property-local timezone)
-- [ ] Admin API route protection audit
-- [ ] Full property and unit CRUD from admin dashboard (create, update, archive)
-- [ ] Tenant move-out workflow (end dates, cancel autopay, past-tenant view with read-only history)
-- [ ] Tenant unit transfer support (move between units in same building)
-- [ ] Self-service invite token entry on tenant empty-state dashboard
-- [ ] Admin UX overhaul: persistent sidebar, KPI dashboard, polished empty states
-- [ ] Mobile-first responsive polish across all tenant and admin views
-- [ ] Vendor assignment for maintenance tickets with limited-view sharing
-- [ ] Work order cost tracking tied to property expenses
+(No active requirements — next milestone not yet defined)
 
 ### Out of Scope
 
-- Lease management/e-signatures — tenants are month-to-month, no leases for now
-- Role-based admin permissions — all team members get full access for now
-- Mobile native apps — web-first, responsive design instead
+- Lease management/e-signatures — tenants are month-to-month, no leases
+- Role-based admin permissions — small team, everyone gets full access
+- Mobile native apps — responsive web-first, 90% of benefit at 10% cost
+- Full double-entry accounting / GL — use QuickBooks or CSV export
+- Security deposit management — complex state-specific legal requirements
+- Vendor portal with login — magic link limited-view is sufficient
+- Real-time chat / two-way messaging — structured maintenance requests cover 90% of needs
 
 ## Context
 
-- Recently purchased 5-unit residential building
-- Many tenants haven't been reached yet — onboarding is critical first interaction
-- Plan to send physical letters with QR codes for portal signup
-- May need to send someone in person for tenant outreach
-- Month-to-month tenancy, no leases
-- Each unit has different rent amount and due date
-- Commercial solutions (AppFolio, etc.) are too expensive for a 5-unit portfolio
-- Portfolio might grow — more properties could be added down the road
+Shipped through v2.1 Production Hardening. 16 phases, 73 plans across 3 milestones.
+Tech stack: Next.js 15.5, Better Auth, Drizzle ORM, Neon PostgreSQL, Stripe, Resend, Twilio, shadcn/ui, Tailwind v4.
+60+ unit tests, 12 e2e specs. Zero known critical bugs.
+
+Known pre-existing tech debt:
+- `postNsfFee` TypeScript type mismatch in src/lib/nsf.ts (Phase 13, runtime correct)
+- No vercel.json cron schedule for /api/cron/late-fees (Phase 9, needs external scheduler)
 
 ## Constraints
 
 - **Payments**: Stripe — tenant pays rent through Stripe with multiple payment method support
 - **Budget**: Minimize hosting/operational costs — this replaces expensive SaaS
 - **Scale**: 5 units now, architecture should accommodate growth without major rewrites
-- **Zero Regression**: v2.0 must not break existing Stripe Checkout, Better Auth sessions, Twilio SMS, or autopay flows
-
-## Current Milestone: v2.1 Production Hardening
-
-**Goal:** Eliminate critical financial, concurrency, and security vulnerabilities identified in architectural audit — ensuring production-grade integrity before tenant onboarding.
-
-**Target features:**
-- Ledger-balance-based late fee assessment (close partial payment loophole)
-- Idempotent webhook UPSERT handling (fix ACH race conditions)
-- UTC-based date math for DST-proof day calculations
-- Session-validated middleware for tenant routes
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| No leases/e-signatures | Month-to-month tenancy, keep it simple | — Pending |
-| Flat admin access (no roles) | Small team, everyone needs full access | — Pending |
-| QR code onboarding | Tenants are unreachable, physical letters with QR code is the outreach plan | — Pending |
-| Stripe for payments | Industry standard, supports multiple payment methods | ✓ Phase 3 |
-| Stripe Checkout (redirect) | Simplest PCI compliance, handles ACH + card | ✓ Phase 3 |
-| Webhook-first confirmation | Never trust redirects as payment proof | ✓ Phase 3 |
-| Manual payment recording | Admin can log cash/check/Venmo payments | ✓ Phase 3 |
-| Local file storage | uploads/ directory with API-based auth-gated serving, UUID filenames | ✓ Phase 4 |
-| @hello-pangea/dnd for kanban | Drag-and-drop maintenance status management for admin | ✓ Phase 4 |
-| Better Auth changeEmail | Email changes via auth client, not profile API — separation of concerns | ✓ Phase 4 |
-| Twilio for SMS | TCPA-compliant with platform-level STOP handling, A2P 10DLC registration | ✓ Phase 5 |
-| System crontab for reminders | Daily curl to CRON_SECRET-protected API route — simpler than BullMQ/Redis | ✓ Phase 5 |
-| Multi-channel sendNotification | Single dispatch helper routes to in-app, email, and SMS based on user prefs | ✓ Phase 5 |
+| QR code onboarding | Tenants are unreachable, physical letters with QR code | ✓ v1.0 |
+| Stripe Checkout (redirect) | Simplest PCI compliance, handles ACH + card | ✓ v1.0 |
+| Webhook-first confirmation | Never trust redirects as payment proof | ✓ v1.0 |
+| Twilio for SMS | TCPA-compliant with platform-level STOP handling | ✓ v1.0 |
+| System crontab for reminders | Daily curl to CRON_SECRET-protected API route | ✓ v1.0 |
+| Charges table (single-entry ledger) | Separates what's owed from what's paid | ✓ v2.0 |
+| Neon WebSocket driver for transactions | Enables atomic multi-table operations | ✓ v2.0 |
+| Balance-based late fee eligibility | Check getTenantBalance(), not payment existence | ✓ v2.1 |
+| UPSERT for ACH webhooks | INSERT ON CONFLICT DO UPDATE prevents stuck payments | ✓ v2.1 |
+| Date.UTC() for day math | Eliminates DST off-by-one in daysSinceRentDue | ✓ v2.1 |
+| auth.api.getSession() for all routes | Full session validation, not just cookie existence | ✓ v2.1 |
 
 ---
-*Last updated: 2026-02-28 after milestone v2.1 initialization*
+*Last updated: 2026-03-01 after v2.1 milestone completion*
