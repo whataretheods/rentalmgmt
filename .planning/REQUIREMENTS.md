@@ -120,12 +120,12 @@ Requirements for milestone v2.1 — Production Hardening. Fixes critical financi
 
 ### Date Math
 
-- [ ] **HARD-03**: daysSinceRentDue calculates day differences using Date.UTC() instead of local Date() constructors, eliminating DST boundary bleeding where 23-hour gaps produce incorrect day counts
-- [ ] **HARD-04**: Timezone unit tests explicitly cover DST spring-forward and fall-back transitions to prove the fix
+- [x] **HARD-03**: daysSinceRentDue calculates day differences using Date.UTC() instead of local Date() constructors, eliminating DST boundary bleeding where 23-hour gaps produce incorrect day counts
+- [x] **HARD-04**: Timezone unit tests explicitly cover DST spring-forward and fall-back transitions to prove the fix
 
 ### Security
 
-- [ ] **HARD-05**: Tenant middleware validates the session (not just cookie existence) so suspended accounts, revoked sessions, and expired cookies are rejected at the edge — or all tenant API routes are audited to confirm they independently enforce auth.api.getSession()
+- [x] **HARD-05**: Tenant middleware validates the session (not just cookie existence) so suspended accounts, revoked sessions, and expired cookies are rejected at the edge — or all tenant API routes are audited to confirm they independently enforce auth.api.getSession()
 
 ## Future Requirements
 
@@ -262,9 +262,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | HARD-01 | Phase 15 | Complete |
 | HARD-02 | Phase 15 | Complete |
-| HARD-03 | Phase 16 | Pending |
-| HARD-04 | Phase 16 | Pending |
-| HARD-05 | Phase 16 | Pending |
+| HARD-03 | Phase 16 | Complete |
+| HARD-04 | Phase 16 | Complete |
+| HARD-05 | Phase 16 | Complete |
 
 **Coverage:**
 - v1 requirements: 22 total (all complete)

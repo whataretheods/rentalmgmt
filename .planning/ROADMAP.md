@@ -43,7 +43,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ### v2.1 Production Hardening
 
 - [x] **Phase 15: Financial Integrity & Concurrency** - Balance-based late fee assessment and idempotent webhook UPSERT for ACH race conditions (completed 2026-02-28)
-- [ ] **Phase 16: Date Math & Security** - UTC-based day calculations with DST proof tests and session-validated tenant middleware
+- [x] **Phase 16: Date Math & Security** - UTC-based day calculations with DST proof tests and session-validated tenant middleware (completed 2026-03-01)
 
 ## Phase Details
 
@@ -172,4 +172,4 @@ Phases execute in numeric order: 15 -> 16
 | 13. FinTech Polish & Edge Cases | v2.0 | 4/4 | Complete | 2026-02-28 |
 | 14. Audit Gap Closure | v2.0 | 4/4 | Complete | 2026-02-28 |
 | 15. Financial Integrity & Concurrency | v2.1 | 2/2 | Complete | 2026-02-28 |
-| 16. Date Math & Security | v2.1 | 0/2 | Not started | - |
+| 16. Date Math & Security | 2/2 | Complete   | 2026-03-01 | - |

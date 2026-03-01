@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v2.1
 milestone_name: Production Hardening
-status: completed
-stopped_at: Completed 15-02-PLAN.md -- Phase 15 complete
-last_updated: "2026-02-28T23:31:49.204Z"
-last_activity: 2026-02-28
+status: executing
+stopped_at: Completed 16-02-PLAN.md -- Phase 16 complete
+last_updated: "2026-03-01T00:07:43Z"
+last_activity: 2026-03-01
 progress:
-  total_phases: 15
-  completed_phases: 15
-  total_plans: 71
-  completed_plans: 71
+  total_phases: 16
+  completed_phases: 16
+  total_plans: 73
+  completed_plans: 73
 ---
 
 # Project State
@@ -20,14 +20,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Core value:** Tenants can pay rent online and the landlord can see who's paid -- replacing scattered, informal payment methods with one organized system.
-**Current focus:** Phase 15 - Financial Integrity & Concurrency
+**Current focus:** Phase 16 - Date Math & Security
 
 ## Current Position
 
-**Phase:** 15 of 16 (Financial Integrity & Concurrency)
+**Phase:** 16 of 16 (Date Math & Security)
 **Plan:** 2 of 2 complete
-**Status:** Milestone complete
-**Last Activity:** 2026-02-28
+**Status:** Phase complete
+**Last Activity:** 2026-03-01
 
 Progress: [##################################################] 100%
 
@@ -72,11 +72,12 @@ Progress: [##################################################] 100%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 15. Financial Integrity | 2/2 | 4min | 2.0min |
+| 16. Date Math & Security | 2/2 | 2min | 1.0min |
 
 **Recent Trend:**
-- Last 6 plans: 2min, 2min, 1min, 1min, 2min, 2min
+- Last 6 plans: 1min, 1min, 2min, 2min, 2min, 2min
 - Trend: Stable
-| Phase 15 P02 | 2min | 2 tasks | 3 files |
+| Phase 16 P02 | 2min | 1 task | 2 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,8 @@ Recent decisions affecting current work:
 - [Phase 15]: Pure function buildAchPaymentUpsert extracts UPSERT value construction for unit testing without DB/HTTP mocking
 - [Phase 15]: ON CONFLICT targets stripeSessionId UNIQUE constraint as second layer of defense after stripe_events dedup
 - [Phase 15]: Pure function buildAchPaymentUpsert extracts UPSERT value construction for unit testing
+- [Phase 16]: Date.UTC() wraps extracted calendar integers from getLocalDate for DST-immune day math
+- [Phase 16]: Removed getSessionCookie -- tenant routes use same auth.api.getSession() pattern as admin
 
 ### Pending Todos
 
@@ -106,6 +109,6 @@ None.
 
 ## Session Continuity
 
-**Last Session:** 2026-02-28T23:29:08.767Z
-**Stopped At:** Completed 15-02-PLAN.md -- Phase 15 complete
+**Last Session:** 2026-03-01T00:07:43Z
+**Stopped At:** Completed 16-02-PLAN.md -- Phase 16 complete
 **Resume File:** None
