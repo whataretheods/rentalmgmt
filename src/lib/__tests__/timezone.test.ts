@@ -84,4 +84,43 @@ describe("daysSinceRentDue", () => {
     const result = daysSinceRentDue(28, TZ, new Date(2026, 0, 2, 12, 0, 0))
     expect(result).toBe(5)
   })
+
+  // DST boundary tests — ensure Date.UTC() prevents off-by-one from 23/25-hour days
+  describe("DST boundary correctness", () => {
+    it("spring-forward: correct day count across March DST transition", () => {
+      // Due day 1, reference March 15 2026 in America/New_York
+      // DST springs forward March 8, 2026 (23-hour day)
+      // Mar 1 -> Mar 15 = 14 days regardless of DST
+      const ref = new Date(2026, 2, 15, 12, 0, 0) // March 15, 2026 noon
+      const result = daysSinceRentDue(1, TZ, ref)
+      expect(result).toBe(14)
+    })
+
+    it("fall-back: correct day count across November DST transition", () => {
+      // Due day 1, reference November 15 2026 in America/New_York
+      // DST falls back November 1, 2026 (25-hour day)
+      // Nov 1 -> Nov 15 = 14 days regardless of DST
+      const ref = new Date(2026, 10, 15, 12, 0, 0) // November 15, 2026 noon
+      const result = daysSinceRentDue(1, TZ, ref)
+      expect(result).toBe(14)
+    })
+
+    it("spring-forward: due date just before DST, current just after", () => {
+      // Due day 7, reference March 10 2026 in America/New_York
+      // DST springs forward March 8. Due date Mar 7 is before, current Mar 10 is after.
+      // Mar 7 -> Mar 10 = 3 days
+      const ref = new Date(2026, 2, 10, 12, 0, 0) // March 10, 2026 noon
+      const result = daysSinceRentDue(7, TZ, ref)
+      expect(result).toBe(3)
+    })
+
+    it("fall-back: due date on DST transition day", () => {
+      // Due day 1, reference November 3 2026 in America/New_York
+      // DST falls back November 1 (25-hour day). Due date is Nov 1.
+      // Nov 1 -> Nov 3 = 2 days
+      const ref = new Date(2026, 10, 3, 12, 0, 0) // November 3, 2026 noon
+      const result = daysSinceRentDue(1, TZ, ref)
+      expect(result).toBe(2)
+    })
+  })
 })
